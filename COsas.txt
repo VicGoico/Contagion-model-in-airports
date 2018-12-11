@@ -7,3 +7,7 @@ Un numero(maximo y minimo), umbral para todos los aeropuertos del mismo pais
 
 
 http://apps.who.int/gho/data/view.main.BODAMBIENTAIRDALYS
+
+Dejar reflejado de donde saco los datos.
+
+Pobreza de cada pais
