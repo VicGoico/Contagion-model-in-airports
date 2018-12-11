@@ -1,0 +1,6 @@
+1º METRICA
+
+1-- Calificacion de Google		Global
+2-- Aeropuertos del mismo pais, Global Health Observatory data respository	
+
+Un numero(maximo y minimo), umbral para todos los aeropuertos del mismo pais
