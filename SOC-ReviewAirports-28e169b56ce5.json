@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "soc-reviewairports",
+  "private_key_id": "28e169b56ce558903ad02f1e03684b042ac0b66b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDNHCHNfMNwsuWx\ndmYaH5HTiWDmOR4xIfwaR5izQaNMto/yUQCZsItEczh7E9k+mHe18Kok+lDBLKV7\n5KS6jGVzXtL9tZlpH+D2vXI61n48+MHoyaJZXzzcoBFR8PFIfmOuZTnY0wRzbWn4\ncp6XDsknn0LJbRliJc7hh7EgYMo2tNk2xrNNEAoWsxTaldiSLFIBxuRnwSYu6NaH\n9z37IIfyCQD2E+YC6kVO7Ttt7B+IaL0XfCqvRDDR2bTEdAZhGXJu48wRH4rmIbHF\n/9FNJHsyOSyttAOSoXje8slkDRP776d8bD15JtPaYoTpXbuFa+IhodsbwWJSDMo4\nY4SY4vADAgMBAAECggEAAlblTc4z/neT5hvHG1or1CFXgRi6ru3HzdbuN3Eytx/H\n8YgZ/SbF1+CGjuTRkAS2LNWTYzuVqzZiptCbTmNmjtPQjUNCfi/2ZWoQwPoMU460\ny35tQx6yd4O93tTkM6L5aRZPfBkgDl77m/FWvLtW8QRAg0KizPtIaksdapSgCdKt\n+zkMJ3S2eRtYumVCQN/2qc5ZHf3NqoPCpLAIgs39OiuVsTKwLOXGimwYFVc5LTcH\ndn7Pj+h+NMjgwcWQY4hYm3rqc4eSV5ZJKTaUYF9pAH0dEl7kV/dwuaNLpva/I8p/\nUHMTFv4NgH87cwTd3CYJyPnYimH9FXpUtjLLdRA38QKBgQD/5bgb31MHPglrWZUG\n4I0JutqT4oMtZdIDT55wixkT+bM0IhCYYdk8gu+e2FyFgXsXopaG6s/0Ft/oULBU\n5mTJvyvsHi/ni42N+KpP3Tv3E+HsQb3cfmlDtpkuv++Kd/y4GdQWn3G9tnPFLpiX\nPdp73WMTpsjFZloT+zxuPPF50wKBgQDNMTJsGrvWNxOLHKmbtVCr2Ey/Xbaj6f3x\nCILb4Ig2cPNivEB6dsmmRH7k3mcvBlgYWTvsd+RbzO1IuCZFZTh2vpuk5AfTlqOj\nM/58fNL7rUjY1BYZxVpjtRmiFjG1KweeaHRZg4au3fzPDg31hsoaD6Fn/9WxI2Ej\nTp3fcMYjEQKBgD/VMePiBXgdBYR9yCr7ALOYpMWXD1nXuFeTGNbCG/NbqlQq2zDn\n16S8lMFu/0VeUzJGIH5vPIiK3De7SQEkp6ebxH0V2qVLrnfnu7RIX5j2oLiqfY3v\nCpsVhYif4EUOQUA7USiDhX/pb1+UjAPOLh4Pz5MrW5HCQl4RobVuBl55AoGAKoSj\nOhtgCMdo2U6bJpSvnqw3WwAENHrsD+H/m6gvEXjeNftkMPwkVLukv7AGGYxq/MCg\n1iMRwqP4FzVxWLfct15Pyh8mMAXq6op/lTQYU+ZYTfXEjpqCXF7ObPPEYRIFhiGG\n2nWSlvGQzSbQZawEfNn4TCCLGyWFn1dPB1nK9MECgYEAqBRNyTYhG7DIUkHc9LVe\nptD5DJDNHCGHvIT9uDQKsQ4PHw22P9KmWvq3Wynpiald3ei15MKQLbDY2hFAHk+N\naiBk4QV/emhJoq+zzi+OgiO7ONjWpp1osHe2u4JcejjD22nlhuFsIxtU5swTU3vT\nwtIDse6Y2m5z6WjBOtX2jr8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "soc-331@soc-reviewairports.iam.gserviceaccount.com",
+  "client_id": "115881319843534341545",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/soc-331%40soc-reviewairports.iam.gserviceaccount.com"
+}
