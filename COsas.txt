@@ -4,3 +4,6 @@
 2-- Aeropuertos del mismo pais, Global Health Observatory data respository	
 
 Un numero(maximo y minimo), umbral para todos los aeropuertos del mismo pais
+
+
+http://apps.who.int/gho/data/view.main.BODAMBIENTAIRDALYS
