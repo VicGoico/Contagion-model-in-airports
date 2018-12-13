@@ -85,6 +85,9 @@ public class Red {
 		return nMax;
 	}
 	
+	public void setNodos(HashMap<Integer, Nodo> nodos) {
+		this.nodos = nodos;
+	}
 	@Override
 	public String toString() {
 		String sOut = "###### NODOS ######" + System.getProperty("line.separator");

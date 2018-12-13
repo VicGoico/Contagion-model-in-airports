@@ -4,20 +4,13 @@ package modelo;
 public class Nodo {
 	private int value;
 	private int degree;
-	private String airportName;
-	private String airportCity;
-	private String airportCountry;
-	private String airportIata;
+	private InfoAeropuertos infoAeropuerto;
 	private Double umbral;
 	
-	public Nodo(int i, int g, String airportName, String airportCity, String airportCountry,
-			String airportIata, Double umbral) {
+	public Nodo(int i, int g, Double umbral, InfoAeropuertos info) {
 		this.value = i;
 		this.degree = g;
-		this.airportName = airportName;
-		this.airportCity = airportCity;
-		this.airportCountry = airportCountry;
-		this.airportIata = airportIata;
+		this.infoAeropuerto = info;
 		this.umbral = umbral;
 	}
 	
@@ -42,46 +35,14 @@ public class Nodo {
 	public boolean equals(Object o) {
 		return o != null &&
 				o instanceof Nodo && ((Nodo) o).value == this.value && ((Nodo) o).degree == this.degree
-				&& ((Nodo) o).airportIata == this.airportIata
-				&& ((Nodo) o).airportName == this.airportName;
+				&& ((Nodo) o).infoAeropuerto.getIata() == this.infoAeropuerto.getIata()
+				&& ((Nodo) o).infoAeropuerto.getName() == this.infoAeropuerto.getName();
 	}
 	
 	@Override
 	public String toString() {
-		return this.airportName + " " + this.airportIata + " idNodo " + 
+		return this.infoAeropuerto.getName() + " " + this.infoAeropuerto.getIata() + " idNodo " + 
 	this.value + " : " + " grado " + this.degree;
-	}
-
-	public String getAirportName() {
-		return airportName;
-	}
-
-	public void setAirportName(String airportName) {
-		this.airportName = airportName;
-	}
-
-	public String getAirportCity() {
-		return airportCity;
-	}
-
-	public void setAirportCity(String airportCity) {
-		this.airportCity = airportCity;
-	}
-
-	public String getAirportCountry() {
-		return airportCountry;
-	}
-
-	public void setAirportCountry(String airportCountry) {
-		this.airportCountry = airportCountry;
-	}
-
-	public String getAirportIata() {
-		return airportIata;
-	}
-
-	public void setAirportIata(String airportIata) {
-		this.airportIata = airportIata;
 	}
 
 	public Double getUmbral() {
@@ -90,5 +51,11 @@ public class Nodo {
 
 	public void setUmbral(Double umbral) {
 		this.umbral = umbral;
+	}
+	public InfoAeropuertos getInfo() {
+		return this.infoAeropuerto;
+	}
+	public void setInfoAeropuertos(InfoAeropuertos info) {
+		this.infoAeropuerto = info;
 	}
 }
