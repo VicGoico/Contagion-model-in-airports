@@ -32,7 +32,7 @@ public class CargarRed {
                 // use comma as separator
                 String[] linea = line.split(cvsSplitBy);
                 
-                InfoAeropuertos info = new InfoAeropuertos(linea[0], linea[3],
+                TAirport info = new TAirport(linea[0], linea[3],
                 		linea[4], linea[5], linea[6], linea[7], linea[8],
                 		linea[9], linea[10], linea[11], linea[12], linea[13]);
                 

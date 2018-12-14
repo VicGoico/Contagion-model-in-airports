@@ -4,13 +4,13 @@ package modelo;
 public class Nodo {
 	private int value;
 	private int degree;
-	private InfoAeropuertos infoAeropuerto;
+	private TAirport tAirport;
 	private Double umbral;
 	
-	public Nodo(int i, int g, Double umbral, InfoAeropuertos info) {
+	public Nodo(int i, int g, Double umbral, TAirport info) {
 		this.value = i;
 		this.degree = g;
-		this.infoAeropuerto = info;
+		this.tAirport = info;
 		this.umbral = umbral;
 	}
 	
@@ -35,13 +35,13 @@ public class Nodo {
 	public boolean equals(Object o) {
 		return o != null &&
 				o instanceof Nodo && ((Nodo) o).value == this.value && ((Nodo) o).degree == this.degree
-				&& ((Nodo) o).infoAeropuerto.getIata() == this.infoAeropuerto.getIata()
-				&& ((Nodo) o).infoAeropuerto.getName() == this.infoAeropuerto.getName();
+				&& ((Nodo) o).tAirport.getIata() == this.tAirport.getIata()
+				&& ((Nodo) o).tAirport.getName() == this.tAirport.getName();
 	}
 	
 	@Override
 	public String toString() {
-		return this.infoAeropuerto.getName() + " " + this.infoAeropuerto.getIata() + " idNodo " + 
+		return this.tAirport.getName() + " " + this.tAirport.getIata() + " idNodo " + 
 	this.value + " : " + " grado " + this.degree;
 	}
 
@@ -52,10 +52,10 @@ public class Nodo {
 	public void setUmbral(Double umbral) {
 		this.umbral = umbral;
 	}
-	public InfoAeropuertos getInfo() {
-		return this.infoAeropuerto;
+	public TAirport getInfo() {
+		return this.tAirport;
 	}
-	public void setInfoAeropuertos(InfoAeropuertos info) {
-		this.infoAeropuerto = info;
+	public void setInfoAeropuertos(TAirport info) {
+		this.tAirport = info;
 	}
 }
