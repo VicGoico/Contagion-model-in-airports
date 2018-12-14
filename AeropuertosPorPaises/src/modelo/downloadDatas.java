@@ -4,15 +4,17 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class downloadDatas {
-	private HashMap<String,TAirport>world;
-	private HashMap<String,Integer> countrys;
+	private HashMap<Integer,TAirport> info_airport;
+	private HashMap<String,ArrayList<HashMap<Integer,TAirport>>> countrys;
 	
 	public downloadDatas(){
-		this.setMundo(new HashMap<String, TAirport>());
-		this.setCountrys(new HashMap<String, Integer>());
+		this.info_airport = new HashMap<Integer, TAirport>();
+		this.countrys = new HashMap<String,ArrayList<HashMap<Integer,TAirport>>>();
+		
 		this.readDatas();
 	}
 	
@@ -80,11 +82,11 @@ public class downloadDatas {
 							data[8], data[9], data[10], data[11]);
 					
 					// Guardo el aeropuerto en mi mapa
-					this.world.put(data[3], tAirport);
+					this.info_airport.put(Integer.parseInt(data[0]), tAirport);
 					
 					// Miro que no este en el HashMap de paises
 					
-					// No esta, pues lo meto
+					/*// No esta, pues lo meto
 					if (!this.countrys.containsKey(data[3])) {
 						this.countrys.put(data[3], 1);
 					} 
@@ -93,14 +95,14 @@ public class downloadDatas {
 						Integer cont = this.countrys.get(data[3]);
 						cont++;
 						this.countrys.put(data[3], cont);
-					}
+					}*/
 				}
 				else{
 					cierto = false;
 				}
 
 			}
-			System.out.println("Numero de paises: " + this.world.size());
+			//System.out.println("Numero de paises: " + this.world.size());
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -116,22 +118,6 @@ public class downloadDatas {
 			}
 		}
 
-	}
-	
-	
-	
-	
-	public HashMap<String,TAirport> getMundo() {
-		return this.world;
-	}
-	public void setMundo(HashMap<String,TAirport> mundo) {
-		this.world = mundo;
-	}
-	public HashMap<String,Integer> getCountrys() {
-		return this.countrys;
-	}
-	public void setCountrys(HashMap<String,Integer> countrys) {
-		this.countrys = countrys;
 	}
 	
 
