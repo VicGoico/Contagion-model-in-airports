@@ -2,23 +2,23 @@ package modelo;
 
 
 public class Nodo {
-	private int value;
+	private int id;
 	private int degree;
 	private TAirport tAirport;
 	private Double umbral;
 	
 	public Nodo(int i, int g, Double umbral, TAirport info) {
-		this.value = i;
+		this.id = i;
 		this.degree = g;
 		this.tAirport = info;
 		this.umbral = umbral;
 	}
 	
 	public int getValue() {
-		return value;
+		return id;
 	}
 	public void setValue(int value) {
-		this.value = value;
+		this.id = value;
 	}
 	public int getDegree() {
 		return degree;
@@ -34,7 +34,7 @@ public class Nodo {
 	@Override
 	public boolean equals(Object o) {
 		return o != null &&
-				o instanceof Nodo && ((Nodo) o).value == this.value && ((Nodo) o).degree == this.degree
+				o instanceof Nodo && ((Nodo) o).id == this.id && ((Nodo) o).degree == this.degree
 				&& ((Nodo) o).tAirport.getIata() == this.tAirport.getIata()
 				&& ((Nodo) o).tAirport.getName() == this.tAirport.getName();
 	}
@@ -42,7 +42,7 @@ public class Nodo {
 	@Override
 	public String toString() {
 		return this.tAirport.getName() + " " + this.tAirport.getIata() + " idNodo " + 
-	this.value + " : " + " grado " + this.degree;
+	this.id + " : " + " grado " + this.degree;
 	}
 
 	public Double getUmbral() {

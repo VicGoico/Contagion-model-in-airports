@@ -12,14 +12,14 @@ public class CargarRed {
 	private Red red;
 	private HashMap<Integer, Nodo> nodos;
 	private HashMap<Integer,TAirport> info_airport;
-	private HashMap<String,ArrayList<HashMap<Integer,TAirport>>> countrys;
+	private HashMap<String,ArrayList<HashMap<Integer,TAirport>>> countries;
 	
 	public CargarRed() {
 		this.red = new Red();
 		this.nodos = new HashMap<Integer, Nodo>();
 		//leerNodos();
 		this.info_airport = new HashMap<Integer, TAirport>();
-		this.countrys = new HashMap<String,ArrayList<HashMap<Integer,TAirport>>>();
+		this.countries = new HashMap<String,ArrayList<HashMap<Integer,TAirport>>>();
 		
 		this.readDatas();
 		this.red.setNodos(nodos);
@@ -28,7 +28,7 @@ public class CargarRed {
 	}
 	
 	public void readDatas(){
-		String csvFile = "src/tabla exportada de nodos.csv";// Poner la ruta del
+		String csvFile = "nodos.csv";// Poner la ruta del
 															// csv
 		BufferedReader br = null;
 		String line = "";
@@ -101,6 +101,10 @@ public class CargarRed {
 
 					// Guardo el aeropuerto en mi mapa
 					this.info_airport.put(Integer.parseInt(data[0]), tAirport);
+					
+					Nodo n = new Nodo(Integer.parseInt(data[0]), 0, 0.0, tAirport);
+	                
+	                nodos.put(Integer.parseInt(data[0]), n);
 
 					// Miro que no este en el HashMap de paises
 
