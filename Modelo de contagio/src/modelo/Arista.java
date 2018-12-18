@@ -5,10 +5,12 @@ public class Arista {
 
 	private Nodo nodo1;
 	private Nodo nodo2;
+	private Integer peso;
 
-	public Arista(Nodo nodo1, Nodo nodo2) {
+	public Arista(Nodo nodo1, Nodo nodo2, Integer peso) {
 		this.nodo1 = nodo1;
 		this.nodo2 = nodo2;
+		this.peso = peso;
 	}
 
 	public Nodo getNodo1() {
@@ -31,12 +33,19 @@ public class Arista {
 	public boolean equals(Object o) {
 		return o != null &&
 				o instanceof Arista &&
-				( ((Arista) o).nodo1.equals(this.nodo1) && ((Arista) o).nodo2.equals(this.nodo2) ||
-				((Arista) o).nodo1.equals(this.nodo2) && ((Arista) o).nodo2.equals(this.nodo1));
+				( ((Arista) o).nodo1.equals(this.nodo1) && ((Arista) o).nodo2.equals(this.nodo2));
 	}
 	
 	@Override
 	public String toString() {
 		return "(" + this.nodo1.toString() + ", " + this.nodo2.toString() + ")";
+	}
+
+	public Integer getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Integer peso) {
+		this.peso = peso;
 	}
 }

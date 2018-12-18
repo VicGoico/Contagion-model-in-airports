@@ -6,12 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class CargarRed {
 	private Red red;
 	private HashMap<Integer, Nodo> nodos;
 	private HashMap<Integer,TAirport> info_airport;
+	
 	private HashMap<String,ArrayList<HashMap<Integer,TAirport>>> countries;
 	
 	public CargarRed() {
@@ -102,7 +102,7 @@ public class CargarRed {
 					// Guardo el aeropuerto en mi mapa
 					this.info_airport.put(Integer.parseInt(data[0]), tAirport);
 					
-					Nodo n = new Nodo(Integer.parseInt(data[0]), 0, 0.0, tAirport);
+					Nodo n = new Nodo(Integer.parseInt(data[0]), 0, 0.0, tAirport, 0,0);
 	                
 	                nodos.put(Integer.parseInt(data[0]), n);
 
@@ -157,13 +157,14 @@ public class CargarRed {
                 //nodos.put(Integer.parseInt(linea[0]), info);
                 
                 System.out.println(linea[3]);
+                System.out.println(linea[5]);
                 if(!linea[3].equalsIgnoreCase("N") && !linea[5].equalsIgnoreCase("N")) {
                 	
                 	Nodo n1 = nodos.get(Integer.parseInt(linea[3]));
                     
                     Nodo n2 = nodos.get(Integer.parseInt(linea[5]));
                     
-                    Arista a = new Arista(n1, n2);
+                    Arista a = new Arista(n1, n2, 1);
                     
                     red.add(a);
                 	
