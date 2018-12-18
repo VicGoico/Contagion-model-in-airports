@@ -1,18 +1,19 @@
 package modelo;
 
 public class TAirport {
-	private int id;//0
-	private String name;//3
-	private String city;//4
-	private String country;//5
-	private String iata;//6
-	private String icao;//7
-	private double latitude;//8
-	private double longitude;//9
-	private int altitude;//10
-	private int indegree;//11
-	private int outdegree;//12
-	private int degree;//13
+	private int id;				//0
+	private String name;		//3
+	private String city;		//4
+	private String country;		//5
+	private String iata;		//6
+	private String icao;		//7
+	private double latitude;	//8
+	private double longitude;	//9
+	private int altitude;		//10
+	private int indegree;		//11
+	private int outdegree;		//12
+	private int degree;			//13
+	private double umbral;
 	
 	public TAirport(String id, String name, String city, String country, String iata, String icao,
 			String latitude, String longitude, String altitude, String indegree, String outdegree, String degree){
@@ -32,6 +33,7 @@ public class TAirport {
 		this.indegree = Integer.parseInt(indegree);
 		this.outdegree = Integer.parseInt(outdegree);
 		this.degree = Integer.parseInt(degree);
+		this.umbral = 0.0;
 	}
 	public int getId(){
 		return this.id;
@@ -68,6 +70,12 @@ public class TAirport {
 	}
 	public int getDegree(){
 		return this.degree;
+	}
+	public double getUmbral() {
+		return umbral;
+	}
+	public void setUmbral(double umbral) {
+		this.umbral = umbral;
 	}
 	
 }

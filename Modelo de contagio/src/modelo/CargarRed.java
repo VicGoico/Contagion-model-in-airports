@@ -34,11 +34,6 @@ public class CargarRed {
 		String line = "";
 
 		try {
-			/*
-			 * HashMap<String,TAirport>mundo = new HashMap<String, TAirport>();
-			 * HashMap<String,Integer> countrys = new HashMap<String,
-			 * Integer>();
-			 */
 			TAirport tAirport;
 			br = new BufferedReader(new FileReader(csvFile));
 			boolean cierto = true;
@@ -47,9 +42,6 @@ public class CargarRed {
 				// vienen todos los nombres de los campos
 				if (!cierto) {
 					String aux = line;
-					// use comma as separator
-					// String[] data = line.split(coma);
-					// String prueba = "234,,,\"Hola,amigos\",pepe";
 					String[] data = new String[12];
 					int conta = 0;
 					String linea = "";
@@ -60,7 +52,6 @@ public class CargarRed {
 						// basura
 						if (!libre && (line.substring(i, i + 1).equals(",")) && !linea.equalsIgnoreCase("")) {
 							data[conta] = linea;
-							// System.out.println(linea);
 							linea = "";
 							conta++;
 						}
@@ -74,7 +65,6 @@ public class CargarRed {
 						// comillas ""
 						else if (line.substring(i, i + 1).equals("\"") && line.substring(i + 1, i + 2).equals(",")) {
 							linea += "\"";
-							// System.out.println(linea);
 							data[conta] = linea;
 							linea = "";
 							conta++;
@@ -91,9 +81,6 @@ public class CargarRed {
 					}
 					// Le pongo al final del todo el ultimo dato leido
 					data[11] = linea;
-					// System.out.println("Datos [id= " + data[0] + " , name
-					// ="+data[3]+" , city ="+data[4]+ " , country =" + data[5]
-					// + "]");
 
 					// Me creo el aeropuerto con sus datos
 					tAirport = new TAirport(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7],
@@ -165,14 +152,9 @@ public class CargarRed {
                     
                     Arista a = new Arista(n1, n2);
                     
-                    red.add(a);
-                	
-                }
-                
-                
+                    red.add(a);	
+                }                
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
