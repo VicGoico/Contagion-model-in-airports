@@ -13,15 +13,16 @@ public class TAirport {
 	private int indegree;		//11
 	private int outdegree;		//12
 	private int degree;			//13
-	private double umbral;
+	private double umbral;		//14
 	
+	// Constructora para poder calcular los umbrales, posteriomente
 	public TAirport(String id, String name, String city, String country, String iata, String icao,
 			String latitude, String longitude, String altitude, String indegree, String outdegree, String degree){
 		
 		this.id = Integer.parseInt(id);
-		if(this.id == 641){
+		/*if(this.id == 641){
 			System.out.println("Hola");
-		}
+		}*/
 		this.name = name;
 		this.city = city;
 		this.country = country;
@@ -34,6 +35,27 @@ public class TAirport {
 		this.outdegree = Integer.parseInt(outdegree);
 		this.degree = Integer.parseInt(degree);
 		this.umbral = 0.0;
+	}
+	// Construtora para leer el CSV bueno, con todos los datos
+	public TAirport(String id, String name, String city, String country, String iata, String icao,
+			String latitude, String longitude, String altitude, String indegree, String outdegree, String degree, String umbral){
+		
+		this.id = Integer.parseInt(id);
+		/*if(this.id == 641){
+			System.out.println("Hola");
+		}*/
+		this.name = name;
+		this.city = city;
+		this.country = country;
+		this.iata = iata;
+		this.icao = icao;
+		this.latitude = Double.parseDouble(latitude);
+		this.longitude = Double.parseDouble(longitude);
+		this.altitude =Integer.parseInt(altitude);
+		this.indegree = Integer.parseInt(indegree);
+		this.outdegree = Integer.parseInt(outdegree);
+		this.degree = Integer.parseInt(degree);
+		this.umbral = Integer.parseInt(umbral);
 	}
 	public int getId(){
 		return this.id;
