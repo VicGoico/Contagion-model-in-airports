@@ -4,14 +4,18 @@ package modelo;
 public class Nodo {
 	private int id;
 	private int degree;
+	private int outdegree;
+	private int indegree;
 	private TAirport tAirport;
 	private Double umbral;
 	
-	public Nodo(int i, int g, Double umbral, TAirport info) {
+	public Nodo(int i, int g, Double umbral, TAirport info, int indegree, int outdegree) {
 		this.id = i;
 		this.degree = g;
 		this.tAirport = info;
 		this.umbral = umbral;
+		this.indegree = indegree;
+		this.outdegree = outdegree;
 	}
 	
 	public int getValue() {
@@ -57,5 +61,21 @@ public class Nodo {
 	}
 	public void setInfoAeropuertos(TAirport info) {
 		this.tAirport = info;
+	}
+
+	public int getOutdegree() {
+		return outdegree;
+	}
+
+	public void setOutdegree(int outdegree) {
+		this.outdegree = outdegree;
+	}
+
+	public int getIndegree() {
+		return indegree;
+	}
+
+	public void setIndegree(int indegree) {
+		this.indegree = indegree;
 	}
 }

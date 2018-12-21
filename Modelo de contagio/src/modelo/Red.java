@@ -23,9 +23,8 @@ public class Red {
 	}
 	
 	public boolean contains(Arista a) {
-		Nodo n1 = a.getNodo1(), n2 = a.getNodo2();
 		//compruebaExistenciaNodos(a);		
-		return this.aristas.contains(new Arista(this.nodos.get(n1.getValue()), this.nodos.get(n2.getValue())));
+		return this.aristas.contains(a);
 	}
 	/*
 	private void compruebaExistenciaNodos(Arista a) {
@@ -41,10 +40,23 @@ public class Red {
 		Nodo n1 = this.nodos.get(a.getNodo1().getValue());
 		Nodo n2 = this.nodos.get(a.getNodo2().getValue());
 		
-		n1.incrementDegree();
-		n2.incrementDegree();
 		
-		this.aristas.add(new Arista(n1, n2));
+		if(aristas.contains(a)) {
+			int index = aristas.indexOf(a);
+			Arista aux = aristas.get(index);
+			aux.setPeso(aux.getPeso() + 1);
+			
+		}
+		else {
+			this.aristas.add(new Arista(n1, n2, 1));
+			n1.setOutdegree(n1.getOutdegree() + 1);
+			n2.setIndegree(n2.getIndegree() + 1);
+
+			n1.incrementDegree();
+			n2.incrementDegree();
+		}
+		
+		
 	}
 	
 	/**
