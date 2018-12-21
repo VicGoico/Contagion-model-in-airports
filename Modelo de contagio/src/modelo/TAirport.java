@@ -55,7 +55,7 @@ public class TAirport {
 		this.indegree = Integer.parseInt(indegree);
 		this.outdegree = Integer.parseInt(outdegree);
 		this.degree = Integer.parseInt(degree);
-		this.umbral = Integer.parseInt(umbral);
+		this.umbral  = Double.parseDouble(umbral);
 	}
 	public int getId(){
 		return this.id;
