@@ -42,7 +42,7 @@ public class HelloUnfoldingWorld extends PApplet {
 		//ImageMarker imgMarker2 = new ImageMarker(veniceLocation, loadImage("marcaRoja.png"));
 		//ImageMarker imgMarker3 = new ImageMarker(berlinLocation, loadImage("marcaRoja.png"));
 		ImageMarker imgMarker4 = new ImageMarker(madridLocation, loadImage("marcaRoja.png"));
-		mainMap.addMarkers(imgMarker4);
+		mainMap.addMarker(imgMarker4);
         //mainMap.addMarkers(infectados);
     }
     public void draw() {
