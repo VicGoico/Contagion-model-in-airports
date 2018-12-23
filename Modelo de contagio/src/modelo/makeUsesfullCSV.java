@@ -14,11 +14,15 @@ public class makeUsesfullCSV {
 	private HashMap<String, ArrayList<TAirport>> umbral_country;
 	private ArrayList<String> name_of_countrys;
 	
+	private double max_umbral;
+	
+	
 	// Constructora
 	public makeUsesfullCSV(){
 		this.umbral_country = new HashMap<String, ArrayList<TAirport>>();
 		this.name_of_countrys = new ArrayList<String>();
 		this.menu();
+		this.max_umbral = 0;
 	}
 	private void menu() {
 		// Primero leo los datos de los aeropuertos sin el umbral
@@ -99,6 +103,7 @@ public class makeUsesfullCSV {
 					sb.append(',');
 					sb.append(tAirport.getDegree());
 					sb.append(',');
+					tAirport.setUmbral((tAirport.getUmbral()*100)/this.max_umbral);
 					sb.append(tAirport.getUmbral());
 					sb.append('\n');
 				}
@@ -106,6 +111,7 @@ public class makeUsesfullCSV {
 			
 
 			pw.write(sb.toString());
+		//	System.out.println("Maximo umbral: "+this.max+ "Pais: " + this.c);
 			pw.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -152,6 +158,9 @@ public class makeUsesfullCSV {
 					else if(!PIB.equalsIgnoreCase(data[3]) && cierto){
 						cierto = false;
 						umbral = (umbral/numOfYears);
+						if(umbral > this.max_umbral){
+							this.max_umbral = umbral;
+						}
 						if(this.umbral_country.containsKey(country)){
 							for(TAirport tAirport : this.umbral_country.get(country)){
 								tAirport.setUmbral(umbral);

@@ -16,8 +16,8 @@ public class Main {
 		vista = new Vista();
 		frame.add(vista, BorderLayout.WEST);
 		frame.setVisible(true);*/
-		CargarRed cr = new CargarRed();
-
+		//CargarRed cr = new CargarRed();
+		makeUsesfullCSV hola = new makeUsesfullCSV();
 	}
 
 }
