@@ -92,6 +92,8 @@ public class CargarRed {
 					this.info_airport.put(Integer.parseInt(data[0]), tAirport);
 					
 					Nodo n = new Nodo(Integer.parseInt(data[0]), 0, 0.0, tAirport, 0,0);
+					
+					n.setUmbral(Double.parseDouble(data[12]));
 	                
 	                nodos.put(Integer.parseInt(data[0]), n);
 
