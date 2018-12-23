@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.HashMap;
 
 public class Nodo {
 	private int id;
@@ -8,6 +9,9 @@ public class Nodo {
 	private int indegree;
 	private TAirport tAirport;
 	private Double umbral;
+	//PARA LA INFECCIÓN
+	HashMap<Integer, Integer> aeropuertos_comunicados; //<IDAeropuerto, Peso>
+	private Integer aeropuetosComunicadosInfectados = 0;
 	
 	public Nodo(int i, int g, Double umbral, TAirport info, int indegree, int outdegree) {
 		this.id = i;
@@ -16,6 +20,15 @@ public class Nodo {
 		this.umbral = umbral;
 		this.indegree = indegree;
 		this.outdegree = outdegree;
+		aeropuertos_comunicados = new HashMap<Integer, Integer>();
+	}
+	
+	public void addAeropuertoComunicado(Integer aeropuerto, Integer peso) {
+		this.aeropuertos_comunicados.put(aeropuerto, peso);
+	}
+	
+	public Integer getPesoAeropuertoComunicado(Integer aeropuerto) {
+		return aeropuertos_comunicados.get(aeropuerto);
 	}
 	
 	public int getValue() {
@@ -77,5 +90,13 @@ public class Nodo {
 
 	public void setIndegree(int indegree) {
 		this.indegree = indegree;
+	}
+
+	public Integer getAeropuetosComunicadosInfectados() {
+		return aeropuetosComunicadosInfectados;
+	}
+
+	public void setAeropuetosComunicadosInfectados(Integer aeropuetosComunicadosInfectados) {
+		this.aeropuetosComunicadosInfectados = aeropuetosComunicadosInfectados;
 	}
 }

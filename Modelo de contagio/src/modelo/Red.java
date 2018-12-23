@@ -40,6 +40,12 @@ public class Red {
 		Nodo n1 = this.nodos.get(a.getNodo1().getValue());
 		Nodo n2 = this.nodos.get(a.getNodo2().getValue());
 		
+		if(n1.getPesoAeropuertoComunicado(n2.getValue()) != null) {
+			n1.addAeropuertoComunicado(n2.getValue(), n1.getPesoAeropuertoComunicado(n2.getValue()) +1);
+		}
+		else {
+			n1.addAeropuertoComunicado(n2.getValue(), 1);
+		}
 		
 		if(aristas.contains(a)) {
 			int index = aristas.indexOf(a);
