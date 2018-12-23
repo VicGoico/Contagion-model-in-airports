@@ -103,7 +103,7 @@ public class makeUsesfullCSV {
 					sb.append(',');
 					sb.append(tAirport.getDegree());
 					sb.append(',');
-					tAirport.setUmbral((tAirport.getUmbral()*100)/this.max_umbral);
+					tAirport.setUmbral((tAirport.getUmbral())/this.max_umbral);
 					sb.append(tAirport.getUmbral());
 					sb.append('\n');
 				}

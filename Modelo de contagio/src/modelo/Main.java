@@ -15,7 +15,7 @@ public class Main {
 	private static CargarRed cr;
 	
 	public static void main(String[] args) {
-		frame = new JFrame("Bienvenidos al lector de datos");
+		/*frame = new JFrame("Bienvenidos al lector de datos");
 		frame.setSize(450, 420);
 		frame.setLayout(new BorderLayout());
 		vista = new Vista();
@@ -24,7 +24,7 @@ public class Main {
 		//CargarRed cr = new CargarRed();
 		makeUsesfullCSV hola = new makeUsesfullCSV();
 
-		frame.setVisible(true);
+		//frame.setVisible(true);
 		//CargarRed cr = new CargarRed();
 	}
 	
