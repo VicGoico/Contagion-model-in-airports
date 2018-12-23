@@ -21,7 +21,12 @@ public class Vista extends javax.swing.JPanel {
         EjecutarPrograma = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
 
-        EjecutarPrograma.setText("Ejecutar programa");
+        EjecutarPrograma.setText("Cargar los datos de todos los vuelos");
+        EjecutarPrograma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EjecutarActionPerformed(evt);
+            }
+        });
 
         Salir.setText("SALIR");
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -57,7 +62,11 @@ public class Vista extends javax.swing.JPanel {
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {                                      
         // TODO add your handling code here:
-    }                                     
+    }
+    
+    private void EjecutarActionPerformed(java.awt.event.ActionEvent evt) {                                      
+        Main.CargarRed();
+    } 
 
 
     // Variables declaration - do not modify                     

@@ -27,7 +27,7 @@ public class CargarRed {
 		this.readDatas("test.csv");
 		this.red.setNodos(nodos);
 		this.generaRed();
-		System.out.println(red);
+		//System.out.println(red);
 	}
 	
 	public void readDatas(String csvFile){
@@ -162,6 +162,9 @@ public class CargarRed {
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	public HashMap<Integer, Nodo> getNodos() {
+		return this.nodos;
 	}
 	
 }
