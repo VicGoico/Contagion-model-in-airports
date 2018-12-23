@@ -35,7 +35,7 @@ public class VentanaControl extends javax.swing.JPanel{
 		
 		String[] aeropuertos = new String[3334];
 		int i = 0;
-		TreeMap<String, Nodo> aeropuertosOrdenados = new TreeMap<String,Nodo>();
+		aeropuertosOrdenados = new TreeMap<String,Nodo>();
 		for (Map.Entry<Integer, Nodo> entry : nodos.entrySet()) {
 			aeropuertosOrdenados.put(entry.getValue().getInfo().getName(), 
 					entry.getValue());
@@ -48,6 +48,11 @@ public class VentanaControl extends javax.swing.JPanel{
 				new javax.swing.DefaultComboBoxModel<>(aeropuertos));
 
 		jButton1.setText("COMENZAR INFECCIÓN");
+		jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InfeccionActionPerformed(evt);
+            }
+        });
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
@@ -73,7 +78,13 @@ public class VentanaControl extends javax.swing.JPanel{
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(70, 70, 70).addComponent(jButton1).addContainerGap(104, Short.MAX_VALUE)));
 	}// </editor-fold>
+	
+	private void InfeccionActionPerformed(java.awt.event.ActionEvent evt) {                                      
+        Nodo foco = aeropuertosOrdenados.get(this.jComboBox1.getSelectedItem());
+        Main.comenzarInfeccion(foco);
+    } 
 
+	private TreeMap<String, Nodo> aeropuertosOrdenados;
 	// Variables declaration - do not modify
 	private javax.swing.JButton jButton1;
 	private javax.swing.JComboBox<String> jComboBox1;

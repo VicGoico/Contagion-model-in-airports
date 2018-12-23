@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+import processing.core.PApplet;
+
 public class Main {
 
 	private static JFrame frame;
@@ -13,6 +15,8 @@ public class Main {
 	private static VentanaControl control;
 	
 	private static CargarRed cr;
+	
+	private static HelloUnfoldingWorld papplet;
 	
 	public static void main(String[] args) {
 		frame = new JFrame("Bienvenidos al lector de datos");
@@ -33,5 +37,23 @@ public class Main {
 		frame.add(control, BorderLayout.WEST);
 		frame.setVisible(true);
 	}
+	
+	public static void comenzarInfeccion(Nodo foco) {
+		frame.remove(control);
+		frame.setSize(1200, 700);
+		papplet = new HelloUnfoldingWorld();
+		
+		papplet.frame = frame;
+		frame.setResizable(true);
+		frame.add(papplet, BorderLayout.CENTER);
+        papplet.init();
+		//PApplet.main(new String[] { HelloUnfoldingWorld.class.getName() });
+		//HelloUnfoldingWorld world = new HelloUnfoldingWorld();
+		//world.frame.setVisible(true);
+		//world.setup();
+		//world.draw();
+		
+	}
+	
 
 }
