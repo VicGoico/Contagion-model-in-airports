@@ -10,8 +10,10 @@ public class Nodo {
 	private TAirport tAirport;
 	private Double umbral;
 	//PARA LA INFECCIÓN
-	HashMap<Integer, Integer> aeropuertos_comunicados; //<IDAeropuerto, Peso>
+	private HashMap<Integer, Integer> aeropuertos_comunicados; //<IDAeropuerto, Peso>
 	private Integer aeropuetosComunicadosInfectados = 0;
+	private boolean infectado = false;
+	
 	
 	public Nodo(int i, int g, Double umbral, TAirport info, int indegree, int outdegree) {
 		this.id = i;
@@ -29,6 +31,10 @@ public class Nodo {
 	
 	public Integer getPesoAeropuertoComunicado(Integer aeropuerto) {
 		return aeropuertos_comunicados.get(aeropuerto);
+	}
+	
+	public HashMap<Integer, Integer> getAeropuertosALosQueVuela(){
+		return this.aeropuertos_comunicados;
 	}
 	
 	public int getValue() {
@@ -98,5 +104,13 @@ public class Nodo {
 
 	public void setAeropuetosComunicadosInfectados(Integer aeropuetosComunicadosInfectados) {
 		this.aeropuetosComunicadosInfectados = aeropuetosComunicadosInfectados;
+	}
+
+	public boolean isInfectado() {
+		return infectado;
+	}
+
+	public void setInfectado(boolean infectado) {
+		this.infectado = infectado;
 	}
 }

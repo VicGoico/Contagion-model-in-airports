@@ -146,8 +146,8 @@ public class CargarRed {
                 //nodos.put(Integer.parseInt(linea[0]), info);
                 
                 //System.out.println(linea[3]);
-                System.out.println(linea[3]);
-                System.out.println(linea[5]);
+                //System.out.println(linea[3]);
+                //System.out.println(linea[5]);
                 if(!linea[3].equalsIgnoreCase("N") && !linea[5].equalsIgnoreCase("N")) {
                 	
                 	Nodo n1 = nodos.get(Integer.parseInt(linea[3]));
@@ -166,5 +166,7 @@ public class CargarRed {
 	public HashMap<Integer, Nodo> getNodos() {
 		return this.nodos;
 	}
-	
+	public Red getRed() {
+		return this.red;
+	}
 }
