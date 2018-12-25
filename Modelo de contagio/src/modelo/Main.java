@@ -51,7 +51,7 @@ public class Main {
 
 	public static void comenzarInfeccion(Nodo foco) {
 		ModeloContagio modelo = new ModeloContagio();
-		modelo.simular(cr.getRed(), cr.getRed().nodos.get(641));
+		modelo.simular(cr.getRed(), cr.getRed().nodos.get(foco.getValue()));
 		
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 
