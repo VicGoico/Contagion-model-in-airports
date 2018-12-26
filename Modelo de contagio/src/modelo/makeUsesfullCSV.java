@@ -156,7 +156,7 @@ public class makeUsesfullCSV {
 							}
 							String aux;
 							if(esNumero){
-								aux = data[4]+ "."+data[5];
+								aux = data[4]+data[5];
 							}
 							else{
 								aux = data[4];
@@ -166,7 +166,7 @@ public class makeUsesfullCSV {
 									support += aux.substring(i, i + 1);
 								}
 							}
-							System.out.println(support+"	"+data[2]+"	"+data[0]);
+							//System.out.println(support+"	"+data[2]+"	"+data[0]);
 							umbral += Double.parseDouble(support);
 							numOfYears++;
 						}
@@ -180,13 +180,12 @@ public class makeUsesfullCSV {
 						// Aqui es donde se realiza toda la magia de los calculos, para el umbral
 						// y en el guardar le daremos el retoque final
 						else if (!PIB.equalsIgnoreCase(data[3]) && cierto && !pro.equalsIgnoreCase(data[3])) {
-							//if(numOfYears != 0){
 								cierto = false;
-								umbral = (umbral / numOfYears);
+								umbral = (umbral / numOfYears);// Esto es el PIB
 								if (this.umbral_country.containsKey(country)) {
 									double cuentas = umbral;
 									for (TAirport tAirport : this.umbral_country.get(country).getList()) {
-										umbral = ((cuentas*tAirport.getUmbral())*tAirport.getDegree())/this.umbral_country.get(country).getMaxDegree();
+										umbral = ((cuentas*(tAirport.getUmbral()/100))*tAirport.getDegree())/this.umbral_country.get(country).getMaxDegree();
 										tAirport.setUmbral(umbral);
 										if(this.max_umbral < umbral){
 											this.max_umbral = umbral;
@@ -195,7 +194,6 @@ public class makeUsesfullCSV {
 								}
 								umbral = 0;
 								numOfYears = 0;
-							//}
 						}
 				
 				} 

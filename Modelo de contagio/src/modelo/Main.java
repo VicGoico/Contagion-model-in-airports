@@ -24,7 +24,7 @@ public class Main {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
 		// CargarRed cr = new CargarRed();
-		 makeUsesfullCSV hola = new makeUsesfullCSV();
+		makeUsesfullCSV hola = new makeUsesfullCSV();
 
 		// frame.setVisible(true);
 		// CargarRed cr = new CargarRed();
