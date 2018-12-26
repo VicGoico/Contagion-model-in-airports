@@ -38,8 +38,14 @@ public class makeUsesfullCSV {
 				this.readDatas2("salud.csv","Current health expenditure (% of GDP)");
 				
 			break;
+			// Segundo caso en el que se lee solo las medidas de "Gasto interno en salud del gobierno general (% del gasto gubernamental total)"
 			case 2:
-				this.readDatas2("salud.csv", "Domestic general government health expenditure (% of total government expenditure");
+				this.readDatas2("salud.csv", "Domestic general government health expenditure (% of total government expenditure)");
+			break;
+			
+			// Tercer caso en el que se combinan las 2 medidas anteriores
+			case 3:
+				this.readDatas3("salud.csv");
 			break;
 				
 				
@@ -136,7 +142,8 @@ public class makeUsesfullCSV {
 			}
 		}	
 	}
-
+	
+	
 	private void readDatas2(String csvFile, String PIB) {
 		BufferedReader br = null;
 		String line = "";
@@ -188,20 +195,123 @@ public class makeUsesfullCSV {
 					// Para no leer las 2 primeras lineas
 					vueltas--;
 				}
-				// Para hacer el ultimo caso
-				/*if(numOfYears != 0){
-					umbral = (umbral/numOfYears);
-					if(umbral > this.max_umbral){
-						this.max_umbral = umbral;
+				
+			}
+			// Para hacer el ultimo caso
+			if(numOfYears != 0){
+				umbral = (umbral/numOfYears);
+				if(umbral > this.max_umbral){
+					this.max_umbral = umbral;
+				}
+				if(this.umbral_country.containsKey(country)){
+					for(TAirport tAirport : this.umbral_country.get(country)){
+						tAirport.setUmbral(umbral);
 					}
-					if(this.umbral_country.containsKey(country)){
-						for(TAirport tAirport : this.umbral_country.get(country)){
-							tAirport.setUmbral(umbral);
+				}
+				umbral = 0;
+				numOfYears = 0;
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	
+
+	private void readDatas3(String csvFile) {
+		BufferedReader br = null;
+		String line = "";
+		double umbral = 0.0;
+		String country = "";
+		int numOfYears = 0;
+		boolean cierto = true;
+		int vueltas = 2;
+		String PIB = "Current health expenditure (% of GDP)";
+		String family = "Domestic general government health expenditure (% of total government expenditure)";
+		
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			
+			while ((line = br.readLine()) != null) {
+				// Este if es para no leer la primera linea, ya que es donde
+				// vienen todos los nombres de los campos
+				if (vueltas == 0) {
+					String[] data = line.split(",");
+					
+					// Es el mismo pais, de otro año
+					if(country.equalsIgnoreCase(data[1]) && PIB.equalsIgnoreCase(data[3])){
+						umbral += Double.parseDouble(data[4]);
+						numOfYears++;
+					}
+					else if (country.equalsIgnoreCase(data[1]) && family.equalsIgnoreCase(data[3])){
+						if(cierto){
+							cierto = false;
+							umbral = (umbral/numOfYears);
+							if(this.umbral_country.containsKey(country)){
+								for(TAirport tAirport : this.umbral_country.get(country)){
+									tAirport.setUmbral(umbral);
+								}
+							}
+							umbral = 0;
+							numOfYears = 0;
 						}
+						umbral += Double.parseDouble(data[4]);
+						numOfYears++;
 					}
-					umbral = 0;
-					numOfYears = 0;
-				}*/
+					// Cuando cambiamos de pais
+					else if (!country.equalsIgnoreCase(data[1])){
+						cierto = true;
+						double oldUmbral;
+						umbral = (umbral/numOfYears);
+						
+						if(this.umbral_country.containsKey(country)){
+							// Aqui esta la magia
+							// Cojo el umbral anterior y el actual y hago la media de los 2
+							oldUmbral = this.umbral_country.get(country).get(0).getUmbral();
+							umbral = (umbral+oldUmbral)/2;
+							if(umbral > this.max_umbral){
+								this.max_umbral = umbral;
+							}
+							for(TAirport tAirport : this.umbral_country.get(country)){
+								tAirport.setUmbral(umbral);
+							}
+						}
+						umbral = 0;
+						numOfYears = 0;
+						country = data[1];
+						umbral += Double.parseDouble(data[4]);
+						numOfYears++;
+					}
+				} 
+				else {
+					// Para no leer las 2 primeras lineas
+					vueltas--;
+				}
+				
+			}
+			// Para hacer el ultimo caso
+			if(numOfYears != 0){
+				umbral = (umbral/numOfYears);
+				if(umbral > this.max_umbral){
+					this.max_umbral = umbral;
+				}
+				if(this.umbral_country.containsKey(country)){
+					for(TAirport tAirport : this.umbral_country.get(country)){
+						tAirport.setUmbral(umbral);
+					}
+				}
+				umbral = 0;
+				numOfYears = 0;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -238,6 +348,7 @@ public class makeUsesfullCSV {
 		namesOfCountrys.put("Laos", "Lao People's Dem. Rep.");
 		namesOfCountrys.put("Vietnam", "Viet Nam");
 		namesOfCountrys.put("United States", "United States of America");
+		// Habria otro pais que es Greenland que habria que cambiarlo por Denmark, ya que Groenlandia pertenece a Dinamarca
 		
 		
 		

@@ -26,14 +26,14 @@ public class Main {
 	private static HelloUnfoldingWorld papplet;
 
 	public static void main(String[] args) {
-		/*frame = new JFrame("Bienvenidos al lector de datos");
+		frame = new JFrame("Bienvenidos al lector de datos");
 		frame.setSize(450, 420);
 		frame.setLayout(new BorderLayout());
 		vista = new Vista();
 		frame.add(vista, BorderLayout.WEST);
-		frame.setVisible(true);*/
+		frame.setVisible(true);
 		// CargarRed cr = new CargarRed();
-		 makeUsesfullCSV hola = new makeUsesfullCSV(1);
+		// makeUsesfullCSV hola = new makeUsesfullCSV(1);
 
 		// frame.setVisible(true);
 		// CargarRed cr = new CargarRed();
