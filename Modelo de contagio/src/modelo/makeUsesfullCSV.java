@@ -16,21 +16,36 @@ public class makeUsesfullCSV {
 	
 	private double max_umbral;
 	
+	private int opcion;
+	
 	
 	// Constructora
-	public makeUsesfullCSV(){
+	public makeUsesfullCSV(int opcion){
 		this.umbral_country = new HashMap<String, ArrayList<TAirport>>();
 		this.name_of_countrys = new ArrayList<String>();
-		this.menu();
 		this.max_umbral = 0;
+		this.opcion = opcion;
+		this.menu();
 	}
 	private void menu() {
 		// Primero leo los datos de los aeropuertos sin el umbral
 		this.readDatas("nodos.csv");
-		// Leo el fichero que contiene informacion sobre paises, en cuanto al nivel de inversion en salud
-		// y calculo el umbral
-		this.readDatas2("salud.csv");
-		// Guardo los datos de los aeropuertos en un nuevo csv llamado test.csv
+		switch(this.opcion){
+			case 1:// Lee solo "Current health expenditure (% of GDP)"
+				// Leo el fichero que contiene informacion sobre paises, en cuanto
+				// al nivel de inversion en salud
+				// y calculo el umbral
+				this.readDatas2("salud.csv","Current health expenditure (% of GDP)");
+				
+			break;
+			case 2:
+				this.readDatas2("salud.csv", "Domestic general government health expenditure (% of total government expenditure");
+			break;
+				
+				
+		}
+		// Guardo los datos de los aeropuertos en un nuevo csv llamado
+		// test.csv
 		this.guardar();
 	}
 	// Guardo la informacion de los aeropuertos con su umbral calculado
@@ -122,13 +137,12 @@ public class makeUsesfullCSV {
 		}	
 	}
 
-	private void readDatas2(String csvFile) {
+	private void readDatas2(String csvFile, String PIB) {
 		BufferedReader br = null;
 		String line = "";
 		double umbral = 0.0;
 		String country = "";
 		int numOfYears = 0;
-		String PIB = "Current health expenditure (% of GDP)";
 		boolean cierto = true;
 		int vueltas = 2;
 		
@@ -174,7 +188,20 @@ public class makeUsesfullCSV {
 					// Para no leer las 2 primeras lineas
 					vueltas--;
 				}
-
+				// Para hacer el ultimo caso
+				/*if(numOfYears != 0){
+					umbral = (umbral/numOfYears);
+					if(umbral > this.max_umbral){
+						this.max_umbral = umbral;
+					}
+					if(this.umbral_country.containsKey(country)){
+						for(TAirport tAirport : this.umbral_country.get(country)){
+							tAirport.setUmbral(umbral);
+						}
+					}
+					umbral = 0;
+					numOfYears = 0;
+				}*/
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -194,7 +221,26 @@ public class makeUsesfullCSV {
 	public void readDatas(String csvFile){
 		BufferedReader br = null;
 		String line = "";
-
+		// Me declaro un HashMap para ver unos determinados paises que en un archivo 
+		// se llaman de una forma y en el otro de otra
+		HashMap<String, String> namesOfCountrys = new HashMap<String, String>();
+		namesOfCountrys.put("Congo(Kinshasa)", "Congo");
+		namesOfCountrys.put("Cape Verde", "Cabo Verde");
+		namesOfCountrys.put("Tanzania", "United Rep. of Tanzania");
+		namesOfCountrys.put("Czech Republic", "Cezchia");
+		namesOfCountrys.put("Macedonia", "TFYR of Macedonia");
+		namesOfCountrys.put("Moldova", "Republic of Moldova");
+		namesOfCountrys.put("Iran", "Iran (Islamic Republic of)");
+		namesOfCountrys.put("South Korea", "Republic of Korea");
+		namesOfCountrys.put("Bolivia", "Bolivia (Plurin. State of)");
+		namesOfCountrys.put("Venezuela", "Venezuela (Boliv. Rep. of)");
+		namesOfCountrys.put("Russia", "Russian Federation");
+		namesOfCountrys.put("Laos", "Lao People's Dem. Rep.");
+		namesOfCountrys.put("Vietnam", "Viet Nam");
+		namesOfCountrys.put("United States", "United States of America");
+		
+		
+		
 		try {
 			TAirport tAirport;
 			br = new BufferedReader(new FileReader(csvFile));
@@ -243,6 +289,11 @@ public class makeUsesfullCSV {
 					}
 					// Le pongo al final del todo el ultimo dato leido
 					data[11] = linea;
+					
+					// Aqui es donde le cambio el nombre para que sea igual en el otro archivo
+					if(namesOfCountrys.containsKey(data[3])){
+						data[3] = namesOfCountrys.get(data[3]);
+					}
 
 					// Me creo el aeropuerto con sus datos
 					tAirport = new TAirport(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7],
@@ -251,6 +302,8 @@ public class makeUsesfullCSV {
 					// Aqui lo que hago es guardar los aeropuertos en HashMap,
 					// Lo ordenado por el nombre del pais
 					ArrayList<TAirport> array;
+					
+					
 					if(this.umbral_country.containsKey(tAirport.getCountry())){
 						array = this.umbral_country.get(tAirport.getCountry());
 						array.add(tAirport);

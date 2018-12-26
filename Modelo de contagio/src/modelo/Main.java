@@ -33,7 +33,7 @@ public class Main {
 		frame.add(vista, BorderLayout.WEST);
 		frame.setVisible(true);
 		// CargarRed cr = new CargarRed();
-		// makeUsesfullCSV hola = new makeUsesfullCSV();
+		 //makeUsesfullCSV hola = new makeUsesfullCSV(1);
 
 		// frame.setVisible(true);
 		// CargarRed cr = new CargarRed();
