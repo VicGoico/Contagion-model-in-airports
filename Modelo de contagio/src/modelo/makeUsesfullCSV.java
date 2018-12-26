@@ -224,10 +224,10 @@ public class makeUsesfullCSV {
 		// Me declaro un HashMap para ver unos determinados paises que en un archivo 
 		// se llaman de una forma y en el otro de otra
 		HashMap<String, String> namesOfCountrys = new HashMap<String, String>();
-		namesOfCountrys.put("Congo(Kinshasa)", "Congo");
+		namesOfCountrys.put("Congo (Kinshasa)", "Congo");
 		namesOfCountrys.put("Cape Verde", "Cabo Verde");
 		namesOfCountrys.put("Tanzania", "United Rep. of Tanzania");
-		namesOfCountrys.put("Czech Republic", "Cezchia");
+		namesOfCountrys.put("Czech Republic", "Czechia");
 		namesOfCountrys.put("Macedonia", "TFYR of Macedonia");
 		namesOfCountrys.put("Moldova", "Republic of Moldova");
 		namesOfCountrys.put("Iran", "Iran (Islamic Republic of)");
