@@ -28,6 +28,7 @@ public class Vista extends javax.swing.JPanel {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				EjecutarPrograma.setText("Cargando...");
 				EjecutarPrograma.setEnabled(false);
+				Salir.setEnabled(false);
 
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {

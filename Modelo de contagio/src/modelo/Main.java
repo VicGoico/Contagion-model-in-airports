@@ -22,6 +22,7 @@ public class Main {
 		vista = new Vista();
 		frame.add(vista, BorderLayout.WEST);
 		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// CargarRed cr = new CargarRed();
 		// makeUsesfullCSV hola = new makeUsesfullCSV(1);
 
