@@ -34,7 +34,7 @@ public class makeUsesfullCSV {
 		// al nivel de inversion en salud
 		// y calculo el umbral
 		this.readDatas2("salud.csv","Current health expenditure (% of GDP)");
-		this.readDatas3("PIB.csv", "GPD per capita");
+		this.readDatas3("PIB.csv", "GDP per capita (US dollars)");
 		
 		// Guardo los datos de los aeropuertos en un nuevo csv llamado
 		// test.csv
@@ -129,10 +129,10 @@ public class makeUsesfullCSV {
 		BufferedReader br = null;
 		String line = "";
 		double umbral = 0.0;
-		String country = "";
+		String country = "", pro = "GDP in current prices (millions of US dollars)";
 		int numOfYears = 0;
 		boolean cierto = true;
-		int vueltas = 40;
+		int vueltas = 755;
 		
 		try {
 			br = new BufferedReader(new FileReader(csvFile));
@@ -142,10 +142,32 @@ public class makeUsesfullCSV {
 				// vienen todos los nombres de los campos
 				if (vueltas == 0) {
 					String[] data = line.split(",");
-					if(this.umbral_country.containsKey(data[1])){
 						// Es el mismo pais, de otro año
 						if (country.equalsIgnoreCase(data[1]) && PIB.equalsIgnoreCase(data[3])) {
-							umbral += Double.parseDouble(data[4]);
+							String support = "";
+							boolean esNumero;
+							// Compruebo si tiene decimales
+							try{
+								Integer.parseInt(data[5]);
+								esNumero = true;
+							}
+							catch(NumberFormatException e){
+								esNumero = false;
+							}
+							String aux;
+							if(esNumero){
+								aux = data[4]+ "."+data[5];
+							}
+							else{
+								aux = data[4];
+							}
+							for(int i = 0; i < aux.length(); i++){
+								if(!aux.substring(i, i + 1).equals("\"")){
+									support += aux.substring(i, i + 1);
+								}
+							}
+							System.out.println(support+"	"+data[2]+"	"+data[0]);
+							umbral += Double.parseDouble(support);
 							numOfYears++;
 						}
 						// Cuando cambiamos de pais
@@ -153,37 +175,37 @@ public class makeUsesfullCSV {
 							cierto = true;
 							country = data[1];
 							umbral = 0;
-							//umbral += Double.parseDouble(data[4]);
 							numOfYears = 0;
-							//numOfYears++;
 						}
 						// Aqui es donde se realiza toda la magia de los calculos, para el umbral
 						// y en el guardar le daremos el retoque final
-						else if (!PIB.equalsIgnoreCase(data[3]) && cierto) {
-							cierto = false;
-							umbral = (umbral / numOfYears);
-							if (this.umbral_country.containsKey(country)) {
-								double cuentas = umbral;
-								for (TAirport tAirport : this.umbral_country.get(country).getList()) {
-									umbral = ((cuentas*tAirport.getUmbral())*tAirport.getDegree())/this.umbral_country.get(country).getMaxDegree();
-									tAirport.setUmbral(umbral);
-									if(this.max_umbral < umbral){
-										this.max_umbral = umbral;
+						else if (!PIB.equalsIgnoreCase(data[3]) && cierto && !pro.equalsIgnoreCase(data[3])) {
+							//if(numOfYears != 0){
+								cierto = false;
+								umbral = (umbral / numOfYears);
+								if (this.umbral_country.containsKey(country)) {
+									double cuentas = umbral;
+									for (TAirport tAirport : this.umbral_country.get(country).getList()) {
+										umbral = ((cuentas*tAirport.getUmbral())*tAirport.getDegree())/this.umbral_country.get(country).getMaxDegree();
+										tAirport.setUmbral(umbral);
+										if(this.max_umbral < umbral){
+											this.max_umbral = umbral;
+										}
 									}
 								}
-							}
-							umbral = 0;
-							numOfYears = 0;
+								umbral = 0;
+								numOfYears = 0;
+							//}
 						}
-					}
+				
 				} 
 				else {
 					// Para no leer las 2 primeras lineas
 					vueltas--;
 				}
-				
 			}
-		} catch (FileNotFoundException e) {
+		}
+		 catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
