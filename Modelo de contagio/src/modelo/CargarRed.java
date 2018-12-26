@@ -1,12 +1,9 @@
 package modelo;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CargarRed {
@@ -15,14 +12,14 @@ public class CargarRed {
 	
 	private HashMap<Integer,TAirport> info_airport;
 	
-	private HashMap<String,ArrayList<HashMap<Integer,TAirport>>> countries;
+	// private HashMap<String,ArrayList<HashMap<Integer,TAirport>>> countries;
 	
 	public CargarRed() {
 		this.red = new Red();
 		this.nodos = new HashMap<Integer, Nodo>();
 		//leerNodos();
 		this.info_airport = new HashMap<Integer, TAirport>();
-		this.countries = new HashMap<String,ArrayList<HashMap<Integer,TAirport>>>();
+		// this.countries = new HashMap<String,ArrayList<HashMap<Integer,TAirport>>>();
 		
 		this.readDatas("test.csv");
 		this.red.setNodos(nodos);
@@ -42,7 +39,7 @@ public class CargarRed {
 				// Este if es para no leer la primera linea, ya que es donde
 				// vienen todos los nombres de los campos
 				if (!cierto) {
-					String aux = line;
+					// String aux = line;
 					String[] data = new String[13];
 					int conta = 0;
 					String linea = "";
