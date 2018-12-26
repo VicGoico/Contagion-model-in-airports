@@ -4,16 +4,6 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-
-import de.fhpotsdam.unfolding.geo.Location;
-import processing.core.PApplet;
-
-
-import de.fhpotsdam.unfolding.UnfoldingMap;
-import de.fhpotsdam.unfolding.geo.Location;
-import de.fhpotsdam.unfolding.marker.Marker;
-import de.fhpotsdam.unfolding.utils.MapUtils;
-import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 public class Main {
 
 	private static JFrame frame;
@@ -32,6 +22,7 @@ public class Main {
 		vista = new Vista();
 		frame.add(vista, BorderLayout.WEST);
 		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// CargarRed cr = new CargarRed();
 		 makeUsesfullCSV hola = new makeUsesfullCSV();
 

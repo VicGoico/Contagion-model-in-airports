@@ -3,8 +3,6 @@ package modelo;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
@@ -43,7 +41,7 @@ public class HelloUnfoldingWorld extends PApplet {
         //ImageMarker imgMarker1 = new ImageMarker(lisbonLocation, loadImage("marcaRoja.png"));
 		//ImageMarker imgMarker2 = new ImageMarker(veniceLocation, loadImage("marcaRoja.png"));
 		//ImageMarker imgMarker3 = new ImageMarker(berlinLocation, loadImage("marcaRoja.png"));
-		ImageMarker imgMarker4 = new ImageMarker(madridLocation, loadImage("marcaRoja.png"));
+		// ImageMarker imgMarker4 = new ImageMarker(madridLocation, loadImage("marcaRoja.png"));
 		//mainMap.addMarker(imgMarker4);
 		mainMap.addMarkers(infectados);
         //mainMap.addMarkers(infectados);

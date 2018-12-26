@@ -299,7 +299,7 @@ public class makeUsesfullCSV {
 				// Este if es para no leer la primera linea, ya que es donde
 				// vienen todos los nombres de los campos
 				if (!cierto) {
-					String aux = line;
+					// String aux = line;
 					String[] data = new String[12];
 					int conta = 0;
 					String linea = "";
