@@ -22,15 +22,7 @@ public class Vista extends javax.swing.JPanel {
 
 		EjecutarPrograma = new javax.swing.JButton();
 		Salir = new javax.swing.JButton();
-
-
-    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {                                      
-        System.exit(ABORT);
-    }
-    
-    private void EjecutarActionPerformed(java.awt.event.ActionEvent evt) {                                      
-        Main.CargarRed();
-    } 
+		
 		EjecutarPrograma.setText("Cargar los datos de todos los vuelos");
 		EjecutarPrograma.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
