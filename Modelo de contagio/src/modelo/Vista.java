@@ -61,7 +61,7 @@ public class Vista extends javax.swing.JPanel {
     }// </editor-fold>                        
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {                                      
-        // TODO add your handling code here:
+        System.exit(ABORT);
     }
     
     private void EjecutarActionPerformed(java.awt.event.ActionEvent evt) {                                      

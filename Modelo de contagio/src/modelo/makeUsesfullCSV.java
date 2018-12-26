@@ -11,45 +11,31 @@ import java.util.HashMap;
 
 public class makeUsesfullCSV {
 	// Atributos
-	private HashMap<String, ArrayList<TAirport>> umbral_country;
+	private HashMap<String, TCountrys> umbral_country;
 	private ArrayList<String> name_of_countrys;
 	
 	private double max_umbral;
 	
-	private int opcion;
+	//private int opcion;
 	
 	
 	// Constructora
-	public makeUsesfullCSV(int opcion){
-		this.umbral_country = new HashMap<String, ArrayList<TAirport>>();
+	public makeUsesfullCSV(){
+		this.umbral_country = new HashMap<String, TCountrys>();
 		this.name_of_countrys = new ArrayList<String>();
 		this.max_umbral = 0;
-		this.opcion = opcion;
+		//this.opcion = opcion;
 		this.menu();
 	}
 	private void menu() {
 		// Primero leo los datos de los aeropuertos sin el umbral
 		this.readDatas("nodos.csv");
-		switch(this.opcion){
-			case 1:// Lee solo "Current health expenditure (% of GDP)"
-				// Leo el fichero que contiene informacion sobre paises, en cuanto
-				// al nivel de inversion en salud
-				// y calculo el umbral
-				this.readDatas2("salud.csv","Current health expenditure (% of GDP)");
-				
-			break;
-			// Segundo caso en el que se lee solo las medidas de "Gasto interno en salud del gobierno general (% del gasto gubernamental total)"
-			case 2:
-				this.readDatas2("salud.csv", "Domestic general government health expenditure (% of total government expenditure)");
-			break;
-			
-			// Tercer caso en el que se combinan las 2 medidas anteriores
-			case 3:
-				this.readDatas3("salud.csv");
-			break;
-				
-				
-		}
+		// Leo el fichero que contiene informacion sobre paises, en cuanto
+		// al nivel de inversion en salud
+		// y calculo el umbral
+		this.readDatas2("salud.csv","Current health expenditure (% of GDP)");
+		this.readDatas3("PIB.csv", "GPD per capita");
+		
 		// Guardo los datos de los aeropuertos en un nuevo csv llamado
 		// test.csv
 		this.guardar();
@@ -59,7 +45,6 @@ public class makeUsesfullCSV {
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new File("test.csv"));
-
 			StringBuilder sb = new StringBuilder();
 			// Escribo la primera linea con los nombres de las columnas
 			sb.append("Id");
@@ -95,7 +80,7 @@ public class makeUsesfullCSV {
 			
 			// Escribir los datos en el csv
 			for(String country :this.name_of_countrys){
-				for (TAirport tAirport : this.umbral_country.get(country)) {
+				for (TAirport tAirport : this.umbral_country.get(country).getList()) {
 					sb.append(tAirport.getId());
 					sb.append(',');
 					sb.append("");
@@ -129,8 +114,6 @@ public class makeUsesfullCSV {
 					sb.append('\n');
 				}
 			}
-			
-
 			pw.write(sb.toString());
 		//	System.out.println("Maximo umbral: "+this.max+ "Pais: " + this.c);
 			pw.close();
@@ -142,7 +125,79 @@ public class makeUsesfullCSV {
 			}
 		}	
 	}
-	
+	private void readDatas3(String csvFile, String PIB) {
+		BufferedReader br = null;
+		String line = "";
+		double umbral = 0.0;
+		String country = "";
+		int numOfYears = 0;
+		boolean cierto = true;
+		int vueltas = 40;
+		
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			
+			while ((line = br.readLine()) != null) {
+				// Este if es para no leer la primera linea, ya que es donde
+				// vienen todos los nombres de los campos
+				if (vueltas == 0) {
+					String[] data = line.split(",");
+					if(this.umbral_country.containsKey(data[1])){
+						// Es el mismo pais, de otro año
+						if (country.equalsIgnoreCase(data[1]) && PIB.equalsIgnoreCase(data[3])) {
+							umbral += Double.parseDouble(data[4]);
+							numOfYears++;
+						}
+						// Cuando cambiamos de pais
+						else if (!country.equalsIgnoreCase(data[1])) {
+							cierto = true;
+							country = data[1];
+							umbral = 0;
+							//umbral += Double.parseDouble(data[4]);
+							numOfYears = 0;
+							//numOfYears++;
+						}
+						// Aqui es donde se realiza toda la magia de los calculos, para el umbral
+						// y en el guardar le daremos el retoque final
+						else if (!PIB.equalsIgnoreCase(data[3]) && cierto) {
+							cierto = false;
+							umbral = (umbral / numOfYears);
+							if (this.umbral_country.containsKey(country)) {
+								double cuentas = umbral;
+								for (TAirport tAirport : this.umbral_country.get(country).getList()) {
+									umbral = ((cuentas*tAirport.getUmbral())*tAirport.getDegree())/this.umbral_country.get(country).getMaxDegree();
+									tAirport.setUmbral(umbral);
+									if(this.max_umbral < umbral){
+										this.max_umbral = umbral;
+									}
+								}
+							}
+							umbral = 0;
+							numOfYears = 0;
+						}
+					}
+				} 
+				else {
+					// Para no leer las 2 primeras lineas
+					vueltas--;
+				}
+				
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	
 	private void readDatas2(String csvFile, String PIB) {
 		BufferedReader br = null;
@@ -171,7 +226,9 @@ public class makeUsesfullCSV {
 					else if (!country.equalsIgnoreCase(data[1])){
 						cierto = true;
 						country = data[1];
+						umbral =0;
 						umbral += Double.parseDouble(data[4]);
+						numOfYears = 0;
 						numOfYears++;
 					}
 					// Cuando estoy en el mismo pais, pero pasamos a un dato que no quiero leer
@@ -179,11 +236,8 @@ public class makeUsesfullCSV {
 					else if(!PIB.equalsIgnoreCase(data[3]) && cierto){
 						cierto = false;
 						umbral = (umbral/numOfYears);
-						if(umbral > this.max_umbral){
-							this.max_umbral = umbral;
-						}
 						if(this.umbral_country.containsKey(country)){
-							for(TAirport tAirport : this.umbral_country.get(country)){
+							for(TAirport tAirport : this.umbral_country.get(country).getList()){
 								tAirport.setUmbral(umbral);
 							}
 						}
@@ -196,20 +250,6 @@ public class makeUsesfullCSV {
 					vueltas--;
 				}
 				
-			}
-			// Para hacer el ultimo caso
-			if(numOfYears != 0){
-				umbral = (umbral/numOfYears);
-				if(umbral > this.max_umbral){
-					this.max_umbral = umbral;
-				}
-				if(this.umbral_country.containsKey(country)){
-					for(TAirport tAirport : this.umbral_country.get(country)){
-						tAirport.setUmbral(umbral);
-					}
-				}
-				umbral = 0;
-				numOfYears = 0;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -227,107 +267,6 @@ public class makeUsesfullCSV {
 	}
 
 	
-
-	private void readDatas3(String csvFile) {
-		BufferedReader br = null;
-		String line = "";
-		double umbral = 0.0;
-		String country = "";
-		int numOfYears = 0;
-		boolean cierto = true;
-		int vueltas = 2;
-		String PIB = "Current health expenditure (% of GDP)";
-		String family = "Domestic general government health expenditure (% of total government expenditure)";
-		
-		try {
-			br = new BufferedReader(new FileReader(csvFile));
-			
-			while ((line = br.readLine()) != null) {
-				// Este if es para no leer la primera linea, ya que es donde
-				// vienen todos los nombres de los campos
-				if (vueltas == 0) {
-					String[] data = line.split(",");
-					
-					// Es el mismo pais, de otro año
-					if(country.equalsIgnoreCase(data[1]) && PIB.equalsIgnoreCase(data[3])){
-						umbral += Double.parseDouble(data[4]);
-						numOfYears++;
-					}
-					else if (country.equalsIgnoreCase(data[1]) && family.equalsIgnoreCase(data[3])){
-						if(cierto){
-							cierto = false;
-							umbral = (umbral/numOfYears);
-							if(this.umbral_country.containsKey(country)){
-								for(TAirport tAirport : this.umbral_country.get(country)){
-									tAirport.setUmbral(umbral);
-								}
-							}
-							umbral = 0;
-							numOfYears = 0;
-						}
-						umbral += Double.parseDouble(data[4]);
-						numOfYears++;
-					}
-					// Cuando cambiamos de pais
-					else if (!country.equalsIgnoreCase(data[1])){
-						cierto = true;
-						double oldUmbral;
-						umbral = (umbral/numOfYears);
-						
-						if(this.umbral_country.containsKey(country)){
-							// Aqui esta la magia
-							// Cojo el umbral anterior y el actual y hago la media de los 2
-							oldUmbral = this.umbral_country.get(country).get(0).getUmbral();
-							umbral = (umbral+oldUmbral)/2;
-							if(umbral > this.max_umbral){
-								this.max_umbral = umbral;
-							}
-							for(TAirport tAirport : this.umbral_country.get(country)){
-								tAirport.setUmbral(umbral);
-							}
-						}
-						umbral = 0;
-						numOfYears = 0;
-						country = data[1];
-						umbral += Double.parseDouble(data[4]);
-						numOfYears++;
-					}
-				} 
-				else {
-					// Para no leer las 2 primeras lineas
-					vueltas--;
-				}
-				
-			}
-			// Para hacer el ultimo caso
-			if(numOfYears != 0){
-				umbral = (umbral/numOfYears);
-				if(umbral > this.max_umbral){
-					this.max_umbral = umbral;
-				}
-				if(this.umbral_country.containsKey(country)){
-					for(TAirport tAirport : this.umbral_country.get(country)){
-						tAirport.setUmbral(umbral);
-					}
-				}
-				umbral = 0;
-				numOfYears = 0;
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 	public void readDatas(String csvFile){
 		BufferedReader br = null;
 		String line = "";
@@ -412,19 +351,29 @@ public class makeUsesfullCSV {
 
 					// Aqui lo que hago es guardar los aeropuertos en HashMap,
 					// Lo ordenado por el nombre del pais
+					// Calculo el max Degree
 					ArrayList<TAirport> array;
-					
+					TCountrys tCountrys;
+					double degree = Double.parseDouble(data[11]);
 					
 					if(this.umbral_country.containsKey(tAirport.getCountry())){
-						array = this.umbral_country.get(tAirport.getCountry());
+						tCountrys = this.umbral_country.get(tAirport.getCountry());
+						array = tCountrys.getList();
 						array.add(tAirport);
-						this.umbral_country.put(tAirport.getCountry(), array);
+						tCountrys.setList(array);
+						if(tCountrys.getMaxDegree() < degree){
+							tCountrys.setMaxDegree(degree);
+						}
+						this.umbral_country.put(tAirport.getCountry(), tCountrys);
 					}
 					else{
 						this.name_of_countrys.add(tAirport.getCountry());
 						array = new ArrayList<TAirport>();
+						tCountrys = new TCountrys();
 						array.add(tAirport);
-						this.umbral_country.put(tAirport.getCountry(), array);
+						tCountrys.setList(array);
+						tCountrys.setMaxDegree(degree);
+						this.umbral_country.put(tAirport.getCountry(), tCountrys);
 					}
 					
 				}

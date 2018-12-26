@@ -2,18 +2,18 @@ package modelo;
 
 public class TAirport {
 	private int id;				//0
-	private String name;		//3
-	private String city;		//4
-	private String country;		//5
-	private String iata;		//6
-	private String icao;		//7
-	private double latitude;	//8
-	private double longitude;	//9
-	private int altitude;		//10
-	private int indegree;		//11
-	private int outdegree;		//12
-	private int degree;			//13
-	private double umbral;		//14
+	private String name;		//1
+	private String city;		//2
+	private String country;		//3
+	private String iata;		//4
+	private String icao;		//5
+	private double latitude;	//6
+	private double longitude;	//7
+	private int altitude;		//8
+	private int indegree;		//9
+	private int outdegree;		//10
+	private int degree;			//11
+	private double umbral;		//12
 	
 	// Constructora para poder calcular los umbrales, posteriomente
 	public TAirport(String id, String name, String city, String country, String iata, String icao,
