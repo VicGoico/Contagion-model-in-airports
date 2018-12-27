@@ -109,7 +109,8 @@ public class makeUsesfullCSV {
 					sb.append(',');
 					sb.append(tAirport.getDegree());
 					sb.append(',');
-					tAirport.setUmbral((tAirport.getUmbral())/this.max_umbral);
+					
+					//tAirport.setUmbral(tAirport.getUmbral()/this.max_umbral);
 					sb.append(tAirport.getUmbral());
 					sb.append('\n');
 				}
@@ -181,16 +182,25 @@ public class makeUsesfullCSV {
 						// y en el guardar le daremos el retoque final
 						else if (!PIB.equalsIgnoreCase(data[3]) && cierto && !pro.equalsIgnoreCase(data[3])) {
 								cierto = false;
-								umbral = (umbral / numOfYears);// Esto es el PIB
+								umbral = (umbral / numOfYears);// Esto es el PIB total
 								if (this.umbral_country.containsKey(country)) {
-									double cuentas = umbral;
+									
+									double cuentas = umbral*this.umbral_country.get(country).getList().get(0).getUmbral();
+									this.max_umbral += cuentas;
+									ArrayList<TAirport> listaActualizada = new ArrayList<TAirport>();
+									
 									for (TAirport tAirport : this.umbral_country.get(country).getList()) {
-										umbral = ((cuentas*(tAirport.getUmbral()/100))*tAirport.getDegree())/this.umbral_country.get(country).getMaxDegree();
+										//double gastaElPaisDelPIBEnSalud = cuentas*(tAirport.getUmbral());// PIB medion * el tanto % que se gasta en sanidad en ese pais
+										System.out.println(this.umbral_country.get(tAirport.getCountry()).getMaxDegree());
+										umbral = tAirport.getDegree()/this.umbral_country.get(tAirport.getCountry()).getMaxDegree();
+										System.out.println("Tanto % que le corresponde por la afluencia: "+umbral);
+										//umbral *= cuentas;
 										tAirport.setUmbral(umbral);
-										if(this.max_umbral < umbral){
-											this.max_umbral = umbral;
-										}
+										listaActualizada.add(tAirport);
 									}
+									this.umbral_country.get(country).setList(listaActualizada);
+									ArrayList<TAirport>auxl = this.umbral_country.get(country).getList();
+									System.out.println("Pausa");
 								}
 								umbral = 0;
 								numOfYears = 0;
@@ -255,7 +265,7 @@ public class makeUsesfullCSV {
 					// Y hago los calculos pertinentes(que son calcular la media de los "Gasto corriente en salud (% del PIB)")
 					else if(!PIB.equalsIgnoreCase(data[3]) && cierto){
 						cierto = false;
-						umbral = (umbral/numOfYears);
+						umbral = ((umbral/numOfYears))/100;
 						if(this.umbral_country.containsKey(country)){
 							for(TAirport tAirport : this.umbral_country.get(country).getList()){
 								tAirport.setUmbral(umbral);
@@ -381,9 +391,9 @@ public class makeUsesfullCSV {
 						array = tCountrys.getList();
 						array.add(tAirport);
 						tCountrys.setList(array);
-						if(tCountrys.getMaxDegree() < degree){
-							tCountrys.setMaxDegree(degree);
-						}
+						
+						tCountrys.setMaxDegree(degree+tCountrys.getMaxDegree());
+						
 						this.umbral_country.put(tAirport.getCountry(), tCountrys);
 					}
 					else{

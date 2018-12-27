@@ -8,7 +8,7 @@ public class TCountrys {
 	private ArrayList<TAirport> list;
 	
 	public TCountrys(){
-		this.setMaxDegree(0);
+		this.setMaxDegree(0.0);
 		this.setList(new ArrayList<TAirport>());
 	}
 
