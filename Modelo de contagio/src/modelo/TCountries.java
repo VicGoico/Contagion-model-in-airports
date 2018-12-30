@@ -2,12 +2,12 @@ package modelo;
 
 import java.util.ArrayList;
 
-public class TCountrys {
+public class TCountries {
 
 	private double maxDegree;
 	private ArrayList<TAirport> list;
 	
-	public TCountrys(){
+	public TCountries(){
 		this.setMaxDegree(0.0);
 		this.setList(new ArrayList<TAirport>());
 	}

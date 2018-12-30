@@ -8,22 +8,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class makeUsesfullCSV {
 	// Atributos
-	private HashMap<String, TCountrys> umbral_country;
-	private ArrayList<String> name_of_countrys;
+	private HashMap<String, TCountries> umbral_countries;
+	private ArrayList<String> name_of_countries;
 	
-	private double max_umbral;
+	private double maxDestinaUnPaisASanidadPorHabitante;
+	private double mediaDeLoQueDestinanLosPaisesASanidad;
 	
+	//Después de los cáculos el máximo es 6892.397 y la media 616.1730162979347
 	//private int opcion;
 	
 	
 	// Constructora
 	public makeUsesfullCSV(){
-		this.umbral_country = new HashMap<String, TCountrys>();
-		this.name_of_countrys = new ArrayList<String>();
-		this.max_umbral = 0;
+		this.umbral_countries = new HashMap<String, TCountries>();
+		this.name_of_countries = new ArrayList<String>();
+		this.maxDestinaUnPaisASanidadPorHabitante = 0.0;
+		
 		//this.opcion = opcion;
 		this.menu();
 	}
@@ -38,7 +42,101 @@ public class makeUsesfullCSV {
 		
 		// Guardo los datos de los aeropuertos en un nuevo csv llamado
 		// test.csv
+		System.out.println("maximo " + maxDestinaUnPaisASanidadPorHabitante);
+		mediaDeLoQueDestinanLosPaisesASanidad = mediaDeLoQueDestinanLosPaisesASanidad / umbral_countries.size();
+		System.out.println("media " + mediaDeLoQueDestinanLosPaisesASanidad);
+		actualizaUmbralGlobal();
+		actualizaUmbralLocal();
 		this.guardar();
+	}
+	
+	private void actualizaUmbralGlobal() {
+		for (Map.Entry<String, TCountries> entry : umbral_countries.entrySet()) {
+			
+			double cantidadDestinaPais = entry.getValue().getList().get(0).getUmbral();
+			double maxauxUmbral = 0.0;
+			
+			if(cantidadDestinaPais > mediaDeLoQueDestinanLosPaisesASanidad) {
+				//Al ser mayor que la media, será mayor a 0.5 el humbral
+				if(cantidadDestinaPais >= (maxDestinaUnPaisASanidadPorHabitante) -
+						(maxDestinaUnPaisASanidadPorHabitante / 4)){
+					//Si es mayor que las tres cuartas partas de lo que destina el que más
+					maxauxUmbral = 0.85;
+				}
+				else if(cantidadDestinaPais >= (maxDestinaUnPaisASanidadPorHabitante) -
+						(maxDestinaUnPaisASanidadPorHabitante / 3)) {
+					maxauxUmbral = 0.75;
+				}
+				else if(cantidadDestinaPais >= (maxDestinaUnPaisASanidadPorHabitante) -
+						(maxDestinaUnPaisASanidadPorHabitante / 2)) {
+					maxauxUmbral = 0.7;
+				}
+				else {
+					if(cantidadDestinaPais > mediaDeLoQueDestinanLosPaisesASanidad *2) {
+						maxauxUmbral = 0.6;
+					}
+					else {
+						maxauxUmbral = 0.5;
+					}
+				}
+			}
+			else {
+				if(cantidadDestinaPais > mediaDeLoQueDestinanLosPaisesASanidad /2) {
+					maxauxUmbral = 0.2;
+				}
+				else if(cantidadDestinaPais > mediaDeLoQueDestinanLosPaisesASanidad /2) {
+					maxauxUmbral = 0.1;
+				}
+				else {
+					maxauxUmbral = cantidadDestinaPais/ maxDestinaUnPaisASanidadPorHabitante;
+				}	
+			}
+			for (TAirport tAirport : this.umbral_countries.get(entry.getKey()).getList()) {
+				tAirport.setUmbral(maxauxUmbral);
+			}
+			System.out.println("Pais " + entry.getKey() + " umbral " + entry.getValue().getList().get(0).getUmbral());
+		}
+	}
+	
+	private void actualizaUmbralLocal() {
+		
+		for (Map.Entry<String, TCountries> entry : umbral_countries.entrySet()) {
+			if(entry.getKey().equalsIgnoreCase("Germany")) {
+				System.out.println("pausa");
+			}
+			double totalVuelosPais = entry.getValue().getMaxDegree();
+			
+			double maxLocal = 0.0;
+			for (TAirport tAirport : this.umbral_countries.get(entry.getKey()).getList()) {
+				if(tAirport.getDegree() > maxLocal) {
+					maxLocal = tAirport.getDegree();
+				}
+			}
+			for (TAirport tAirport : this.umbral_countries.get(entry.getKey()).getList()) {
+				
+				if((tAirport.getDegree() / maxLocal) >= 0.35) {
+					//Dejamos el umbral maximo
+				}
+				else if((tAirport.getDegree() / maxLocal) >= 0.15) {
+					//Si hace entre el 20 y el 40 % de los vuelos del pais penalizamos con un 10% del umbral
+					double nuevoUmbral = tAirport.getUmbral() - (tAirport.getUmbral()*0.1);
+					if(nuevoUmbral < 0.0) {
+						nuevoUmbral = 0.0;
+					}
+					tAirport.setUmbral(nuevoUmbral);
+				}
+				else {
+					//Si hace entre el 20 y el 40 % de los vuelos del pais penalizamos con un 20% del umbral
+					double nuevoUmbral = tAirport.getUmbral() - (tAirport.getUmbral()*0.2);
+					if(nuevoUmbral < 0.0) {
+						nuevoUmbral = 0.0;
+					}
+					tAirport.setUmbral(nuevoUmbral);
+				}
+				
+			}
+			
+		}
 	}
 	// Guardo la informacion de los aeropuertos con su umbral calculado
 	private void guardar() {
@@ -79,8 +177,8 @@ public class makeUsesfullCSV {
 			sb.append('\n');
 			
 			// Escribir los datos en el csv
-			for(String country :this.name_of_countrys){
-				for (TAirport tAirport : this.umbral_country.get(country).getList()) {
+			for(String country :this.name_of_countries){
+				for (TAirport tAirport : this.umbral_countries.get(country).getList()) {
 					sb.append(tAirport.getId());
 					sb.append(',');
 					sb.append("");
@@ -149,7 +247,7 @@ public class makeUsesfullCSV {
 							boolean esNumero;
 							// Compruebo si tiene decimales
 							try{
-								Integer.parseInt(data[5]);
+								Integer.parseInt(data[5].replaceAll("\"", ""));
 								esNumero = true;
 							}
 							catch(NumberFormatException e){
@@ -157,6 +255,7 @@ public class makeUsesfullCSV {
 							}
 							String aux;
 							if(esNumero){
+								//Double numero = new Double(data[4].replaceAll("\"", "")+data[5].replaceAll("\"", "")) * 1000;
 								aux = data[4]+data[5];
 							}
 							else{
@@ -168,6 +267,7 @@ public class makeUsesfullCSV {
 								}
 							}
 							//System.out.println(support+"	"+data[2]+"	"+data[0]);
+							
 							umbral += Double.parseDouble(support);
 							numOfYears++;
 						}
@@ -183,24 +283,38 @@ public class makeUsesfullCSV {
 						else if (!PIB.equalsIgnoreCase(data[3]) && cierto && !pro.equalsIgnoreCase(data[3])) {
 								cierto = false;
 								umbral = (umbral / numOfYears);// Esto es el PIB total
-								if (this.umbral_country.containsKey(country)) {
+								if(country.equalsIgnoreCase("Spain")) {
+									System.out.println("españa");
+								}
+								if (this.umbral_countries.containsKey(country)) {
+									//System.out.println(this.umbral_countries.get(country).getList().get(0).getUmbral());
+									double cuentas = umbral* this.umbral_countries.get(country).getList().get(0).getUmbral();
+									System.out.println("el pais " + data[1] + " destina "+
+									cuentas + " $ por habitante ");
+									mediaDeLoQueDestinanLosPaisesASanidad += cuentas;
+									if(cuentas > maxDestinaUnPaisASanidadPorHabitante) {
+										maxDestinaUnPaisASanidadPorHabitante = cuentas;
+									}
 									
-									double cuentas = umbral*this.umbral_country.get(country).getList().get(0).getUmbral();
-									this.max_umbral += cuentas;
+									for (TAirport tAirport : this.umbral_countries.get(country).getList()) {
+										tAirport.setUmbral(cuentas);
+									}
+									/*this.max_umbral += cuentas;
 									ArrayList<TAirport> listaActualizada = new ArrayList<TAirport>();
 									
-									for (TAirport tAirport : this.umbral_country.get(country).getList()) {
+									for (TAirport tAirport : this.umbral_countries.get(country).getList()) {
 										//double gastaElPaisDelPIBEnSalud = cuentas*(tAirport.getUmbral());// PIB medion * el tanto % que se gasta en sanidad en ese pais
-										System.out.println(this.umbral_country.get(tAirport.getCountry()).getMaxDegree());
-										umbral = tAirport.getDegree()/this.umbral_country.get(tAirport.getCountry()).getMaxDegree();
+										System.out.println(this.umbral_countries.get(tAirport.getCountry()).getMaxDegree());
+										umbral = tAirport.getDegree()/this.umbral_countries.get(tAirport.getCountry()).getMaxDegree();
 										System.out.println("Tanto % que le corresponde por la afluencia: "+umbral);
 										//umbral *= cuentas;
 										tAirport.setUmbral(umbral);
 										listaActualizada.add(tAirport);
 									}
-									this.umbral_country.get(country).setList(listaActualizada);
-									ArrayList<TAirport>auxl = this.umbral_country.get(country).getList();
+									this.umbral_countries.get(country).setList(listaActualizada);
+									ArrayList<TAirport>auxl = this.umbral_countries.get(country).getList();
 									System.out.println("Pausa");
+									*/
 								}
 								umbral = 0;
 								numOfYears = 0;
@@ -266,8 +380,8 @@ public class makeUsesfullCSV {
 					else if(!PIB.equalsIgnoreCase(data[3]) && cierto){
 						cierto = false;
 						umbral = ((umbral/numOfYears))/100;
-						if(this.umbral_country.containsKey(country)){
-							for(TAirport tAirport : this.umbral_country.get(country).getList()){
+						if(this.umbral_countries.containsKey(country)){
+							for(TAirport tAirport : this.umbral_countries.get(country).getList()){
 								tAirport.setUmbral(umbral);
 							}
 						}
@@ -383,27 +497,27 @@ public class makeUsesfullCSV {
 					// Lo ordenado por el nombre del pais
 					// Calculo el max Degree
 					ArrayList<TAirport> array;
-					TCountrys tCountrys;
+					TCountries tCountrys;
 					double degree = Double.parseDouble(data[11]);
 					
-					if(this.umbral_country.containsKey(tAirport.getCountry())){
-						tCountrys = this.umbral_country.get(tAirport.getCountry());
+					if(this.umbral_countries.containsKey(tAirport.getCountry())){
+						tCountrys = this.umbral_countries.get(tAirport.getCountry());
 						array = tCountrys.getList();
 						array.add(tAirport);
 						tCountrys.setList(array);
 						
 						tCountrys.setMaxDegree(degree+tCountrys.getMaxDegree());
 						
-						this.umbral_country.put(tAirport.getCountry(), tCountrys);
+						this.umbral_countries.put(tAirport.getCountry(), tCountrys);
 					}
 					else{
-						this.name_of_countrys.add(tAirport.getCountry());
+						this.name_of_countries.add(tAirport.getCountry());
 						array = new ArrayList<TAirport>();
-						tCountrys = new TCountrys();
+						tCountrys = new TCountries();
 						array.add(tAirport);
 						tCountrys.setList(array);
 						tCountrys.setMaxDegree(degree);
-						this.umbral_country.put(tAirport.getCountry(), tCountrys);
+						this.umbral_countries.put(tAirport.getCountry(), tCountrys);
 					}
 					
 				}
