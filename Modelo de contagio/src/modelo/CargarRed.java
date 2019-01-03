@@ -14,14 +14,24 @@ public class CargarRed {
 	
 	// private HashMap<String,ArrayList<HashMap<Integer,TAirport>>> countries;
 	
-	public CargarRed() {
+	public CargarRed(String fileName) {
 		this.red = new Red();
 		this.nodos = new HashMap<Integer, Nodo>();
 		//leerNodos();
 		this.info_airport = new HashMap<Integer, TAirport>();
 		// this.countries = new HashMap<String,ArrayList<HashMap<Integer,TAirport>>>();
 		
-		this.readDatas("test.csv");
+		if(Main.processCSVDatas == null)
+			this.readDatas(fileName);
+		else {
+			this.info_airport = Main.processCSVDatas.toHashMap();
+			for (TAirport tAirp : this.info_airport.values()) {
+				Nodo n = new Nodo(tAirp.getId(), 0, 0.0, tAirp, 0,0);
+				n.setUmbral(tAirp.getUmbral());
+				this.nodos.put(tAirp.getId(), n);
+			}
+		}
+		
 		this.red.setNodos(nodos);
 		this.generaRed();
 		//System.out.println(red);
@@ -92,7 +102,7 @@ public class CargarRed {
 					
 					n.setUmbral(Double.parseDouble(data[12]));
 	                
-	                nodos.put(Integer.parseInt(data[0]), n);
+	                this.nodos.put(Integer.parseInt(data[0]), n);
 
 					// Miro que no este en el HashMap de paises
 

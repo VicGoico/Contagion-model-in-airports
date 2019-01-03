@@ -3,6 +3,9 @@ package modelo;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.swing.SwingUtilities;
+
 import java.util.TreeMap;
 
 public class VentanaControl extends javax.swing.JPanel {
@@ -82,7 +85,18 @@ public class VentanaControl extends javax.swing.JPanel {
 
 		jButton1.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				InfeccionActionPerformed(evt);
+				
+				jButton1.setText("Cargando...");
+				jButton1.setEnabled(false);
+				jComboBoxPaises.setEnabled(false);
+				jComboBox1.setEnabled(false);
+
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						InfeccionActionPerformed(evt);
+					}
+				});
+				
 			}
 		});
 

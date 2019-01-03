@@ -47,7 +47,6 @@ public class makeUsesfullCSV {
 		System.out.println("media " + mediaDeLoQueDestinanLosPaisesASanidad);
 		actualizaUmbralGlobal();
 		actualizaUmbralLocal();
-		this.guardar();
 	}
 	
 	private void actualizaUmbralGlobal() {
@@ -104,7 +103,7 @@ public class makeUsesfullCSV {
 			if(entry.getKey().equalsIgnoreCase("Germany")) {
 				System.out.println("pausa");
 			}
-			double totalVuelosPais = entry.getValue().getMaxDegree();
+			// double totalVuelosPais = entry.getValue().getMaxDegree();
 			
 			double maxLocal = 0.0;
 			for (TAirport tAirport : this.umbral_countries.get(entry.getKey()).getList()) {
@@ -138,11 +137,24 @@ public class makeUsesfullCSV {
 			
 		}
 	}
+	
+	public HashMap<Integer, TAirport> toHashMap(){
+		HashMap<Integer, TAirport> sb = new HashMap<Integer, TAirport>();
+		
+		for(String country :this.name_of_countries){
+			for (TAirport tAirport : this.umbral_countries.get(country).getList()) {
+				sb.put(tAirport.getId(), tAirport);
+			}
+		}
+		
+		return sb;
+	}
+	 
 	// Guardo la informacion de los aeropuertos con su umbral calculado
-	private void guardar() {
+	public void guardar(String outputFileName) throws FileNotFoundException {
 		PrintWriter pw = null;
 		try {
-			pw = new PrintWriter(new File("test.csv"));
+			pw = new PrintWriter(new File(outputFileName));
 			StringBuilder sb = new StringBuilder();
 			// Escribo la primera linea con los nombres de las columnas
 			sb.append("Id");
@@ -217,7 +229,7 @@ public class makeUsesfullCSV {
 		//	System.out.println("Maximo umbral: "+this.max+ "Pais: " + this.c);
 			pw.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			throw e;
 		} finally {
 			if (pw != null) {
 				pw.close();

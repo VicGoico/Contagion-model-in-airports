@@ -1,58 +1,53 @@
 package modelo;
 
-import java.awt.BorderLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+
 public class Main {
-
 	private static JFrame frame;
-
 	private static Vista vista;
 	private static VentanaControl control;
-
 	private static CargarRed cr;
-
 	private static HelloUnfoldingWorld papplet;
+	protected static String OUTPUTFILENAME_PROCESSEDDATA = "test.csv";
+	protected static makeUsesfullCSV processCSVDatas;
 
 	public static void main(String[] args) {
+		vista = new Vista();
+		
 		frame = new JFrame("Bienvenidos al lector de datos");
 		frame.setSize(450, 420);
-		frame.setLayout(new BorderLayout());
-		vista = new Vista();
-		frame.add(vista, BorderLayout.WEST);
+		frame.setContentPane(vista);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// CargarRed cr = new CargarRed();
-		makeUsesfullCSV hola = new makeUsesfullCSV();
 
-		// frame.setVisible(true);
-		// CargarRed cr = new CargarRed();
+		processCSVDatas = new makeUsesfullCSV();
 	}
 
 	public static void CargarRed() {
-		cr = new CargarRed();
-
-		frame.remove(vista);
-		frame.setSize(622, 307);
+		cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA);
 		control = new VentanaControl(cr.getNodos());
-		frame.add(control, BorderLayout.WEST);
-		frame.setVisible(true);
+		
+		frame.setContentPane(control);
+		frame.setSize(622, 307);
 	}
 
 	public static void comenzarInfeccion(Nodo foco) {
 		ModeloContagio modelo = new ModeloContagio();
 		modelo.simular(cr.getRed(), cr.getRed().nodos.get(foco.getValue()));
-		
+
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 
-		frame.remove(control);
 		frame.setSize(1200, 700);
+		
 		papplet = new HelloUnfoldingWorld();
 		papplet.setInfectados(nodosContagiados);
 		papplet.frame = frame;
+		
 		frame.setResizable(true);
-		frame.add(papplet, BorderLayout.CENTER);
+		frame.setContentPane(papplet);
+		// frame.add(papplet, BorderLayout.CENTER);
 		papplet.init();
 
 		// PApplet.main(new String[] { HelloUnfoldingWorld.class.getName() });
