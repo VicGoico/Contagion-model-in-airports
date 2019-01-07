@@ -40,7 +40,7 @@ public class PIBReader implements ReaderConsumer  {
 				if (!country.equalsIgnoreCase("Total, all countries or areas") && serie.equalsIgnoreCase("GDP per capita (US dollars)")) {
 					
 					// Integer year = Integer.parseInt(t.get(2));
-					Double value = Double.parseDouble(t.get(4));
+					Double value = Double.parseDouble(t.get(4).replace("\"", "").replace(",", "."));
 					
 					if(!this.countriesUmbral.containsKey(country))
 						this.countriesUmbral.put(country, value);
@@ -58,6 +58,8 @@ public class PIBReader implements ReaderConsumer  {
 				}
 			} catch (Exception e) {
 				System.err.println("Ha ocurrido un error al procesar el PIB.");
+				System.err.println(t);
+				e.printStackTrace();
 				processing = false;
 			}
 		}
@@ -68,6 +70,7 @@ public class PIBReader implements ReaderConsumer  {
 		if(this.expHealthReader.countryIncluded(country)) {
 			// Cuanto gasta al año en salud
 			double umbral = this.expHealthReader.getUmbral(country) * this.countriesUmbral.get(country);
+			
 			this.expHealthReader.setUmbral(country, umbral);
 		}
 	}

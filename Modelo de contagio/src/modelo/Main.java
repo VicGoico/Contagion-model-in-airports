@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 
 import modelo.CSVReaders.AirportNodesReader;
 import modelo.CSVReaders.ExpenditureHealthReader;
+import modelo.CSVReaders.PIBReader;
 import modelo.metricas.tools.CSVFileProcessor;
 import modelo.metricas.tools.CorrespondingCountry;
 
@@ -24,6 +25,7 @@ public class Main {
 	public static String OUTPUTFILENAME_PROCESSEDDATA = "test.csv";
 	public static String AIRPORTNODESFILENAME = "nodos.csv";
 	public static String EXPENDITUREHEALTHFILENAME = "salud.csv";
+	public static String PIBFILENAME = "PIB.csv";
 	protected static makeUsesfullCSV processCSVDatas = null;
 
 	public static void main(String[] args) throws IOException {
@@ -42,12 +44,14 @@ public class Main {
 		
 		// new CSVFileProcessor("CarbonDioxideEmissionEstimates.csv", );
 		
+		
 		HashMap<Integer, TAirport> airports = new HashMap<>();
+		new CorrespondingCountry();
+		
 		AirportNodesReader apReader = new AirportNodesReader(AIRPORTNODESFILENAME, airports);
 		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTHFILENAME);
+		PIBReader pibReader = new PIBReader(PIBFILENAME);
 		
-		
-		new CorrespondingCountry();
 		
 		airports.forEach(new BiConsumer<Integer, TAirport>() {
 			@Override
@@ -55,7 +59,6 @@ public class Main {
 				System.out.println(t + "\t" + u.getCountry() + "\t\t" + expHReader.getUmbral(u.getCountry()));
 			}
 		});
-		
 	}
 
 	public static void CargarRed() {

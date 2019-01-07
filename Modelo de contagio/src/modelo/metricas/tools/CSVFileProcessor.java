@@ -67,7 +67,7 @@ public class CSVFileProcessor {
 					int j; // Busco la comilla doble final
 					for (j = i + 1; j < lineParts.length && !lineParts[j].contains("\""); j++) {
 					}
-					lnFParts.add(String.join(", ", Arrays.copyOfRange(lineParts, i, j + 1)).trim());
+					lnFParts.add(String.join(",", Arrays.copyOfRange(lineParts, i, j + 1)).trim());
 					i = j; // Adelando el bucle
 				} else {
 					lnFParts.add(lineParts[i].trim());
