@@ -1,8 +1,12 @@
 package modelo;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+
+import modelo.metricas.tools.CSVFileProcessor;
 
 public class Main {
 	private static JFrame frame;
@@ -11,9 +15,11 @@ public class Main {
 	private static CargarRed cr;
 	private static HelloUnfoldingWorld papplet;
 	protected static String OUTPUTFILENAME_PROCESSEDDATA = "test.csv";
-	protected static makeUsesfullCSV processCSVDatas;
+	protected static makeUsesfullCSV processCSVDatas = null;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		
+		/*
 		vista = new Vista();
 		
 		frame = new JFrame("Bienvenidos al lector de datos");
@@ -21,8 +27,11 @@ public class Main {
 		frame.setContentPane(vista);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		processCSVDatas = new makeUsesfullCSV();
+		 */
+		// processCSVDatas = new makeUsesfullCSV();
+		
+		new CSVFileProcessor("CarbonDioxideEmissionEstimates.csv", processCSVDatas);
+		
 	}
 
 	public static void CargarRed() {
