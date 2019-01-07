@@ -52,7 +52,6 @@ public class Main {
 		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTHFILENAME);
 		PIBReader pibReader = new PIBReader(PIBFILENAME);
 		
-		
 		airports.forEach(new BiConsumer<Integer, TAirport>() {
 			@Override
 			public void accept(Integer t, TAirport u) {

@@ -14,6 +14,7 @@ public class ExpenditureHealthReader implements ReaderConsumer  {
 	private static ExpenditureHealthReader instance;
 	private static boolean processing = true;
 	private int tempCounter = 0;
+	private String tempCountry = "";
 
 	private HashMap<String, Double> countriesUmbral;
 
@@ -54,7 +55,17 @@ public class ExpenditureHealthReader implements ReaderConsumer  {
 			try {
 				String serie = t.get(3);
 				if (serie.equalsIgnoreCase("Current health expenditure (% of GDP)")) {
+					
 					String country = t.get(1);
+					if(!this.tempCountry.equalsIgnoreCase(country)) {
+						double auxUmbral = 0.0;
+						if(countriesUmbral.containsKey(tempCountry)) {
+							auxUmbral = this.countriesUmbral.get(tempCountry);
+						}
+						this.countriesUmbral.put(tempCountry, auxUmbral / tempCounter);
+						tempCounter = 0;
+						tempCountry = country;
+					}
 					// Integer year = Integer.parseInt(t.get(2));
 					Double value = Double.parseDouble(t.get(4));
 					
@@ -62,14 +73,14 @@ public class ExpenditureHealthReader implements ReaderConsumer  {
 						this.countriesUmbral.put(country, value);
 					else
 						this.countriesUmbral.put(country, this.countriesUmbral.get(country) + value);
-					
-					if(tempCounter >= 4) {
+					tempCounter++;
+					/*if(tempCounter >= 4) {
 						 // Una media de los 5 valores de los 5 años
 						this.countriesUmbral.put(country, this.countriesUmbral.get(country) / 5);
 						tempCounter = 0;
 					} else {
 						tempCounter++;
-					}
+					}*/
 				}
 			} catch (Exception e) {
 				System.err.println("Ha ocurrido un error al procesar el gasto en salud.");
