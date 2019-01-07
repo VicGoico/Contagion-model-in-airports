@@ -21,7 +21,9 @@ public class Main {
 	private static VentanaControl control;
 	private static CargarRed cr;
 	private static HelloUnfoldingWorld papplet;
-	protected static String OUTPUTFILENAME_PROCESSEDDATA = "test.csv";
+	public static String OUTPUTFILENAME_PROCESSEDDATA = "test.csv";
+	public static String AIRPORTNODESFILENAME = "nodos.csv";
+	public static String EXPENDITUREHEALTHFILENAME = "salud.csv";
 	protected static makeUsesfullCSV processCSVDatas = null;
 
 	public static void main(String[] args) throws IOException {
@@ -41,8 +43,8 @@ public class Main {
 		// new CSVFileProcessor("CarbonDioxideEmissionEstimates.csv", );
 		
 		HashMap<Integer, TAirport> airports = new HashMap<>();
-		AirportNodesReader apReader = new AirportNodesReader("nodos.csv", airports);
-		ExpenditureHealthReader expHReader = new ExpenditureHealthReader("salud.csv");
+		AirportNodesReader apReader = new AirportNodesReader(AIRPORTNODESFILENAME, airports);
+		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTHFILENAME);
 		
 		
 		new CorrespondingCountry();

@@ -3,12 +3,15 @@ package modelo.CSVReaders;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
+
+import modelo.Main;
 import modelo.metricas.tools.CSVFileProcessor;
 import modelo.metricas.tools.CorrespondingCountry;
 
 public class ExpenditureHealthReader implements ReaderConsumer  {
 	public static double DEFAULTEXPENDITUREHEALTH = 0.0;
 	private static int lineCounter = 0;
+	private static ExpenditureHealthReader instance;
 	private static boolean processing = true;
 	private int tempCounter = 0;
 
@@ -17,6 +20,13 @@ public class ExpenditureHealthReader implements ReaderConsumer  {
 	public ExpenditureHealthReader(String fileName) throws IOException {
 		this.countriesUmbral = new HashMap<>();
 		new CSVFileProcessor(fileName, this);
+		ExpenditureHealthReader.instance = this;
+	}
+	
+	public static ExpenditureHealthReader getInstance() throws IOException {
+		if(ExpenditureHealthReader.instance == null)
+			ExpenditureHealthReader.instance = new ExpenditureHealthReader(Main.AIRPORTNODESFILENAME);
+		return ExpenditureHealthReader.instance;
 	}
 	
 	public double getUmbral(String country) {
@@ -28,6 +38,14 @@ public class ExpenditureHealthReader implements ReaderConsumer  {
 			} else System.err.println("No se reconoce el pais: '" + country + "'");
 		}
 		return this.countriesUmbral.get(country);
+	}
+	
+	public boolean countryIncluded(String country) {
+		return this.countriesUmbral.containsKey(country);
+	}
+	
+	public void setUmbral(String country, double value) {
+		this.countriesUmbral.put(country, value);
 	}
 
 	@Override
@@ -45,7 +63,7 @@ public class ExpenditureHealthReader implements ReaderConsumer  {
 					else
 						this.countriesUmbral.put(country, this.countriesUmbral.get(country) + value);
 					
-					if(tempCounter > 4) {
+					if(tempCounter >= 4) {
 						 // Una media de los 5 valores de los 5 años
 						this.countriesUmbral.put(country, this.countriesUmbral.get(country) / 5);
 						tempCounter = 0;
