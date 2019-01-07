@@ -338,7 +338,7 @@ Id,Label,timeset,name,city,country,iata,icao,latitude,longitude,altitude,indegre
 671,,,Katowice International Airport,Katowice,Poland,KTW,EPKT,50.4743,19.08,995,27,27,54
 674,,,Poznań-Ławica Airport,Poznan,Poland,POZ,EPPO,52.421001,16.8263,308,19,19,38
 675,,,Rzeszów-Jasionka Airport,Rzeszow,Poland,RZE,EPRZ,50.110001,22.018999,675,11,11,22
-676,,,"Szczecin-Goleniów Solidarność"" Airport""",Szczecin,Poland,SZZ,EPSC,53.584702,14.9022,154,7,7,14
+676,,,"Szczecin-Goleniów Solidarność Airport",Szczecin,Poland,SZZ,EPSC,53.584702,14.9022,154,7,7,14
 679,,,Warsaw Chopin Airport,Warsaw,Poland,WAW,EPWA,52.165699,20.9671,362,78,78,156
 680,,,Copernicus Wrocław Airport,Wroclaw,Poland,WRO,EPWR,51.102699,16.885799,404,31,31,62
 685,,,Ronneby Airport,Ronneby,Sweden,RNB,ESDF,56.266701,15.265,191,2,2,4

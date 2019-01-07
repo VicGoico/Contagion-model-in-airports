@@ -3,10 +3,17 @@ package modelo;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import javax.swing.JFrame;
 
+import modelo.CSVReaders.AirportNodesReader;
+import modelo.CSVReaders.ExpenditureHealthReader;
 import modelo.metricas.tools.CSVFileProcessor;
+import modelo.metricas.tools.CorrespondingCountry;
 
 public class Main {
 	private static JFrame frame;
@@ -28,9 +35,24 @@ public class Main {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 */
+		
 		// processCSVDatas = new makeUsesfullCSV();
 		
-		new CSVFileProcessor("CarbonDioxideEmissionEstimates.csv", processCSVDatas);
+		// new CSVFileProcessor("CarbonDioxideEmissionEstimates.csv", );
+		
+		HashMap<Integer, TAirport> airports = new HashMap<>();
+		AirportNodesReader apReader = new AirportNodesReader("nodos.csv", airports);
+		ExpenditureHealthReader expHReader = new ExpenditureHealthReader("salud.csv");
+		
+		
+		new CorrespondingCountry();
+		
+		airports.forEach(new BiConsumer<Integer, TAirport>() {
+			@Override
+			public void accept(Integer t, TAirport u) {
+				System.out.println(t + "\t" + u.getCountry() + "\t\t" + expHReader.getUmbral(u.getCountry()));
+			}
+		});
 		
 	}
 

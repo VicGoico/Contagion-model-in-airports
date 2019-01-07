@@ -354,7 +354,6 @@ public class makeUsesfullCSV {
 		}
 	}
 
-	
 	private void readDatas2(String csvFile, String PIB) {
 		BufferedReader br = null;
 		String line = "";
