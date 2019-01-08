@@ -11,14 +11,15 @@ public class PIBReader implements ReaderConsumer {
 	private static int lineCounter = 0;
 	private static boolean processing = true;
 	private int tempCounter = 0;
-	private String tempCounty = "";
+	private String tempCountry = "";
 	private ExpenditureHealthReader expHealthReader;
 	private HashMap<String, Double> countriesUmbral;
 
 	public PIBReader(String fileName) throws IOException {
 		this.countriesUmbral = new HashMap<>();
+		this.countriesUmbral.put("", 0.0);
 		this.expHealthReader = ExpenditureHealthReader.getInstance();
-		new CSVFileProcessor(fileName, this);
+		new CSVFileProcessor(fileName, this).process();
 	}
 
 	public double getUmbral(String country) {
@@ -35,42 +36,28 @@ public class PIBReader implements ReaderConsumer {
 
 	@Override
 	public void accept(ArrayList<String> t) {
-
-		if (lineCounter > 1) { // No uso las dos primeras lineas
+		if (lineCounter > 2) { // No uso las dos primeras lineas
 			try {
 				String serie = t.get(3);
 				String country = t.get(1).replaceAll("\"", "");
 
-				if (!country.equalsIgnoreCase("Total, all countries or areas")
-						&& serie.equalsIgnoreCase("GDP per capita (US dollars)")) {
-					if(country.equalsIgnoreCase("centinela")) {
-						System.out.println("pepe");
-					}
-					if (!this.tempCounty.equalsIgnoreCase(country)) {
-						double umbralAux = 0.0;
-						if(this.countriesUmbral.containsKey(tempCounty)) {
-							umbralAux = this.countriesUmbral.get(tempCounty);
-						}
-						this.countriesUmbral.put(tempCounty, umbralAux / (double)tempCounter);
-						this.updateExpenditureHealthUmbral(tempCounty);
-						this.tempCounter = 0;
-						this.tempCounty = country;
-						
-					}
+				if (serie.equalsIgnoreCase("GDP per capita (US dollars)")) {
 					// Integer year = Integer.parseInt(t.get(2));
 					Double value = Double.parseDouble(t.get(4).replace("\"", "").replace(",", ""));
-					//value = value + 2.0;
-					if (!this.countriesUmbral.containsKey(country))
-						this.countriesUmbral.put(country, value);
-					else
+					
+					if (this.tempCountry.equalsIgnoreCase(country)) {
 						this.countriesUmbral.put(country, this.countriesUmbral.get(country) + value);
-					tempCounter += 1;
-					/*
-					 * if(tempCounter >= 6) { // Una media de los 7 valores de los 7 años
-					 * this.countriesUmbral.put(country, this.countriesUmbral.get(country) / 7);
-					 * this.updateExpenditureHealthUmbral(country); tempCounter = 0; } else {
-					 * tempCounter++; }
-					 */
+					} else {
+						this.countriesUmbral.put(this.tempCountry, this.countriesUmbral.get(this.tempCountry) / (double) this.tempCounter);
+						this.updateExpenditureHealthUmbral(tempCountry);
+						
+						// El Siguiente pais
+						this.tempCounter = 0;
+						this.tempCountry = country;
+						this.countriesUmbral.put(country, value);						
+					}
+					
+					tempCounter++;
 				}
 			} catch (Exception e) {
 				System.err.println("Ha ocurrido un error al procesar el PIB.");
@@ -95,4 +82,11 @@ public class PIBReader implements ReaderConsumer {
 	public boolean processing() {
 		return processing;
 	}
+	
+	@Override
+	public void atEndProcessing() {
+		this.countriesUmbral.put(this.tempCountry, this.countriesUmbral.get(this.tempCountry) / (double) this.tempCounter); // Actualizo el ultimo pais
+		this.updateExpenditureHealthUmbral(tempCountry);
+		this.countriesUmbral.remove("");
+	};
 }

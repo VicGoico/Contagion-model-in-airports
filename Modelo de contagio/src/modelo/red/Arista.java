@@ -1,5 +1,4 @@
-package modelo;
-
+package modelo.red;
 
 public class Arista {
 
@@ -29,23 +28,22 @@ public class Arista {
 		this.nodo2 = nodo2;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		return o != null &&
-				o instanceof Arista &&
-				( ((Arista) o).nodo1.equals(this.nodo1) && ((Arista) o).nodo2.equals(this.nodo2));
-	}
-	
-	@Override
-	public String toString() {
-		return "(" + this.nodo1.toString() + ", " + this.nodo2.toString() + ")";
-	}
-
 	public int getPeso() {
 		return peso;
 	}
 
 	public void setPeso(int peso) {
 		this.peso = peso;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o != null && o instanceof Arista
+				&& (((Arista) o).nodo1.equals(this.nodo1) && ((Arista) o).nodo2.equals(this.nodo2));
+	}
+
+	@Override
+	public String toString() {
+		return "(" + this.nodo1.toString() + ", " + this.nodo2.toString() + ")";
 	}
 }

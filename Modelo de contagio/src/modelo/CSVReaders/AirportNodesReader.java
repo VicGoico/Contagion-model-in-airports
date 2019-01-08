@@ -6,18 +6,23 @@ import java.util.HashMap;
 import modelo.TAirport;
 import modelo.metricas.tools.CSVFileProcessor;
 import modelo.metricas.tools.CorrespondingCountry;
+import modelo.red.Nodo;
 
 public class AirportNodesReader implements ReaderConsumer {
 	private static int lineCounter = 0;
 	private static boolean processing = true;
 	private HashMap<Integer, TAirport> airportsById;
 	private HashMap<String, ArrayList<TAirport>> airportsByCountry;
+	private HashMap<Integer, Nodo> loadedNodes;
+	private ExpenditureHealthReader expHealthReader;
 
-	public AirportNodesReader(String fileName, HashMap<Integer, TAirport> nodes) throws IOException {
-		this.airportsById = nodes;
+	public AirportNodesReader(String fileName, HashMap<Integer, Nodo> nodes) throws IOException {
+		this.loadedNodes = nodes;
+		this.airportsById = new HashMap<>();
 		this.airportsByCountry = new HashMap<>();
+		this.expHealthReader = ExpenditureHealthReader.getInstance();
 
-		new CSVFileProcessor(fileName, this);
+		new CSVFileProcessor(fileName, this).process();
 	}
 
 	public TAirport getAirportById(int id) {
@@ -34,6 +39,10 @@ public class AirportNodesReader implements ReaderConsumer {
 			else System.out.println("No se han podido obtener aeropuertos del pais: '" + country + "'");
 		}
 		return this.airportsByCountry.get(country);
+	}
+	
+	private double calcExpenditureHealthUmbral(TAirport airport) {
+		return this.expHealthReader.getUmbral(airport.getCountry());
 	}
 
 	@Override
@@ -57,22 +66,15 @@ public class AirportNodesReader implements ReaderConsumer {
 						Integer.parseInt(t.get(11)), Integer.parseInt(t.get(12)), Integer.parseInt(t.get(13)));
 
 				this.airportsById.put(airportId, airport);
-			} catch (Exception e) {
-				System.err.println("No se ha podido leer el aeropuerto, compruebe el CSV que no este corrupto. (Cadenas no pueden contener \" y si contienen , se encierran entre comillas dobles");
-				e.printStackTrace();
-				System.out.println(t);
-				processing = false;
-			}
-
-			try {
+				this.loadedNodes.put(airportId, new Nodo(airport, this.calcExpenditureHealthUmbral(airport)));
+				
 				if (!airportsByCountry.containsKey(countryName))
 					airportsByCountry.put(countryName, new ArrayList<>());
-
-				if (airport != null) {
-					airportsByCountry.get(countryName).add(airport);
-				}
+				airportsByCountry.get(countryName).add(airport);
 			} catch (Exception e) {
-				System.err.println("Error al insertar el aeropuerto en las tablas.");
+				System.err.println("No se ha podido leer el aeropuerto ( o no se ha podido almacenar ), compruebe el CSV que no este corrupto. (Cadenas no pueden contener \" y si contienen , se encierran entre comillas dobles");
+				e.printStackTrace();
+				System.out.println(t);
 				processing = false;
 			}
 

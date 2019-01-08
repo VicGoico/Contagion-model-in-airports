@@ -7,6 +7,7 @@ import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.utils.MapUtils;
+import modelo.red.Nodo;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 
 public class HelloUnfoldingWorld extends PApplet {
@@ -42,8 +43,8 @@ public class HelloUnfoldingWorld extends PApplet {
     	Marker[] aux = new Marker[nodosContagiados.size()];
     	
     	for(int i = 0; i < nodosContagiados.size(); i++) {
-    		Location loc = new Location(nodosContagiados.get(i).getInfo().getLatitude(),
-    				nodosContagiados.get(i).getInfo().getLongitude());
+    		Location loc = new Location(nodosContagiados.get(i).getAirportInfo().getLatitude(),
+    				nodosContagiados.get(i).getAirportInfo().getLongitude());
     		ImageMarker img = new ImageMarker(loc, loadImage("marcaRoja.png"));
     		aux[i] = img;
     	}

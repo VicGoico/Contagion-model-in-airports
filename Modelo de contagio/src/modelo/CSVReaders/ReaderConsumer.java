@@ -7,5 +7,6 @@ public interface ReaderConsumer extends Consumer<ArrayList<String>>{
 	default public void atEndProcessing() {
 		
 	};
+	
 	public boolean processing();
 }

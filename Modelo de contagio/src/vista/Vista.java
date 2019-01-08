@@ -1,4 +1,4 @@
-package modelo;
+package vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import modelo.Main;
 
 public class Vista extends JPanel {
 	private static final long serialVersionUID = 9094988387830993055L;

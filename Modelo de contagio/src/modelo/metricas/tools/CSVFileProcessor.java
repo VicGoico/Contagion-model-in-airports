@@ -11,14 +11,17 @@ import java.util.Collection;
 import modelo.CSVReaders.ReaderConsumer;
 
 public class CSVFileProcessor {
-	String fileName;
+	private String columnDelimiter = ",";
+	protected String fileName;
 	private BufferedReader fileBuffer;
 	private ReaderConsumer fProcessLine;
-
-	public CSVFileProcessor(String fileName, ReaderConsumer fProcessLine) throws IOException {
+	
+	public CSVFileProcessor(String fileName, ReaderConsumer fProcessLine) {
 		this.fileName = fileName;
 		this.fProcessLine = fProcessLine;
-
+	}
+	
+	public void process() throws IOException {
 		this.openFile();
 		System.out.println("CSV Abierto: '" + fileName + "'");
 
@@ -38,7 +41,7 @@ public class CSVFileProcessor {
 
 		try {
 			while ((line = fileBuffer.readLine()) != null && this.fProcessLine.processing()) {
-				this.fProcessLine.accept(new ArrayList<String>(splitLine(line)));
+				this.fProcessLine.accept(new ArrayList<String>(splitLine(line, this.columnDelimiter)));
 			}
 		} catch (IOException e) {
 			throw e;
@@ -57,8 +60,8 @@ public class CSVFileProcessor {
 		}
 	}
 
-	public static Collection<String> splitLine(String line) {
-		String[] lineParts = line.split(","); // Separo todas las lineas con ,
+	public static Collection<String> splitLine(String line, String columnDelimiter) {
+		String[] lineParts = line.split(columnDelimiter); // Separo todas las lineas con ,
 		ArrayList<String> lnFParts = new ArrayList<>();
 
 		for (int i = 0; i < lineParts.length; i++) {
@@ -67,7 +70,7 @@ public class CSVFileProcessor {
 					int j; // Busco la comilla doble final
 					for (j = i + 1; j < lineParts.length && !lineParts[j].contains("\""); j++) {
 					}
-					lnFParts.add(String.join(",", Arrays.copyOfRange(lineParts, i, j + 1)).trim());
+					lnFParts.add(String.join(columnDelimiter, Arrays.copyOfRange(lineParts, i, j + 1)).trim());
 					i = j; // Adelando el bucle
 				} else {
 					lnFParts.add(lineParts[i].trim());
@@ -78,5 +81,13 @@ public class CSVFileProcessor {
 		}
 
 		return lnFParts;
+	}
+	
+	public String getColumnDelimiter() {
+		return columnDelimiter;
+	}
+
+	public void setColumnDelimiter(String columnDelimiter) {
+		this.columnDelimiter = columnDelimiter;
 	}
 }

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import modelo.red.Arista;
+import modelo.red.Nodo;
+import modelo.red.Red;
+
 public class ModeloContagio {
 
 	private ArrayList<Nodo> nodosContagiadosFin;
@@ -26,15 +30,15 @@ public class ModeloContagio {
 			
 			for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
 				
-				Nodo aux = red.nodos.get(entry.getKey());
+				Nodo aux = red.getNodos().get(entry.getKey());
 				
 				Arista aristaAuxiliar = new Arista(nodosContagiados.get(0),aux,0);
 				
 				int peso = 0;
 				
-				if(red.aristas.contains(aristaAuxiliar)) {
+				if(red.getAristas().contains(aristaAuxiliar)) {
 					//Aquí se comprueba porque a lo mejor el eropuerto no vuela a ese nodo
-					peso = red.aristas.get(red.aristas.indexOf(aristaAuxiliar)).getPeso();
+					peso = red.getAristas().get(red.getAristas().indexOf(aristaAuxiliar)).getPeso();
 					
 				}
 				
@@ -42,10 +46,10 @@ public class ModeloContagio {
 				aux.setAeropuetosComunicadosInfectados(aux.getAeropuetosComunicadosInfectados() + peso);
 				
 				double porcentajeContagiado = 
-						(aux.getAeropuetosComunicadosInfectados().doubleValue() / Double.valueOf(aux.getInfo().getDegree()));
+						(aux.getAeropuetosComunicadosInfectados().doubleValue() / Double.valueOf(aux.getAirportInfo().getDegree()));
 				
 				System.out.println("porcentaje contagiado " + porcentajeContagiado + " umbral "+
-						aux.getUmbral() + " aeropuerto " + aux.getInfo().getName() + " peso " + peso +
+						aux.getUmbral() + " aeropuerto " + aux.getAirportInfo().getName() + " peso " + peso +
 						" aeropuertos contagiados " + aux.getAeropuetosComunicadosInfectados());
 				
 				if(porcentajeContagiado > aux.getUmbral() && !aux.isInfectado()) {
@@ -53,7 +57,7 @@ public class ModeloContagio {
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);
-					System.out.println("Se ha contagiado " + aux.getInfo().getName());
+					System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
 				}
 			}
 			

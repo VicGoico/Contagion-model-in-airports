@@ -1,10 +1,13 @@
-package modelo;
+package vista;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.SwingUtilities;
+
+import modelo.Main;
+import modelo.red.Nodo;
 
 import java.util.TreeMap;
 
@@ -40,14 +43,14 @@ public class VentanaControl extends javax.swing.JPanel {
 		int i = 0;
 		aeropuertosOrdenados = new TreeMap<String, Nodo>();
 		for (Map.Entry<Integer, Nodo> entry : nodos.entrySet()) {
-			aeropuertosOrdenados.put(entry.getValue().getInfo().getName(), entry.getValue());
-			if (informacionCompleta.containsKey(entry.getValue().getInfo().getCountry())) {
-				informacionCompleta.get(entry.getValue().getInfo().getCountry())
-						.put(entry.getValue().getInfo().getName(), entry.getValue());
+			aeropuertosOrdenados.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
+			if (informacionCompleta.containsKey(entry.getValue().getAirportInfo().getCountry())) {
+				informacionCompleta.get(entry.getValue().getAirportInfo().getCountry())
+						.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
 			} else {
-				informacionCompleta.put(entry.getValue().getInfo().getCountry(), new TreeMap<String, Nodo>());
-				informacionCompleta.get(entry.getValue().getInfo().getCountry())
-						.put(entry.getValue().getInfo().getName(), entry.getValue());
+				informacionCompleta.put(entry.getValue().getAirportInfo().getCountry(), new TreeMap<String, Nodo>());
+				informacionCompleta.get(entry.getValue().getAirportInfo().getCountry())
+						.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
 			}
 		}
 		String[] paises = new String[informacionCompleta.size() + 1];
@@ -154,7 +157,7 @@ public class VentanaControl extends javax.swing.JPanel {
 
 	private void InfeccionActionPerformed(java.awt.event.ActionEvent evt) {
 		Nodo foco = informacionCompleta.get(paisSeleccionado).get(this.jComboBox1.getSelectedItem());
-		System.out.println("Va a comenzar la infeccion desde " + foco.getInfo().getName());
+		System.out.println("Va a comenzar la infeccion desde " + foco.getAirportInfo().getName());
 		Main.comenzarInfeccion(foco);
 	}
 

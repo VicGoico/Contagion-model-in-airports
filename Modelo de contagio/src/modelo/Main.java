@@ -1,26 +1,42 @@
 package modelo;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 import javax.swing.JFrame;
 
 import modelo.CSVReaders.AirportNodesReader;
+import modelo.CSVReaders.AristasReader;
 import modelo.CSVReaders.ExpenditureHealthReader;
 import modelo.CSVReaders.PIBReader;
 import modelo.metricas.tools.CorrespondingCountry;
+import modelo.red.Arista;
+import modelo.red.Nodo;
+import modelo.red.Red;
+import vista.VentanaControl;
+import vista.Vista;
 
 public class Main {
+	public static String OUTPUTFILENAME_PROCESSEDDATA = "test.csv";
+	public static String AIRPORT_NODES_FILENAME = "nodos.csv";
+	public static String AIRPORT_ARISTAS_FILENAME = "aristas.csv";
+	public static String EXPENDITUREHEALTH_FILENAME = "salud.csv";
+	public static String PIB_FILENAME = "PIB.csv";
+	
+	
 	private static JFrame frame;
 	private static Vista vista;
 	private static VentanaControl control;
-	private static CargarRed cr;
 	private static HelloUnfoldingWorld papplet;
-	public static String OUTPUTFILENAME_PROCESSEDDATA = "test.csv";
-	public static String AIRPORTNODESFILENAME = "nodos.csv";
-	public static String EXPENDITUREHEALTHFILENAME = "salud.csv";
-	public static String PIBFILENAME = "PIB.csv";
+	private static Red red;
+	
 
 	public static void main(String[] args) throws IOException {
 		
@@ -39,21 +55,40 @@ public class Main {
 		// new CSVFileProcessor("CarbonDioxideEmissionEstimates.csv", );
 		
 		
-		HashMap<Integer, TAirport> airports = new HashMap<>();
+		HashMap<Integer, Nodo> nodos = new HashMap<>();
+		red = new Red(nodos);
 		new CorrespondingCountry();
 		
-		AirportNodesReader apReader = new AirportNodesReader(AIRPORTNODESFILENAME, airports);
-		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTHFILENAME);
-		PIBReader pibReader = new PIBReader(PIBFILENAME);
+		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTH_FILENAME);
+		PIBReader pibReader = new PIBReader(PIB_FILENAME);
+		AirportNodesReader nodesReader = new AirportNodesReader(AIRPORT_NODES_FILENAME, nodos);
+		AristasReader aristasReader = new AristasReader(AIRPORT_ARISTAS_FILENAME, red, nodos);
 		
-		airports.forEach(new BiConsumer<Integer, TAirport>() {
+		// IGNORAR DE AQUI EN ADELANTE
+		BufferedWriter out = new BufferedWriter(new FileWriter("temp" + new Date().getTime() + ".csv"));
+		
+		HashMap<String, Boolean> lola = new HashMap<>();
+		
+		nodos.forEach(new BiConsumer<Integer, Nodo>() {
 			@Override
-			public void accept(Integer t, TAirport u) {
-				System.out.println(t + "\t" + u.getCountry() + "\t\t" + expHReader.getUmbral(u.getCountry()));
+			public void accept(Integer t, Nodo n) {
+				TAirport u = n.getAirportInfo();
+				
+				System.out.println(t + "\t" + u.getCountry() + "\t\t" + n.getUmbral() + "\t\t\t" + n.getAirportInfo().getDegree());
+				try {
+					if(!lola.containsKey(u.getCountry())) {
+						out.write(t + "," + u.getCountry() + "," + expHReader.getUmbral(u.getCountry()) + "\n");
+						lola.put(u.getCountry(), true);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		
-		cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA, airports, expHReader);
+		out.close();
+		
+		/* cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA, airports, expHReader);
 		control = new VentanaControl(cr.getNodos());
 		
 		frame = new JFrame("Bienvenidos al lector de datos");
@@ -62,6 +97,8 @@ public class Main {
 		frame.setSize(622, 307);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		*/
 	}
 
 	public static void CargarRed() {
@@ -74,7 +111,7 @@ public class Main {
 
 	public static void comenzarInfeccion(Nodo foco) {
 		ModeloContagio modelo = new ModeloContagio();
-		modelo.simular(cr.getRed(), cr.getRed().nodos.get(foco.getInfo().getId()));
+		modelo.simular(red, red.getNodo(foco.getId()));
 
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 

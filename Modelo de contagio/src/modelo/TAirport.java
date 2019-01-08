@@ -78,13 +78,24 @@ public class TAirport {
 	public int getDegree() {
 		return this.degree;
 	}
+
 	public void setOutdegree(int outDegree) {
 		this.outdegree = outDegree;
 	}
+
 	public void setIndegree(int inDegree) {
 		this.indegree = inDegree;
 	}
+
 	public void incrementDegree() {
-		this.degree += 1;
+		this.degree++;
+	}
+
+	public void incrementInDegree() {
+		this.indegree++;
+	}
+
+	public void incrementOutDegree() {
+		this.outdegree++;
 	}
 }
