@@ -1,10 +1,11 @@
 package modelo;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+
+import modelo.CSVReaders.ExpenditureHealthReader;
 
 public class CargarRed {
 	private Red red;
@@ -14,22 +15,26 @@ public class CargarRed {
 	
 	// private HashMap<String,ArrayList<HashMap<Integer,TAirport>>> countries;
 	
-	public CargarRed(String fileName) {
+	public CargarRed(String fileName, HashMap<Integer, TAirport> infoAirport, ExpenditureHealthReader expHReader) {
 		this.red = new Red();
 		this.nodos = new HashMap<Integer, Nodo>();
 		//leerNodos();
-		this.info_airport = new HashMap<Integer, TAirport>();
+		this.info_airport = infoAirport;
 		// this.countries = new HashMap<String,ArrayList<HashMap<Integer,TAirport>>>();
 		
-		if(Main.processCSVDatas == null)
+		/*if(Main.processCSVDatas == null)
 			this.readDatas(fileName);
 		else {
-			this.info_airport = Main.processCSVDatas.toHashMap();
+			//this.info_airport = Main.processCSVDatas.toHashMap();
 			for (TAirport tAirp : this.info_airport.values()) {
-				Nodo n = new Nodo(tAirp.getId(), 0, 0.0, tAirp, 0,0);
-				n.setUmbral(tAirp.getUmbral());
+				Nodo n = new Nodo(tAirp, expHReader.getUmbral(tAirp.getCountry()));
 				this.nodos.put(tAirp.getId(), n);
 			}
+		}*/
+		
+		for (TAirport tAirp : this.info_airport.values()) {
+			Nodo n = new Nodo(tAirp, expHReader.getUmbral(tAirp.getCountry()));
+			this.nodos.put(tAirp.getId(), n);
 		}
 		
 		this.red.setNodos(nodos);
@@ -37,104 +42,6 @@ public class CargarRed {
 		//System.out.println(red);
 	}
 	
-	public void readDatas(String csvFile){
-		BufferedReader br = null;
-		String line = "";
-
-		try {
-			TAirport tAirport;
-			br = new BufferedReader(new FileReader(csvFile));
-			boolean cierto = true;
-			while ((line = br.readLine()) != null) {
-				// Este if es para no leer la primera linea, ya que es donde
-				// vienen todos los nombres de los campos
-				if (!cierto) {
-					// String aux = line;
-					String[] data = new String[13];
-					int conta = 0;
-					String linea = "";
-					boolean libre = false;
-					// Recorro toda la linea que he leido del csv
-					for (int i = 0; i < line.length(); i++) {
-						// Compruebo que puedo guardarme el dato sin guardar
-						// basura
-						if (!libre && (line.substring(i, i + 1).equals(",")) && !linea.equalsIgnoreCase("")) {
-							data[conta] = linea;
-							linea = "";
-							conta++;
-						}
-						// Cuando nos encontramos las comillas dobles "", por
-						// primera vez
-						else if (line.substring(i, i + 1).equals("\"") && !libre) {
-							libre = true;
-							linea += "\"";
-						}
-						// Cuando nos encontramos el final de las dobles
-						// comillas ""
-						else if (line.substring(i, i + 1).equals("\"") && line.substring(i + 1, i + 2).equals(",")) {
-							linea += "\"";
-							data[conta] = linea;
-							linea = "";
-							conta++;
-							libre = false;
-						}
-						// Voy sumando las letras de las palabras
-						else {
-							linea += line.substring(i, i + 1);
-							// Por si guardo una coma, la borro
-							if (linea.equals(",")) {
-								linea = "";
-							}
-						}
-					}
-					// Le pongo al final del todo el ultimo dato leido
-					data[12] = linea;
-
-					// Me creo el aeropuerto con sus datos
-					tAirport = new TAirport(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7],
-							data[8], data[9], data[10], data[11], data[12]);
-					
-					
-					// Guardo el aeropuerto en mi mapa
-					this.info_airport.put(Integer.parseInt(data[0]), tAirport);
-					
-					Nodo n = new Nodo(Integer.parseInt(data[0]), 0, 0.0, tAirport, 0,0);
-					
-					n.setUmbral(Double.parseDouble(data[12]));
-	                
-	                this.nodos.put(Integer.parseInt(data[0]), n);
-
-					// Miro que no este en el HashMap de paises
-
-					/*
-					 * // No esta, pues lo meto if
-					 * (!this.countrys.containsKey(data[3])) {
-					 * this.countrys.put(data[3], 1); } // Esta, le sumo un mas
-					 * para saber cuantos aeropuertos de ese pais tengo else {
-					 * Integer cont = this.countrys.get(data[3]); cont++;
-					 * this.countrys.put(data[3], cont); }
-					 */
-				} else {
-					cierto = false;
-				}
-
-			}
-			// System.out.println("Numero de paises: " + this.world.size());
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 	public void generaRed() {
 		String csvFile = "aristas.csv";
 		String line = "";

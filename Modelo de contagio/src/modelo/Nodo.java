@@ -3,25 +3,17 @@ package modelo;
 import java.util.HashMap;
 
 public class Nodo {
-	private int id;
-	private int degree;
-	private int outdegree;
-	private int indegree;
 	private TAirport tAirport;
-	private Double umbral;
 	//PARA LA INFECCIÓN
+	private double umbral;
 	private HashMap<Integer, Integer> aeropuertos_comunicados; //<IDAeropuerto, Peso>
-	private Integer aeropuetosComunicadosInfectados = 0;
+	private int aeropuetosComunicadosInfectados = 0;
 	private boolean infectado = false;
 	
 	
-	public Nodo(int i, int g, Double umbral, TAirport info, int indegree, int outdegree) {
-		this.id = i;
-		this.degree = g;
+	public Nodo(TAirport info, double umbral) {
 		this.tAirport = info;
 		this.umbral = umbral;
-		this.indegree = indegree;
-		this.outdegree = outdegree;
 		aeropuertos_comunicados = new HashMap<Integer, Integer>();
 	}
 	
@@ -37,27 +29,12 @@ public class Nodo {
 		return this.aeropuertos_comunicados;
 	}
 	
-	public int getValue() {
-		return id;
-	}
-	public void setValue(int value) {
-		this.id = value;
-	}
-	public int getDegree() {
-		return degree;
-	}
-	public void setDegree(int degree) {
-		this.degree = degree;
-	}
-	
-	public void incrementDegree() {
-		this.degree += 1;
-	}
 	
 	@Override
 	public boolean equals(Object o) {
 		return o != null &&
-				o instanceof Nodo && ((Nodo) o).id == this.id && ((Nodo) o).degree == this.degree
+				o instanceof Nodo && ((Nodo) o).tAirport.getId() == this.tAirport.getId() 
+				&& ((Nodo) o).tAirport.getDegree() == this.tAirport.getDegree()
 				&& ((Nodo) o).tAirport.getIata() == this.tAirport.getIata()
 				&& ((Nodo) o).tAirport.getName() == this.tAirport.getName();
 	}
@@ -65,7 +42,7 @@ public class Nodo {
 	@Override
 	public String toString() {
 		return this.tAirport.getName() + " " + this.tAirport.getIata() + " idNodo " + 
-	this.id + " : " + " grado " + this.degree;
+	this.tAirport.getId() + " : " + " grado " + this.tAirport.getDegree();
 	}
 
 	public Double getUmbral() {

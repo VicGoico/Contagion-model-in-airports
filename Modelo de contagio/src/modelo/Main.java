@@ -58,14 +58,20 @@ public class Main {
 				System.out.println(t + "\t" + u.getCountry() + "\t\t" + expHReader.getUmbral(u.getCountry()));
 			}
 		});
+		
+		cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA, airports, expHReader);
+		/*control = new VentanaControl(cr.getNodos());
+		
+		frame.setContentPane(control);
+		frame.setSize(622, 307);*/
 	}
 
 	public static void CargarRed() {
-		cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA);
+		/*cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA, airports);
 		control = new VentanaControl(cr.getNodos());
 		
 		frame.setContentPane(control);
-		frame.setSize(622, 307);
+		frame.setSize(622, 307);*/
 	}
 
 	public static void comenzarInfeccion(Nodo foco) {
