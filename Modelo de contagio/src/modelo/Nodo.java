@@ -17,11 +17,11 @@ public class Nodo {
 		aeropuertos_comunicados = new HashMap<Integer, Integer>();
 	}
 	
-	public void addAeropuertoComunicado(Integer aeropuerto, Integer peso) {
+	public void addAeropuertoComunicado(int aeropuerto, int peso) {
 		this.aeropuertos_comunicados.put(aeropuerto, peso);
 	}
 	
-	public Integer getPesoAeropuertoComunicado(Integer aeropuerto) {
+	public Integer getPesoAeropuertoComunicado(int aeropuerto) {
 		return aeropuertos_comunicados.get(aeropuerto);
 	}
 	
@@ -49,7 +49,7 @@ public class Nodo {
 		return umbral;
 	}
 
-	public void setUmbral(Double umbral) {
+	public void setUmbral(double umbral) {
 		this.umbral = umbral;
 	}
 	public TAirport getInfo() {
@@ -57,22 +57,6 @@ public class Nodo {
 	}
 	public void setInfoAeropuertos(TAirport info) {
 		this.tAirport = info;
-	}
-
-	public int getOutdegree() {
-		return outdegree;
-	}
-
-	public void setOutdegree(int outdegree) {
-		this.outdegree = outdegree;
-	}
-
-	public int getIndegree() {
-		return indegree;
-	}
-
-	public void setIndegree(int indegree) {
-		this.indegree = indegree;
 	}
 
 	public Integer getAeropuetosComunicadosInfectados() {

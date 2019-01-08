@@ -5,9 +5,9 @@ public class Arista {
 
 	private Nodo nodo1;
 	private Nodo nodo2;
-	private Integer peso;
+	private int peso;
 
-	public Arista(Nodo nodo1, Nodo nodo2, Integer peso) {
+	public Arista(Nodo nodo1, Nodo nodo2, int peso) {
 		this.nodo1 = nodo1;
 		this.nodo2 = nodo2;
 		this.peso = peso;
@@ -41,11 +41,11 @@ public class Arista {
 		return "(" + this.nodo1.toString() + ", " + this.nodo2.toString() + ")";
 	}
 
-	public Integer getPeso() {
+	public int getPeso() {
 		return peso;
 	}
 
-	public void setPeso(Integer peso) {
+	public void setPeso(int peso) {
 		this.peso = peso;
 	}
 }

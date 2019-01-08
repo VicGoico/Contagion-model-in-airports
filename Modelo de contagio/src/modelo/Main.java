@@ -1,19 +1,14 @@
 package modelo;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import javax.swing.JFrame;
 
 import modelo.CSVReaders.AirportNodesReader;
 import modelo.CSVReaders.ExpenditureHealthReader;
 import modelo.CSVReaders.PIBReader;
-import modelo.metricas.tools.CSVFileProcessor;
 import modelo.metricas.tools.CorrespondingCountry;
 
 public class Main {
@@ -26,7 +21,6 @@ public class Main {
 	public static String AIRPORTNODESFILENAME = "nodos.csv";
 	public static String EXPENDITUREHEALTHFILENAME = "salud.csv";
 	public static String PIBFILENAME = "PIB.csv";
-	protected static makeUsesfullCSV processCSVDatas = null;
 
 	public static void main(String[] args) throws IOException {
 		
@@ -60,10 +54,14 @@ public class Main {
 		});
 		
 		cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA, airports, expHReader);
-		/*control = new VentanaControl(cr.getNodos());
+		control = new VentanaControl(cr.getNodos());
 		
+		frame = new JFrame("Bienvenidos al lector de datos");
+		frame.setSize(450, 420);
 		frame.setContentPane(control);
-		frame.setSize(622, 307);*/
+		frame.setSize(622, 307);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public static void CargarRed() {
@@ -76,7 +74,7 @@ public class Main {
 
 	public static void comenzarInfeccion(Nodo foco) {
 		ModeloContagio modelo = new ModeloContagio();
-		modelo.simular(cr.getRed(), cr.getRed().nodos.get(foco.getValue()));
+		modelo.simular(cr.getRed(), cr.getRed().nodos.get(foco.getInfo().getId()));
 
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 

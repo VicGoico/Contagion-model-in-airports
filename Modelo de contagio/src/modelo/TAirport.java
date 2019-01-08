@@ -15,8 +15,8 @@ public class TAirport {
 	private int degree; // 11
 
 	// Construtora para leer el CSV bueno, con todos los datos
-	public TAirport(int id, String name, String city, String country, String iata, String icao, Double latitude,
-			Double longitude, int altitude, int indegree, int outdegree, int degree) {
+	public TAirport(int id, String name, String city, String country, String iata, String icao, double latitude,
+			double longitude, int altitude, int indegree, int outdegree, int degree) {
 		this.id = id;
 		this.name = name;
 		this.city = city;
@@ -77,5 +77,14 @@ public class TAirport {
 
 	public int getDegree() {
 		return this.degree;
+	}
+	public void setOutdegree(int outDegree) {
+		this.outdegree = outDegree;
+	}
+	public void setIndegree(int inDegree) {
+		this.indegree = inDegree;
+	}
+	public void incrementDegree() {
+		this.degree += 1;
 	}
 }

@@ -77,7 +77,7 @@ public class Vista extends JPanel {
 
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-						if (Main.processCSVDatas != null) {
+						/*if (Main.processCSVDatas != null) {
 							try {
 								Main.processCSVDatas.guardar(fileNameProcesadosTextField.getText());
 								
@@ -94,7 +94,7 @@ public class Vista extends JPanel {
 							JOptionPane.showMessageDialog(frame, "No se han procesado los CSVs.", "Error!",
 									JOptionPane.ERROR_MESSAGE);
 						}
-
+						 */
 						
 						// Restablezco los botones
 						guardarDatosProcesadosButton.setText("Guardar datos procesados");

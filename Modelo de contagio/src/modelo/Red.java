@@ -37,14 +37,14 @@ public class Red {
 	*/
 	public void add(Arista a) {
 		//compruebaExistenciaNodos(a);
-		Nodo n1 = this.nodos.get(a.getNodo1().getValue());
-		Nodo n2 = this.nodos.get(a.getNodo2().getValue());
+		Nodo n1 = this.nodos.get(a.getNodo1().getInfo().getId());
+		Nodo n2 = this.nodos.get(a.getNodo2().getInfo().getId());
 		
-		if(n1.getPesoAeropuertoComunicado(n2.getValue()) != null) {
-			n1.addAeropuertoComunicado(n2.getValue(), n1.getPesoAeropuertoComunicado(n2.getValue()) +1);
+		if(n1.getPesoAeropuertoComunicado(n2.getInfo().getId()) != null) {
+			n1.addAeropuertoComunicado(n2.getInfo().getId(), n1.getPesoAeropuertoComunicado(n2.getInfo().getId()) +1);
 		}
 		else {
-			n1.addAeropuertoComunicado(n2.getValue(), 1);
+			n1.addAeropuertoComunicado(n2.getInfo().getId(), 1);
 		}
 		
 		if(aristas.contains(a)) {
@@ -55,11 +55,11 @@ public class Red {
 		}
 		else {
 			this.aristas.add(new Arista(n1, n2, 1));
-			n1.setOutdegree(n1.getOutdegree() + 1);
-			n2.setIndegree(n2.getIndegree() + 1);
+			n1.getInfo().setOutdegree(n1.getInfo().getOutdegree() + 1);
+			n2.getInfo().setIndegree(n2.getInfo().getIndegree() + 1);
 
-			n1.incrementDegree();
-			n2.incrementDegree();
+			n1.getInfo().incrementDegree();
+			n2.getInfo().incrementDegree();
 		}
 		
 		
@@ -94,8 +94,8 @@ public class Red {
 		Nodo nMax = null;
 		
 		for(Nodo n : this.nodos.values()) {
-			if(n.getDegree() > max) {
-				max = n.getDegree();
+			if(n.getInfo().getDegree() > max) {
+				max = n.getInfo().getDegree();
 				nMax = n;
 			}
 		}
