@@ -11,14 +11,17 @@ import java.util.Collection;
 import modelo.CSVReaders.ReaderConsumer;
 
 public class CSVFileProcessor {
+	
+	// Atributos
 	private String columnDelimiter = ",";
 	protected String fileName;
 	private BufferedReader fileBuffer;
 	private ReaderConsumer fProcessLine;
 	
+	// Constructora
 	public CSVFileProcessor(String fileName, ReaderConsumer fProcessLine) {
-		this.fileName = fileName;
-		this.fProcessLine = fProcessLine;
+		this.fileName = fileName;// Nombre del fichero a leer "supongo pork esto no lo ha comentado el creador"
+		this.fProcessLine = fProcessLine;// Una clase que a saber que hace
 	}
 	
 	public void process() throws IOException {
@@ -68,6 +71,7 @@ public class CSVFileProcessor {
 			if (lineParts[i].trim().startsWith("\"")) {
 				if(!lineParts[i].trim().substring(1).contains("\"")) {
 					int j; // Busco la comilla doble final
+					// Esto es un while, no un for.
 					for (j = i + 1; j < lineParts.length && !lineParts[j].contains("\""); j++) {
 					}
 					lnFParts.add(String.join(columnDelimiter, Arrays.copyOfRange(lineParts, i, j + 1)).trim());

@@ -2,6 +2,8 @@ package modelo.metricas.tools;
 
 import java.util.HashMap;
 
+// Que absurdo este de hacerse una clase para rellenar un HashMap?
+
 public class CorrespondingCountry {
 	public static HashMap<String, String> map = null;
 	public static String DEFAULTVALUE = "";

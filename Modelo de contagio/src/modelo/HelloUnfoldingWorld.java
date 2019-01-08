@@ -10,6 +10,7 @@ import de.fhpotsdam.unfolding.utils.MapUtils;
 import modelo.red.Nodo;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 
+// Es la vista que despliega la ventana que pinta el mundo
 public class HelloUnfoldingWorld extends PApplet {
     // Serial ID is optional and added by Eclipse
     private static final long serialVersionUID = 1L;

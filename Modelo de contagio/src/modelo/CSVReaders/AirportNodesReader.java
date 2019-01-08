@@ -15,7 +15,8 @@ public class AirportNodesReader implements ReaderConsumer {
 	private HashMap<String, ArrayList<TAirport>> airportsByCountry;
 	private HashMap<Integer, Nodo> loadedNodes;
 	private ExpenditureHealthReader expHealthReader;
-
+	
+	// Constructora
 	public AirportNodesReader(String fileName, HashMap<Integer, Nodo> nodes) throws IOException {
 		this.loadedNodes = nodes;
 		this.airportsById = new HashMap<>();
@@ -24,7 +25,8 @@ public class AirportNodesReader implements ReaderConsumer {
 
 		new CSVFileProcessor(fileName, this).process();
 	}
-
+	
+	// Getters
 	public TAirport getAirportById(int id) {
 		return this.airportsById.get(id);
 	}
@@ -45,10 +47,11 @@ public class AirportNodesReader implements ReaderConsumer {
 		return this.expHealthReader.getUmbral(airport.getCountry());
 	}
 
+	// Metodos implementados de la interfaz ReaderConsumer
 	@Override
 	public void accept(ArrayList<String> t) {
 		if (!processing)
-			return;
+			return;// Return k?, si es un void??????
 
 		if (lineCounter != 0) { // Me salto la cabecera
 			String airportName = "";
@@ -92,6 +95,7 @@ public class AirportNodesReader implements ReaderConsumer {
 		}
 	}
 
+	// Este medoto es el mismo en todas las clases deberia estar declarado
 	@Override
 	public boolean processing() {
 		return processing;

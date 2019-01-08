@@ -1,11 +1,8 @@
 package modelo;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,17 +44,21 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	// Carga la ventana de control(que control, no se sabe)
 	public static void loadVentanaControl() {
 		control = new VentanaControl(red.getNodos());
 		frame.setContentPane(control);
 		frame.setSize(622, 307);
 	}
-
+	
+	// Carga la red del fichero
 	public static void CargarRed() throws IOException {
-		HashMap<Integer, Nodo> nodos = new HashMap<>();
+		// O sea te declaras el atributo, para luego inicializarlo(y los getters para que estan?)
+		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
 		red = new Red(nodos);
-		new CorrespondingCountry();
+		new CorrespondingCountry();// Aqui podria ir perfectmente el HashMap y cargarlo
 		
+		// Lo calculamos todos los ficheros si o si
 		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTH_FILENAME);
 		PIBReader pibReader = new PIBReader(PIB_FILENAME);
 		AirportNodesReader nodesReader = new AirportNodesReader(AIRPORT_NODES_FILENAME, nodos);
@@ -67,7 +68,7 @@ public class Main {
 		
 		
 		
-		// IGNORAR DE AQUI EN ADELANTE
+		// IGNORAR DE AQUI EN ADELANTE ???????????????????????????
 		BufferedWriter out = new BufferedWriter(new FileWriter("temp" + new Date().getTime() + ".csv"));
 		
 		HashMap<String, Boolean> lola = new HashMap<>();
@@ -91,6 +92,8 @@ public class Main {
 		out.close();
 	}
 
+	// Metodo que gestiona la infeccion entre aeropuertos, 
+	// se le pasa un nodo de la red, que representa un aeropuerto
 	public static void comenzarInfeccion(Nodo foco) {
 		ModeloContagio modelo = new ModeloContagio();
 		modelo.simular(red, red.getNodo(foco.getId()));
@@ -116,6 +119,7 @@ public class Main {
 
 	}
 
+	// Metodo que guarda un csv, que su nombre se le pasa por parametro
 	public static void guardar(String outputFileName) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
 		

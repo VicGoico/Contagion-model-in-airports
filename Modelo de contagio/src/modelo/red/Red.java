@@ -5,26 +5,33 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Red {
+	
+	// Atributos
 	protected ArrayList<Arista> aristas;
 	private HashMap<Integer, Nodo> nodos;
 
+	// Constructora
 	public Red(HashMap<Integer, Nodo> nodos) {
-		this.aristas = new ArrayList<>();
+		this.aristas = new ArrayList<Arista>();
 		this.nodos = nodos;
 	}
-
-	public int numNodos() {
-		return this.getNodos().size();
-	}
-
+	
+	// Numero de arisras de la red
 	public int numAristas() {
 		return this.aristas.size();
 	}
-
+	
+	// Para saber si una arista esta en el array de aristas de la red
 	public boolean contains(Arista a) {
 		return this.aristas.contains(a);
 	}
 	
+	// Numero de nodos de la red
+	public int numNodos() {
+		return this.getNodos().size();
+	}
+	
+	// No se que hace esto?
 	public void add(Arista a) {
 		Nodo n1 = a.getNodo1();
 		Nodo n2 = a.getNodo2();
@@ -63,18 +70,12 @@ public class Red {
 	 * return this.nodos.get(nodo); }
 	 */
 
+	// Que hace esto??
 	public Nodo getNodo(int nodo) {
 		return this.getNodos().get(nodo);
 	}
 
-	public List<Arista> getAristas() {
-		return aristas;
-	}
-
-	public void setAristas(ArrayList<Arista> aristas) {
-		this.aristas = aristas;
-	}
-
+	// Metodo que nos da el Nodo con el degree mas grande de la red
 	public Nodo getLargestHubDegree() {
 		int max = 0;
 		Nodo nMax = null;
@@ -88,14 +89,26 @@ public class Red {
 
 		return nMax;
 	}
-
+	
+	// Getters
+	public List<Arista> getAristas() {
+		return this.aristas;
+	}
+	
+	public HashMap<Integer, Nodo> getNodos() {
+		return this.nodos;
+	}
+	
+	// Setters
+	public void setAristas(ArrayList<Arista> aristas) {
+		this.aristas = aristas;
+	}
+	
 	public void setNodos(HashMap<Integer, Nodo> nodos) {
 		this.nodos = nodos;
 	}
 
-	public HashMap<Integer, Nodo> getNodos() {
-		return nodos;
-	}
+	
 
 	@Override
 	public String toString() {
