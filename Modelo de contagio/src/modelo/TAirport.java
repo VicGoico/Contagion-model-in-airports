@@ -10,9 +10,9 @@ public class TAirport {
 	private double latitude; // 6
 	private double longitude; // 7
 	private int altitude; // 8
-	private int indegree; // 9
-	private int outdegree; // 10
-	private int degree; // 11
+	private int calculatedIndegree; // 9
+	private int calculatedOutdegree; // 10
+	private int calculatedDegree; // 11
 
 	// Construtora para leer el CSV bueno, con todos los datos
 	public TAirport(int id, String name, String city, String country, String iata, String icao, double latitude,
@@ -26,9 +26,9 @@ public class TAirport {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.altitude = altitude;
-		this.indegree = indegree;
-		this.outdegree = outdegree;
-		this.degree = degree;
+		this.calculatedIndegree = indegree;
+		this.calculatedOutdegree = outdegree;
+		this.calculatedDegree = degree;
 	}
 
 	public int getId() {
@@ -67,35 +67,22 @@ public class TAirport {
 		return this.altitude;
 	}
 
-	public int getIndegree() {
-		return this.indegree;
+	public int getCalculatedIndegree() {
+		return this.calculatedIndegree;
 	}
 
-	public int getOutdegree() {
-		return this.outdegree;
+	public int getCalculatedOutdegree() {
+		return this.calculatedOutdegree;
 	}
 
-	public int getDegree() {
-		return this.degree;
+	public int getCalculatedDegree() {
+		return this.calculatedDegree;
 	}
-
-	public void setOutdegree(int outDegree) {
-		this.outdegree = outDegree;
-	}
-
-	public void setIndegree(int inDegree) {
-		this.indegree = inDegree;
-	}
-
-	public void incrementDegree() {
-		this.degree++;
-	}
-
-	public void incrementInDegree() {
-		this.indegree++;
-	}
-
-	public void incrementOutDegree() {
-		this.outdegree++;
+	
+	@Override
+	public String toString() {
+		return this.id + "," + this.name.replaceAll(",", "-") + "," + this.city + "," + this.country + "," + this.iata
+				+ "," + this.icao + "," + this.latitude + "," + this.longitude + "," + this.altitude + ","
+				+ this.calculatedIndegree + "," + this.calculatedOutdegree + "," + this.calculatedDegree;
 	}
 }

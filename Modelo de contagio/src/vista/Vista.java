@@ -7,7 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,8 +22,10 @@ import modelo.Main;
 
 public class Vista extends JPanel {
 	private static final long serialVersionUID = 9094988387830993055L;
+	private boolean redCargada = false;
 	private JButton ejecutarProgramaButton;
 	private JButton salirButton;
+	private JButton continuarButton;
 	private JTextField fileNameProcesadosTextField;
 	private JButton guardarDatosProcesadosButton;
 	private JPanel centerPanel;
@@ -45,7 +47,9 @@ public class Vista extends JPanel {
 		salirButton = new JButton("Salir");
 		guardarDatosProcesadosButton = new JButton("Guardar datos procesados");
 		fileNameProcesadosTextField = new JTextField("test.csv");
-
+		continuarButton = new JButton("Continuar");
+		continuarButton.setEnabled(false);
+		
 		ejecutarProgramaButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -56,9 +60,28 @@ public class Vista extends JPanel {
 
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-						Main.CargarRed();
+						try {
+							Main.CargarRed();
+							continuarButton.setEnabled(true);
+							salirButton.setEnabled(true);
+							guardarDatosProcesadosButton.setEnabled(true);
+							redCargada = true;
+						} catch (IOException e) {
+							JFrame frame = new JFrame();
+							JOptionPane.showMessageDialog(frame, "Ha ocurrido un error al leer los datos!", "Error!",
+									JOptionPane.ERROR_MESSAGE);
+							
+							e.printStackTrace();
+						}
 					}
 				});
+			}
+		});
+		
+		continuarButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.loadVentanaControl();
 			}
 		});
 
@@ -79,24 +102,23 @@ public class Vista extends JPanel {
 
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-						/*if (Main.processCSVDatas != null) {
+						if (redCargada) {
 							try {
-								Main.processCSVDatas.guardar(fileNameProcesadosTextField.getText());
+								Main.guardar(fileNameProcesadosTextField.getText());
 								
 								JFrame frame = new JFrame();
 								JOptionPane.showMessageDialog(frame, "Archivo guardado correctamente!", "Listo!",
 										JOptionPane.INFORMATION_MESSAGE);
-							} catch (FileNotFoundException e) {
+							} catch (IOException e) {
 								JFrame frame = new JFrame();
 								JOptionPane.showMessageDialog(frame, e.getMessage(), "Error!",
 										JOptionPane.ERROR_MESSAGE);
 							}
 						} else {
 							JFrame frame = new JFrame();
-							JOptionPane.showMessageDialog(frame, "No se han procesado los CSVs.", "Error!",
+							JOptionPane.showMessageDialog(frame, "Primero debes cargar la red!", "Error!",
 									JOptionPane.ERROR_MESSAGE);
 						}
-						 */
 						
 						// Restablezco los botones
 						guardarDatosProcesadosButton.setText("Guardar datos procesados");
@@ -116,7 +138,7 @@ public class Vista extends JPanel {
 		exportPanel.add(fileNameProcesadosTextField);
 		exportPanel.add(guardarDatosProcesadosButton);
 		centerPanel.add(exportPanel);
-		
+		centerPanel.add(continuarButton);
 		centerPanel.add(salirButton);
 	}
 

@@ -22,19 +22,10 @@ public class Red {
 	}
 
 	public boolean contains(Arista a) {
-		// compruebaExistenciaNodos(a);
 		return this.aristas.contains(a);
 	}
-
-	/*
-	 * private void compruebaExistenciaNodos(Arista a) { int nodo1 =
-	 * a.getNodo1().getValue(), nodo2 = a.getNodo2().getValue();
-	 * if(!this.nodos.containsKey(nodo1)) this.nodos.put(nodo1, new Nodo(nodo1, 0));
-	 * if(!this.nodos.containsKey(nodo2)) this.nodos.put(nodo2, new Nodo(nodo2, 0));
-	 * }
-	 */
+	
 	public void add(Arista a) {
-		// compruebaExistenciaNodos(a);
 		Nodo n1 = a.getNodo1();
 		Nodo n2 = a.getNodo2();
 
@@ -50,11 +41,11 @@ public class Red {
 			aux.setPeso(aux.getPeso() + 1);
 		} else {
 			this.aristas.add(new Arista(n1, n2, 1));
-			n1.getAirportInfo().incrementOutDegree();
-			n2.getAirportInfo().incrementInDegree();
+			n1.incrementOutDegree();
+			n2.incrementInDegree();
 			
-			n1.getAirportInfo().incrementDegree();
-			n2.getAirportInfo().incrementDegree();
+			n1.incrementDegree();
+			n2.incrementDegree();
 		}
 
 	}
@@ -89,8 +80,8 @@ public class Red {
 		Nodo nMax = null;
 
 		for (Nodo n : this.getNodos().values()) {
-			if (n.getAirportInfo().getDegree() > max) {
-				max = n.getAirportInfo().getDegree();
+			if (n.getDegree() > max) {
+				max = n.getDegree();
 				nMax = n;
 			}
 		}

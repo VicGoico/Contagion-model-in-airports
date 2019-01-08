@@ -46,7 +46,7 @@ public class ModeloContagio {
 				aux.setAeropuetosComunicadosInfectados(aux.getAeropuetosComunicadosInfectados() + peso);
 				
 				double porcentajeContagiado = 
-						(aux.getAeropuetosComunicadosInfectados().doubleValue() / Double.valueOf(aux.getAirportInfo().getDegree()));
+						(aux.getAeropuetosComunicadosInfectados().doubleValue() / Double.valueOf(aux.getDegree()));
 				
 				System.out.println("porcentaje contagiado " + porcentajeContagiado + " umbral "+
 						aux.getUmbral() + " aeropuerto " + aux.getAirportInfo().getName() + " peso " + peso +

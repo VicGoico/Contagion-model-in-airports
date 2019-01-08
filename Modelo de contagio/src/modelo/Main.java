@@ -1,14 +1,15 @@
 package modelo;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.function.BiConsumer;
 import javax.swing.JFrame;
 
@@ -17,7 +18,6 @@ import modelo.CSVReaders.AristasReader;
 import modelo.CSVReaders.ExpenditureHealthReader;
 import modelo.CSVReaders.PIBReader;
 import modelo.metricas.tools.CorrespondingCountry;
-import modelo.red.Arista;
 import modelo.red.Nodo;
 import modelo.red.Red;
 import vista.VentanaControl;
@@ -38,23 +38,22 @@ public class Main {
 	private static Red red;
 	
 
-	public static void main(String[] args) throws IOException {
-		
-		/*
+	public static void main(String[] args) {
 		vista = new Vista();
-		
 		frame = new JFrame("Bienvenidos al lector de datos");
 		frame.setSize(450, 420);
 		frame.setContentPane(vista);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		 */
-		
-		// processCSVDatas = new makeUsesfullCSV();
-		
-		// new CSVFileProcessor("CarbonDioxideEmissionEstimates.csv", );
-		
-		
+	}
+	
+	public static void loadVentanaControl() {
+		control = new VentanaControl(red.getNodos());
+		frame.setContentPane(control);
+		frame.setSize(622, 307);
+	}
+
+	public static void CargarRed() throws IOException {
 		HashMap<Integer, Nodo> nodos = new HashMap<>();
 		red = new Red(nodos);
 		new CorrespondingCountry();
@@ -63,6 +62,10 @@ public class Main {
 		PIBReader pibReader = new PIBReader(PIB_FILENAME);
 		AirportNodesReader nodesReader = new AirportNodesReader(AIRPORT_NODES_FILENAME, nodos);
 		AristasReader aristasReader = new AristasReader(AIRPORT_ARISTAS_FILENAME, red, nodos);
+		
+		
+		
+		
 		
 		// IGNORAR DE AQUI EN ADELANTE
 		BufferedWriter out = new BufferedWriter(new FileWriter("temp" + new Date().getTime() + ".csv"));
@@ -74,7 +77,7 @@ public class Main {
 			public void accept(Integer t, Nodo n) {
 				TAirport u = n.getAirportInfo();
 				
-				System.out.println(t + "\t" + u.getCountry() + "\t\t" + n.getUmbral() + "\t\t\t" + n.getAirportInfo().getDegree());
+				System.out.println(t + "\t" + u.getCountry() + "\t\t" + n.getUmbral() + "\t\t\t" + n.getDegree());
 				try {
 					if(!lola.containsKey(u.getCountry())) {
 						out.write(t + "," + u.getCountry() + "," + expHReader.getUmbral(u.getCountry()) + "\n");
@@ -85,28 +88,7 @@ public class Main {
 				}
 			}
 		});
-		
 		out.close();
-		
-		/* cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA, airports, expHReader);
-		control = new VentanaControl(cr.getNodos());
-		
-		frame = new JFrame("Bienvenidos al lector de datos");
-		frame.setSize(450, 420);
-		frame.setContentPane(control);
-		frame.setSize(622, 307);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		*/
-	}
-
-	public static void CargarRed() {
-		/*cr = new CargarRed(OUTPUTFILENAME_PROCESSEDDATA, airports);
-		control = new VentanaControl(cr.getNodos());
-		
-		frame.setContentPane(control);
-		frame.setSize(622, 307);*/
 	}
 
 	public static void comenzarInfeccion(Nodo foco) {
@@ -132,6 +114,19 @@ public class Main {
 		// world.setup();
 		// world.draw();
 
+	}
+
+	public static void guardar(String outputFileName) throws IOException {
+		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
+		
+		out.write("id,umbral,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
+		
+		for (Iterator<Nodo> i = red.getNodos().values().iterator(); i.hasNext();) {
+			Nodo n = (Nodo) i.next();
+			out.write(n.getId() + "," + n.getUmbral() + "," + n.getAirportInfo().toString() + "\n");
+		}
+		
+		out.close();
 	}
 
 }
