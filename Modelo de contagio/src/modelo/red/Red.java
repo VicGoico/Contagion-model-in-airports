@@ -1,17 +1,18 @@
 package modelo.red;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Red {
 	
 	// Atributos
 	protected ArrayList<Arista> aristas;
-	private HashMap<Integer, Nodo> nodos;
+	
+	//private HashMap<Integer, Nodo> nodos;
+	ArrayList<Nodo> nodos;
 
 	// Constructora
-	public Red(HashMap<Integer, Nodo> nodos) {
+	public Red(ArrayList<Nodo> nodos) {
 		this.aristas = new ArrayList<Arista>();
 		this.nodos = nodos;
 	}
@@ -80,7 +81,7 @@ public class Red {
 		int max = 0;
 		Nodo nMax = null;
 
-		for (Nodo n : this.getNodos().values()) {
+		for (Nodo n : this.getNodos()) {
 			if (n.getDegree() > max) {
 				max = n.getDegree();
 				nMax = n;
@@ -95,7 +96,7 @@ public class Red {
 		return this.aristas;
 	}
 	
-	public HashMap<Integer, Nodo> getNodos() {
+	public ArrayList<Nodo> getNodos() {
 		return this.nodos;
 	}
 	
@@ -104,7 +105,7 @@ public class Red {
 		this.aristas = aristas;
 	}
 	
-	public void setNodos(HashMap<Integer, Nodo> nodos) {
+	public void setNodos(ArrayList<Nodo> nodos) {
 		this.nodos = nodos;
 	}
 
@@ -114,7 +115,7 @@ public class Red {
 	public String toString() {
 		String sOut = "###### NODOS ######" + System.getProperty("line.separator");
 
-		for (Nodo n : this.getNodos().values())
+		for (Nodo n : this.getNodos())
 			sOut += n + System.getProperty("line.separator");
 
 		sOut = "###### ARISTAS ######" + System.getProperty("line.separator");

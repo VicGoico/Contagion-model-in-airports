@@ -1,5 +1,6 @@
 package vista;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,11 +18,11 @@ public class VentanaControl extends javax.swing.JPanel {
 	/**
 	 * Creates new form Control
 	 */
-	public VentanaControl(HashMap<Integer, Nodo> nodos) {
+	public VentanaControl(ArrayList<Nodo> nodos) {
 		initComponents(nodos);
 	}
 
-	private void initComponents(HashMap<Integer, Nodo> nodos) {
+	private void initComponents(ArrayList<Nodo> nodos) {
 
 		jLabel1 = new javax.swing.JLabel();
 		jComboBox1 = new javax.swing.JComboBox<>();
@@ -36,7 +37,18 @@ public class VentanaControl extends javax.swing.JPanel {
 
 		int i = 0;
 		aeropuertosOrdenados = new TreeMap<String, Nodo>();
-		for (Map.Entry<Integer, Nodo> entry : nodos.entrySet()) {
+		for(Nodo aeropuerto: nodos ) {
+			aeropuertosOrdenados.put(aeropuerto.getAirportInfo().getName(), aeropuerto);
+			if (informacionCompleta.containsKey(aeropuerto.getAirportInfo().getCountry())) {
+				informacionCompleta.get(aeropuerto.getAirportInfo().getCountry())
+						.put(aeropuerto.getAirportInfo().getName(), aeropuerto);
+			} else {
+				informacionCompleta.put(aeropuerto.getAirportInfo().getCountry(), new TreeMap<String, Nodo>());
+				informacionCompleta.get(aeropuerto.getAirportInfo().getCountry())
+						.put(aeropuerto.getAirportInfo().getName(), aeropuerto);
+			}
+		}
+		/*for (Map.Entry<Integer, Nodo> entry : nodos.entrySet()) {
 			aeropuertosOrdenados.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
 			if (informacionCompleta.containsKey(entry.getValue().getAirportInfo().getCountry())) {
 				informacionCompleta.get(entry.getValue().getAirportInfo().getCountry())
@@ -46,7 +58,7 @@ public class VentanaControl extends javax.swing.JPanel {
 				informacionCompleta.get(entry.getValue().getAirportInfo().getCountry())
 						.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
 			}
-		}
+		}*/
 		String[] paises = new String[informacionCompleta.size() + 1];
 		paises[i] = "Selección";
 		i++;

@@ -54,7 +54,13 @@ public class Main {
 	// Carga la red del fichero
 	public static void CargarRed() throws IOException {
 		// O sea te declaras el atributo, para luego inicializarlo(y los getters para que estan?)
-		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
+		//HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
+		ArrayList<Nodo> nodos = new ArrayList<Nodo>();
+		
+		for (int i = 0; i < 12000; i++) {
+			nodos.add(i, null); //"Add" all positions to null
+		}
+		
 		red = new Red(nodos);
 		new CorrespondingCountry();// Aqui podria ir perfectmente el HashMap y cargarlo
 		
@@ -73,7 +79,25 @@ public class Main {
 		
 		HashMap<String, Boolean> lola = new HashMap<>();
 		
-		nodos.forEach(new BiConsumer<Integer, Nodo>() {
+		for(Nodo aeropuerto : nodos) {
+			
+			if(aeropuerto != null) {
+				TAirport u = aeropuerto.getAirportInfo();
+				
+				System.out.println(u.getId() + "\t" + u.getCountry() + "\t\t" + aeropuerto.getUmbral() + "\t\t\t" + aeropuerto.getDegree());
+				try {
+					if(!lola.containsKey(u.getCountry())) {
+						out.write(u.getId() + "," + u.getCountry() + "," + expHReader.getUmbral(u.getCountry()) + "\n");
+						lola.put(u.getCountry(), true);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+		/*nodos.forEach(new BiConsumer<Integer, Nodo>() {
 			@Override
 			public void accept(Integer t, Nodo n) {
 				TAirport u = n.getAirportInfo();
@@ -88,7 +112,7 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
-		});
+		});*/
 		out.close();
 	}
 
@@ -125,11 +149,15 @@ public class Main {
 		
 		out.write("id,umbral,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
 		
-		for (Iterator<Nodo> i = red.getNodos().values().iterator(); i.hasNext();) {
+		
+		for(Nodo aeropuerto : red.getNodos()) {
+			out.write(aeropuerto.getId() + "," + aeropuerto.getUmbral() + "," + aeropuerto.getAirportInfo().toString() + "\n");
+		}
+		/*for (Iterator<Nodo> i = red.getNodos().values().iterator(); i.hasNext();) {
 			Nodo n = (Nodo) i.next();
 			out.write(n.getId() + "," + n.getUmbral() + "," + n.getAirportInfo().toString() + "\n");
 		}
-		
+		*/
 		out.close();
 	}
 

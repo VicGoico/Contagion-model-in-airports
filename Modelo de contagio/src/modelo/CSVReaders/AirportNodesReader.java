@@ -13,11 +13,11 @@ public class AirportNodesReader implements ReaderConsumer {
 	private static boolean processing = true;
 	private HashMap<Integer, TAirport> airportsById;
 	private HashMap<String, ArrayList<TAirport>> airportsByCountry;
-	private HashMap<Integer, Nodo> loadedNodes;
+	private ArrayList<Nodo> loadedNodes;
 	private ExpenditureHealthReader expHealthReader;
 	
 	// Constructora
-	public AirportNodesReader(String fileName, HashMap<Integer, Nodo> nodes) throws IOException {
+	public AirportNodesReader(String fileName, ArrayList<Nodo> nodes) throws IOException {
 		this.loadedNodes = nodes;
 		this.airportsById = new HashMap<>();
 		this.airportsByCountry = new HashMap<>();
@@ -69,8 +69,9 @@ public class AirportNodesReader implements ReaderConsumer {
 						Integer.parseInt(t.get(11)), Integer.parseInt(t.get(12)), Integer.parseInt(t.get(13)));
 
 				this.airportsById.put(airportId, airport);
-				this.loadedNodes.put(airportId, new Nodo(airport, this.calcExpenditureHealthUmbral(airport)));
 				
+				this.loadedNodes.set(airportId, new Nodo(airport, this.calcExpenditureHealthUmbral(airport)));
+				//this.loadedNodes.put(airportId, new Nodo(airport, this.calcExpenditureHealthUmbral(airport)));
 				if (!airportsByCountry.containsKey(countryName))
 					airportsByCountry.put(countryName, new ArrayList<>());
 				airportsByCountry.get(countryName).add(airport);

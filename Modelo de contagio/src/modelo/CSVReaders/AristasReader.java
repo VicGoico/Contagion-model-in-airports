@@ -11,10 +11,10 @@ import modelo.red.Red;
 public class AristasReader implements ReaderConsumer {
 	private static int lineCounter = 0;
 	private static boolean processing = true;
-	private HashMap<Integer, Nodo> nodos;
+	private ArrayList<Nodo> nodos;
 	private Red red;
 
-	public AristasReader(String fileName, Red red, HashMap<Integer, Nodo> nodos) throws IOException {
+	public AristasReader(String fileName, Red red, ArrayList<Nodo> nodos) throws IOException {
 		this.red = red;
 		this.nodos = nodos;
 		
