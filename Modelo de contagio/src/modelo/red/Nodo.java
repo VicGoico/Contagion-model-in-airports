@@ -9,8 +9,14 @@ public class Nodo {
 	// Atributos
 	private TAirport tAirport;
 	private double umbral;
-	// Este atributo tiene que ser cambiado por un vector<int>, como le gusta al profesor
-	private HashMap<Integer, Integer> aeropuertosComunicados; // <IDAeropuerto, Peso> 
+	/*
+	 * Se guarda un HashMap<Id aeropuerto al que vuela, cuantas veces vuela>
+	 * No hemos hecho un vector porque hay 12.000 aeropuertos y creemos que 
+	 * es mejor tener un hashMap de 3 elementos que un array de 12.000 con la
+	 * mayoría de posiciones a null de cada aeropuerto
+	 */
+	private HashMap<Integer, Integer> aeropuertosComunicados; 
+	// <IDAeropuerto, Veces que vuela a ese aeropuerto concreto> 
 	private int aeropuetosComunicadosInfectados = 0;
 	private boolean infectado = false;
 	private int indegree;
@@ -112,8 +118,6 @@ public class Nodo {
 	}
 	
 	
-	
-	// Otra vez que hace esto?????????
 	@Override
 	public boolean equals(Object o) {
 		return o != null && o instanceof Nodo && ((Nodo) o).tAirport.getId() == this.tAirport.getId()

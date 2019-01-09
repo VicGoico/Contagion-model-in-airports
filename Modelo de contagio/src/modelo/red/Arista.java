@@ -40,7 +40,6 @@ public class Arista {
 	}
 
 	
-	// Que hace este metodo?????????
 	@Override
 	public boolean equals(Object o) {
 		return o != null && o instanceof Arista

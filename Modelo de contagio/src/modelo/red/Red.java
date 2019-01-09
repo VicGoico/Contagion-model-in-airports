@@ -8,8 +8,7 @@ public class Red {
 	// Atributos
 	protected ArrayList<Arista> aristas;
 	
-	//private HashMap<Integer, Nodo> nodos;
-	ArrayList<Nodo> nodos;
+	private ArrayList<Nodo> nodos;
 
 	// Constructora
 	public Red(ArrayList<Nodo> nodos) {
@@ -32,11 +31,18 @@ public class Red {
 		return this.getNodos().size();
 	}
 	
-	// No se que hace esto?
+
 	public void add(Arista a) {
 		Nodo n1 = a.getNodo1();
 		Nodo n2 = a.getNodo2();
 
+		/*
+		 * Aquí guardamos cauntas veces se viaja desde el nodo a hasta el nodo b
+		 * para la infección.
+		 * Cada nodo tendrá un HashMap<IdNodo al que viaja, Veces que ha viajado a ese nodo>
+		 * De esta forma sabemos si un aeropuerto es el unico que viaja a otro y se infecta
+		 * el primero que hay que dar por infectado al segundo
+		 */
 		if (n1.getPesoAeropComunicado(n2.getId()) != null) { // Existe nodo
 			n1.addAeropuertoComunicado(n2.getId(), n1.getPesoAeropComunicado(n2.getId()) + 1);
 		} else {
@@ -70,8 +76,6 @@ public class Red {
 	 * 
 	 * return this.nodos.get(nodo); }
 	 */
-
-	// Que hace esto??
 	public Nodo getNodo(int nodo) {
 		return this.getNodos().get(nodo);
 	}
