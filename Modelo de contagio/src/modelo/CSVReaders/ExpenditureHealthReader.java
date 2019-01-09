@@ -18,6 +18,11 @@ public class ExpenditureHealthReader implements ReaderConsumer {
 
 	private HashMap<String, Double> countriesUmbral;
 
+	/**
+	 * Constructor
+	 * @param fileName Nombre del fichero donde se encuentra el gasto en sanidad de cada país
+	 * @throws IOException
+	 */
 	public ExpenditureHealthReader(String fileName) throws IOException {
 		if(fileName == null) fileName = Main.EXPENDITUREHEALTH_FILENAME;
 		this.countriesUmbral = new HashMap<>();
@@ -26,12 +31,22 @@ public class ExpenditureHealthReader implements ReaderConsumer {
 		ExpenditureHealthReader.instance = this;
 	}
 
+	/**
+	 * Método para obtener la instancia de la clase
+	 * @return instancia
+	 * @throws IOException
+	 */
 	public static ExpenditureHealthReader getInstance() throws IOException {
 		if (ExpenditureHealthReader.instance == null)
 			ExpenditureHealthReader.instance = new ExpenditureHealthReader(Main.AIRPORT_NODES_FILENAME);
 		return ExpenditureHealthReader.instance;
 	}
 
+	/**
+	 * Método para obtener el umbral de un país
+	 * @param country País del que se quiere obtener el umbral
+	 * @return Umbral del país
+	 */
 	public double getUmbral(String country) {
 		if (!this.countriesUmbral.containsKey(country)) {
 			if (CorrespondingCountry.map.containsKey(country)) {
@@ -44,10 +59,20 @@ public class ExpenditureHealthReader implements ReaderConsumer {
 		return this.countriesUmbral.get(country);
 	}
 
+	/**
+	 * Comprueba si existe el país
+	 * @param country País
+	 * @return Verdadero o falso
+	 */
 	public boolean countryIncluded(String country) {
 		return this.countriesUmbral.containsKey(country);
 	}
 
+	/**
+	 * Método para establecer el umbral de un país
+	 * @param country País del que se quiere establecer el umbral
+	 * @param value Nuevo umbral
+	 */
 	public void setUmbral(String country, double value) {
 		this.countriesUmbral.put(country, value);
 	}

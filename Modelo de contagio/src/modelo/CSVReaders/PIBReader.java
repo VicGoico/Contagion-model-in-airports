@@ -17,6 +17,11 @@ public class PIBReader implements ReaderConsumer {
 	private ExpenditureHealthReader expHealthReader;
 	private HashMap<String, Double> countriesUmbral;
 
+	/**
+	 * Constructor
+	 * @param fileName Nombre del fichero donde se encuentran los datos del PIB de cada país
+	 * @throws IOException
+	 */
 	public PIBReader(String fileName) throws IOException {
 		if(fileName == null) fileName = Main.PIB_FILENAME;
 		this.countriesUmbral = new HashMap<>();
@@ -25,6 +30,11 @@ public class PIBReader implements ReaderConsumer {
 		new CSVFileProcessor(fileName, this).process();
 	}
 
+	/**
+	 * Método para obtener el umbral en función del PIB de un país
+	 * @param country País del que se quiere conocer el umbral
+	 * @return umbral
+	 */
 	public double getUmbral(String country) {
 		if (!this.countriesUmbral.containsKey(country)) {
 			if (CorrespondingCountry.map.containsKey(country)) {
@@ -72,9 +82,17 @@ public class PIBReader implements ReaderConsumer {
 		lineCounter++;
 	}
 
+	/**
+	 * Método que se encarga de actualizar el umbral
+	 * @param country país del que se quiere actualizar el umbral
+	 */
 	private void updateExpenditureHealthUmbral(String country) {
 		if (this.expHealthReader.countryIncluded(country)) {
 			// Cuanto gasta al año en salud
+			/*
+			 * Obtenemos cuanto gasta al año el país por habitante en salud
+			 * multiplicando el PIB por habitante y el porcentaje del PIB que destinan a salud
+			 */
 			double umbral = this.expHealthReader.getUmbral(country) * (this.countriesUmbral.get(country)/100);
 
 			this.expHealthReader.setUmbral(country, umbral);

@@ -17,7 +17,13 @@ public class AirportNodesReader implements ReaderConsumer {
 	private HashMap<String, ArrayList<TAirport>> airportsByCountry;
 	private HashMap<Integer, Nodo> loadedNodes;
 	private ExpenditureHealthReader expHealthReader;
-
+	
+	/**
+	 * Constructora
+	 * @param fileName Nombre del fichero donde se encuentran los nodos
+	 * @param nodes Nodos
+	 * @throws IOException
+	 */
 	public AirportNodesReader(String fileName, HashMap<Integer, Nodo> nodes) throws IOException {
 		if(fileName == null) fileName = Main.AIRPORT_NODES_FILENAME;
 		this.loadedNodes = nodes;
@@ -28,10 +34,20 @@ public class AirportNodesReader implements ReaderConsumer {
 		new CSVFileProcessor(fileName, this).process();
 	}
 
+	/**
+	 * Mediante un id obtiene un aeropuerto
+	 * @param id Identificador el aeropuerto que se quiere obtener
+	 * @return aeropuerto
+	 */
 	public TAirport getAirportById(int id) {
 		return this.airportsById.get(id);
 	}
 
+	/**
+	 * Obtiene todos los aeropuertos de un país
+	 * @param country País del que se quieren obtener los aeropuertos
+	 * @return Lista de los aeropuertos del país
+	 */
 	public ArrayList<TAirport> getAirportsByCountry(String country) {
 		if (!this.airportsByCountry.containsKey(country)) {
 			if(CorrespondingCountry.map.containsKey(country)) {
@@ -44,10 +60,19 @@ public class AirportNodesReader implements ReaderConsumer {
 		return this.airportsByCountry.get(country);
 	}
 	
+	/**
+	 * Obtiene el umbral de salud de un aeropuerto
+	 * @param airport Aeropuerto
+	 * @return umbral de salud
+	 */
 	private double calcExpenditureHealthUmbral(TAirport airport) {
 		return this.expHealthReader.getUmbral(airport.getCountry());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Se encarga de obtener de la información de los aeropuertos
+	 */
 	@Override
 	public void accept(ArrayList<String> t) {
 		if (!processing)

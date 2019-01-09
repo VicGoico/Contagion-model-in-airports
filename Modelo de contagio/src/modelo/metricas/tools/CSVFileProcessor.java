@@ -16,6 +16,11 @@ public class CSVFileProcessor {
 	private BufferedReader fileBuffer;
 	private ReaderConsumer fProcessLine;
 	
+	/**
+	 * Constructor
+	 * @param fileName Nombre del CSV a procesar
+	 * @param fProcessLine
+	 */
 	public CSVFileProcessor(String fileName, ReaderConsumer fProcessLine) {
 		this.fileName = fileName;
 		this.fProcessLine = fProcessLine;
@@ -60,6 +65,12 @@ public class CSVFileProcessor {
 		}
 	}
 
+	/**
+	 * Método que se encarga de obtener los datos de los CSV
+	 * @param line Línea del CSV que se va a procesar
+	 * @param columnDelimiter Delimitador
+	 * @return Colección con los datos ya procesados
+	 */
 	public static Collection<String> splitLine(String line, String columnDelimiter) {
 		String[] lineParts = line.split(columnDelimiter); // Separo todas las lineas con ,
 		ArrayList<String> lnFParts = new ArrayList<>();

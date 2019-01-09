@@ -16,6 +16,13 @@ public class AristasReader implements ReaderConsumer {
 	private HashMap<Integer, Nodo> nodos;
 	private Red red;
 
+	/**
+	 * Contructor
+	 * @param fileName Nombre del fichero donde se encuentran las aristas
+	 * @param red Red de aeropuertos
+	 * @param nodos Aeropuertos
+	 * @throws IOException
+	 */
 	public AristasReader(String fileName, Red red, HashMap<Integer, Nodo> nodos) throws IOException {
 		if(fileName == null) fileName = Main.AIRPORT_ARISTAS_FILENAME;
 		this.red = red;
@@ -26,6 +33,10 @@ public class AristasReader implements ReaderConsumer {
 		fileProcessor.process();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Se encarga de obtener de la información de las conexiones entre aeropuertos
+	 */
 	@Override
 	public void accept(ArrayList<String> t) {
 		if (!processing)

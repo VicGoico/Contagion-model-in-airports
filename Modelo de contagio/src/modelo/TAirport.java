@@ -14,7 +14,21 @@ public class TAirport {
 	private int calculatedOutdegree; // 10
 	private int calculatedDegree; // 11
 
-	// Construtora para leer el CSV bueno, con todos los datos
+	/**
+	 * Constructora
+	 * @param id identificador del aeropuerto
+	 * @param name nombre del aeropuerto
+	 * @param city ciudad del aeropuerto
+	 * @param country país del aeropuerto
+	 * @param iata código iata del aeropuerto
+	 * @param icao código icao del aeropuerto
+	 * @param latitude latitud en la que se encuentra el aeropuerto
+	 * @param longitude longitud en la que se encuentra el aeropuerto
+	 * @param altitude altitud en la que se encuentra el aeropuerto
+	 * @param indegree grado de entrada del aeropuerto
+	 * @param outdegree grado de salida del aeropuerto
+	 * @param degree grado de entrada + grado de salida del aeropuerto
+	 */
 	public TAirport(int id, String name, String city, String country, String iata, String icao, double latitude,
 			double longitude, int altitude, int indegree, int outdegree, int degree) {
 		this.id = id;

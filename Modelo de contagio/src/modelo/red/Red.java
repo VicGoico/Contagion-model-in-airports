@@ -8,6 +8,10 @@ public class Red {
 	protected ArrayList<Arista> aristas;
 	private HashMap<Integer, Nodo> nodos;
 
+	/**
+	 * Constructor
+	 * @param nodos Nodos de la red
+	 */
 	public Red(HashMap<Integer, Nodo> nodos) {
 		this.aristas = new ArrayList<>();
 		this.nodos = nodos;
@@ -25,10 +29,18 @@ public class Red {
 		return this.aristas.contains(a);
 	}
 	
+	/**
+	 * Método que añade las aristas.
+	 * @param a Arista que se quiere añadir
+	 */
 	public void add(Arista a) {
 		Nodo n1 = a.getNodo1();
 		Nodo n2 = a.getNodo2();
-
+		/*
+		 * Se actualiza la lista de aeropuertos a los que se vuela desde un aeropuerto
+		 * De esta forma cada aeropuerto tendrá una lista con todos los aeropuertos a los
+		 * que vuela y cuantas veces lo hace
+		 */
 		if (n1.getPesoAeropComunicado(n2.getId()) != null) { // Existe nodo
 			n1.addAeropuertoComunicado(n2.getId(), n1.getPesoAeropComunicado(n2.getId()) + 1);
 		} else {
@@ -75,6 +87,10 @@ public class Red {
 		this.aristas = aristas;
 	}
 
+	/**
+	 * Método para obtener el nodo con el grado más alto
+	 * @return Nodo con el grado más alto
+	 */
 	public Nodo getLargestHubDegree() {
 		int max = 0;
 		Nodo nMax = null;

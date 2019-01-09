@@ -6,6 +6,10 @@ public class CorrespondingCountry {
 	public static HashMap<String, String> map = null;
 	public static String DEFAULTVALUE = "";
 	
+	/**
+	 * Paises que no están bien definidos o no están reconocidos internacionalmente
+	 * y generan conflicto
+	 */
 	public CorrespondingCountry() {
 		map = new HashMap<>();
 		

@@ -12,6 +12,11 @@ public class ModeloContagio {
 
 	private ArrayList<Nodo> nodosContagiadosFin;
 	
+	/**
+	 * Método que se encarga de simular una infección
+	 * @param red Red sobre la que se pretende realizar la infección
+	 * @param foco Aeropuerto en el cual se quiere iniciar la infección
+	 */
 	public void simular(Red red, Nodo foco) {
 		
 		nodosContagiadosFin = new ArrayList<Nodo>();
@@ -65,6 +70,11 @@ public class ModeloContagio {
 			
 		}
 	}
+	/**
+	 * Método para obtener los aeropuertos que se han contagiado tras
+	 * la simulación
+	 * @return ArrayList con los aeropuertos que se han infectado
+	 */
 	public ArrayList<Nodo> getNodosContagiados(){
 		return this.nodosContagiadosFin;
 	}
