@@ -27,6 +27,10 @@ public class Vista extends JPanel {
 	private JButton salirButton;
 	private JButton continuarButton;
 	private JTextField fileNameProcesadosTextField;
+	private JTextField fileNameNodesTextField;
+	private JTextField fileNameAristasTextField;
+	private JTextField fileNameExpenditureHelathTextField;
+	private JTextField fileNamePIBTextField;
 	private JButton guardarDatosProcesadosButton;
 	private JPanel centerPanel;
 	private JPanel leftPanel;
@@ -46,10 +50,15 @@ public class Vista extends JPanel {
 		ejecutarProgramaButton = new JButton("Cargar los datos de todos los vuelos");
 		salirButton = new JButton("Salir");
 		guardarDatosProcesadosButton = new JButton("Guardar datos procesados");
-		fileNameProcesadosTextField = new JTextField("test.csv");
+		fileNameProcesadosTextField = new JTextField(Main.OUTPUTFILENAME_PROCESSEDDATA);
+		fileNameExpenditureHelathTextField = new JTextField(Main.EXPENDITUREHEALTH_FILENAME);
+		fileNameAristasTextField = new JTextField(Main.AIRPORT_ARISTAS_FILENAME);
+		fileNameNodesTextField = new JTextField(Main.AIRPORT_NODES_FILENAME);
+		fileNamePIBTextField = new JTextField(Main.PIB_FILENAME);
+
 		continuarButton = new JButton("Continuar");
 		continuarButton.setEnabled(false);
-		
+
 		ejecutarProgramaButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -70,14 +79,14 @@ public class Vista extends JPanel {
 							JFrame frame = new JFrame();
 							JOptionPane.showMessageDialog(frame, "Ha ocurrido un error al leer los datos!", "Error!",
 									JOptionPane.ERROR_MESSAGE);
-							
+
 							e.printStackTrace();
 						}
 					}
 				});
 			}
 		});
-		
+
 		continuarButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -105,7 +114,7 @@ public class Vista extends JPanel {
 						if (redCargada) {
 							try {
 								Main.guardar(fileNameProcesadosTextField.getText());
-								
+
 								JFrame frame = new JFrame();
 								JOptionPane.showMessageDialog(frame, "Archivo guardado correctamente!", "Listo!",
 										JOptionPane.INFORMATION_MESSAGE);
@@ -119,7 +128,7 @@ public class Vista extends JPanel {
 							JOptionPane.showMessageDialog(frame, "Primero debes cargar la red!", "Error!",
 									JOptionPane.ERROR_MESSAGE);
 						}
-						
+
 						// Restablezco los botones
 						guardarDatosProcesadosButton.setText("Guardar datos procesados");
 						ejecutarProgramaButton.setEnabled(true);
@@ -129,15 +138,31 @@ public class Vista extends JPanel {
 				});
 			}
 		});
-		
+
 		centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 20));
 		centerPanel.add(ejecutarProgramaButton);
+
+		centerPanel.add(new JLabel("NOMBRE DE FICHEROS A CARGAR"));
+		JPanel csvsPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+		csvsPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+		csvsPanel.add(new JLabel("CSV Nodos:"));
+		csvsPanel.add(fileNameNodesTextField);
+		csvsPanel.add(new JLabel("CSV Aristas:"));
+		csvsPanel.add(fileNameAristasTextField);
+		csvsPanel.add(new JLabel("CSV Gasto en Salud:"));
+		csvsPanel.add(fileNameExpenditureHelathTextField);
+		csvsPanel.add(new JLabel("CSV PIB:"));
+		csvsPanel.add(fileNamePIBTextField);
+		csvsPanel.add(guardarDatosProcesadosButton);
+		centerPanel.add(csvsPanel);
+
 		JPanel exportPanel = new JPanel(new GridLayout(3, 1, 10, 10));
 		exportPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
 		exportPanel.add(new JLabel("Nombre del fichero a exportar:"));
 		exportPanel.add(fileNameProcesadosTextField);
 		exportPanel.add(guardarDatosProcesadosButton);
 		centerPanel.add(exportPanel);
+
 		centerPanel.add(continuarButton);
 		centerPanel.add(salirButton);
 	}
@@ -159,7 +184,7 @@ public class Vista extends JPanel {
 	private JPanel createPanel(Color color, int x, int y) {
 		JPanel panel;
 		panel = new JPanel();
-		if(color != null)
+		if (color != null)
 			panel.setBackground(color);
 		panel.setPreferredSize(new Dimension(x, y));
 		return panel;

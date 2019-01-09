@@ -19,6 +19,7 @@ public class ExpenditureHealthReader implements ReaderConsumer {
 	private HashMap<String, Double> countriesUmbral;
 
 	public ExpenditureHealthReader(String fileName) throws IOException {
+		if(fileName == null) fileName = Main.EXPENDITUREHEALTH_FILENAME;
 		this.countriesUmbral = new HashMap<String, Double>();
 		this.countriesUmbral.put("", 0.0);
 		new CSVFileProcessor(fileName, this).process();

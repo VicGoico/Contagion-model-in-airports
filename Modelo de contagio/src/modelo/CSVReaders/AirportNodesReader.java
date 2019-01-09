@@ -3,6 +3,8 @@ package modelo.CSVReaders;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import modelo.Main;
 import modelo.TAirport;
 import modelo.metricas.tools.CSVFileProcessor;
 import modelo.metricas.tools.CorrespondingCountry;
@@ -18,6 +20,7 @@ public class AirportNodesReader implements ReaderConsumer {
 	
 	// Constructora
 	public AirportNodesReader(String fileName, HashMap<Integer, Nodo> nodes) throws IOException {
+		if(fileName == null) fileName = Main.AIRPORT_NODES_FILENAME;
 		this.loadedNodes = nodes;
 		this.airportsById = new HashMap<>();
 		this.airportsByCountry = new HashMap<>();

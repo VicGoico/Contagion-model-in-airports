@@ -3,6 +3,8 @@ package modelo.CSVReaders;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
+
+import modelo.Main;
 import modelo.metricas.tools.CSVFileProcessor;
 import modelo.metricas.tools.CorrespondingCountry;
 
@@ -17,6 +19,7 @@ public class PIBReader implements ReaderConsumer {
 	private HashMap<String, Double> countriesUmbral;
 
 	public PIBReader(String fileName) throws IOException {
+		if(fileName == null) fileName = Main.PIB_FILENAME;
 		this.countriesUmbral = new HashMap<String, Double>();
 		this.countriesUmbral.put("", 0.0);
 		this.expHealthReader = ExpenditureHealthReader.getInstance();

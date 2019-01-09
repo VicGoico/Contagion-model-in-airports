@@ -26,14 +26,12 @@ public class Main {
 	public static String AIRPORT_ARISTAS_FILENAME = "aristas.csv";
 	public static String EXPENDITUREHEALTH_FILENAME = "salud.csv";
 	public static String PIB_FILENAME = "PIB.csv";
-	
-	
+
 	private static JFrame frame;
 	private static Vista vista;
 	private static VentanaControl control;
 	private static HelloUnfoldingWorld papplet;
 	private static Red red;
-	
 
 	public static void main(String[] args) {
 		vista = new Vista();
@@ -43,44 +41,44 @@ public class Main {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+
 	// Carga la ventana de control(que control, no se sabe)
 	public static void loadVentanaControl() {
 		control = new VentanaControl(red.getNodos());
 		frame.setContentPane(control);
 		frame.setSize(622, 307);
 	}
-	
+
 	// Carga la red del fichero
-	public static void CargarRed() throws IOException {
-		// O sea te declaras el atributo, para luego inicializarlo(y los getters para que estan?)
+	public static void CargarRed(String fileNameCSVNodos, String fileNameCSVAristas, String fileNameCSVSalud,
+			String fileNameCSVPIB) throws IOException {
+		// O sea te declaras el atributo, para luego inicializarlo(y los getters para
+		// que estan?)
 		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
 		red = new Red(nodos);
 		new CorrespondingCountry();// Aqui podria ir perfectmente el HashMap y cargarlo
-		
+
 		// Lo calculamos todos los ficheros si o si
-		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTH_FILENAME);
-		PIBReader pibReader = new PIBReader(PIB_FILENAME);
-		AirportNodesReader nodesReader = new AirportNodesReader(AIRPORT_NODES_FILENAME, nodos);
-		AristasReader aristasReader = new AristasReader(AIRPORT_ARISTAS_FILENAME, red, nodos);
-		
-		
-		
+		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(fileNameCSVSalud);
+		PIBReader pibReader = new PIBReader(fileNameCSVPIB);
+		AirportNodesReader nodesReader = new AirportNodesReader(fileNameCSVNodos, nodos);
+		AristasReader aristasReader = new AristasReader(fileNameCSVAristas, red, nodos);
+
 		
 		
 		// IGNORAR DE AQUI EN ADELANTE ???????????????????????????
 		BufferedWriter out = new BufferedWriter(new FileWriter("temp" + new Date().getTime() + ".csv"));
-		
+
 		HashMap<String, Boolean> lola = new HashMap<>();
-		
+
 		nodos.forEach(new BiConsumer<Integer, Nodo>() {
 			@Override
 			public void accept(Integer t, Nodo n) {
 				TAirport u = n.getAirportInfo();
-				
+
 				System.out.println(t + "\t" + u.getCountry() + "\t\t" + n.getUmbral() + "\t\t\t" + n.getDegree());
 				try {
-					if(!lola.containsKey(u.getCountry())) {
+					if (!lola.containsKey(u.getCountry())) {
 						out.write(t + "," + u.getCountry() + "," + expHReader.getUmbral(u.getCountry()) + "\n");
 						lola.put(u.getCountry(), true);
 					}
@@ -92,7 +90,7 @@ public class Main {
 		out.close();
 	}
 
-	// Metodo que gestiona la infeccion entre aeropuertos, 
+	// Metodo que gestiona la infeccion entre aeropuertos,
 	// se le pasa un nodo de la red, que representa un aeropuerto
 	public static void comenzarInfeccion(Nodo foco) {
 		ModeloContagio modelo = new ModeloContagio();
@@ -101,11 +99,11 @@ public class Main {
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 
 		frame.setSize(1200, 700);
-		
+
 		papplet = new HelloUnfoldingWorld();
 		papplet.setInfectados(nodosContagiados);
 		papplet.frame = frame;
-		
+
 		frame.setResizable(true);
 		frame.setContentPane(papplet);
 		// frame.add(papplet, BorderLayout.CENTER);
@@ -122,14 +120,15 @@ public class Main {
 	// Metodo que guarda un csv, que su nombre se le pasa por parametro
 	public static void guardar(String outputFileName) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
-		
-		out.write("id,umbral,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
-		
+
+		out.write(
+				"id,umbral,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
+
 		for (Iterator<Nodo> i = red.getNodos().values().iterator(); i.hasNext();) {
 			Nodo n = (Nodo) i.next();
 			out.write(n.getId() + "," + n.getUmbral() + "," + n.getAirportInfo().toString() + "\n");
 		}
-		
+
 		out.close();
 	}
 
