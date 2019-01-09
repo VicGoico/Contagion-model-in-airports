@@ -1,11 +1,8 @@
 package modelo;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +26,7 @@ public class Main {
 	public static String AIRPORT_ARISTAS_FILENAME = "aristas.csv";
 	public static String EXPENDITUREHEALTH_FILENAME = "salud.csv";
 	public static String PIB_FILENAME = "PIB.csv";
+	public static String CARBONDIOXIDE_FILENAME = "CarbonDioxideEmissionEstimates.csv";
 
 	private static JFrame frame;
 	private static Vista vista;
@@ -39,27 +37,21 @@ public class Main {
 	public static void main(String[] args) {
 		vista = new Vista();
 		frame = new JFrame("Bienvenidos al lector de datos");
-		frame.setSize(450, 420);
+		frame.setSize(500, 550);
 		frame.setContentPane(vista);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-<<<<<<< HEAD
-
-	// Carga la ventana de control(que control, no se sabe)
-=======
 	
->>>>>>> parent of f9cf59c... Comentando la practica en general
 	public static void loadVentanaControl() {
 		control = new VentanaControl(red.getNodos());
 		frame.setContentPane(control);
 		frame.setSize(622, 307);
 	}
 
-<<<<<<< HEAD
 	// Carga la red del fichero
 	public static void CargarRed(String fileNameCSVNodos, String fileNameCSVAristas, String fileNameCSVSalud,
-			String fileNameCSVPIB) throws IOException {
+			String fileNameCSVPIB, String fileNameCO2) throws IOException {
 		// O sea te declaras el atributo, para luego inicializarlo(y los getters para
 		// que estan?)
 		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
@@ -72,21 +64,6 @@ public class Main {
 		AirportNodesReader nodesReader = new AirportNodesReader(fileNameCSVNodos, nodos);
 		AristasReader aristasReader = new AristasReader(fileNameCSVAristas, red, nodos);
 
-=======
-	public static void CargarRed() throws IOException {
-		HashMap<Integer, Nodo> nodos = new HashMap<>();
-		red = new Red(nodos);
-		new CorrespondingCountry();
-		
-		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTH_FILENAME);
-		PIBReader pibReader = new PIBReader(PIB_FILENAME);
-		AirportNodesReader nodesReader = new AirportNodesReader(AIRPORT_NODES_FILENAME, nodos);
-		AristasReader aristasReader = new AristasReader(AIRPORT_ARISTAS_FILENAME, red, nodos);
-		
-		
-		
->>>>>>> parent of f9cf59c... Comentando la practica en general
-		
 		
 		// IGNORAR DE AQUI EN ADELANTE
 		BufferedWriter out = new BufferedWriter(new FileWriter("temp" + new Date().getTime() + ".csv"));
@@ -112,11 +89,6 @@ public class Main {
 		out.close();
 	}
 
-<<<<<<< HEAD
-	// Metodo que gestiona la infeccion entre aeropuertos,
-	// se le pasa un nodo de la red, que representa un aeropuerto
-=======
->>>>>>> parent of f9cf59c... Comentando la practica en general
 	public static void comenzarInfeccion(Nodo foco) {
 		ModeloContagio modelo = new ModeloContagio();
 		modelo.simular(red, red.getNodo(foco.getId()));
