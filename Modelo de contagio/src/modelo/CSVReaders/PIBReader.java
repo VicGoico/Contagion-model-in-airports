@@ -15,12 +15,15 @@ public class PIBReader implements ReaderConsumer {
 	private int tempCounter = 0;
 	private String tempCountry = "";
 	private ExpenditureHealthReader expHealthReader;
-	
 	private HashMap<String, Double> countriesUmbral;
 
 	public PIBReader(String fileName) throws IOException {
+<<<<<<< HEAD
 		if(fileName == null) fileName = Main.PIB_FILENAME;
 		this.countriesUmbral = new HashMap<String, Double>();
+=======
+		this.countriesUmbral = new HashMap<>();
+>>>>>>> parent of f9cf59c... Comentando la practica en general
 		this.countriesUmbral.put("", 0.0);
 		this.expHealthReader = ExpenditureHealthReader.getInstance();
 		new CSVFileProcessor(fileName, this).process();

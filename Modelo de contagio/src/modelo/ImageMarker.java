@@ -9,7 +9,6 @@ import de.fhpotsdam.unfolding.marker.AbstractMarker;
 /**
  * This marker displays an image at its location.
  */
-// Supondre que es el punto Roto que aparece cada vez que se infecta un aeropuerto
 public class ImageMarker extends AbstractMarker {
 
 	PImage img;

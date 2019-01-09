@@ -4,27 +4,26 @@ import java.util.HashMap;
 
 import modelo.TAirport;
 
-// Clase que contiene la informacion necesaria para un nodo
 public class Nodo {
-	// Atributos
 	private TAirport tAirport;
 	private double umbral;
-	// Este atributo tiene que ser cambiado por un vector<int>, como le gusta al profesor
-	private HashMap<Integer, Integer> aeropuertosComunicados; // <IDAeropuerto, Peso> 
+	private HashMap<Integer, Integer> aeropuertosComunicados; // <IDAeropuerto, Peso>
 	private int aeropuetosComunicadosInfectados = 0;
 	private boolean infectado = false;
 	private int indegree;
 	private int outdegree;
 	private int degree;
 
-	// Constructora
 	public Nodo(TAirport info, double umbral) {
 		this.tAirport = info;
 		this.umbral = umbral;
 		aeropuertosComunicados = new HashMap<Integer, Integer>();
 	}
 
-	// Getters
+	public void addAeropuertoComunicado(int aeropuerto, int peso) {
+		this.aeropuertosComunicados.put(aeropuerto, peso);
+	}
+
 	public Integer getPesoAeropComunicado(int aeropuerto) {
 		return aeropuertosComunicados.get(aeropuerto);
 	}
@@ -34,7 +33,11 @@ public class Nodo {
 	}
 
 	public Double getUmbral() {
-		return this.umbral;
+		return umbral;
+	}
+
+	public void setUmbral(double umbral) {
+		this.umbral = umbral;
 	}
 
 	public TAirport getAirportInfo() {
@@ -45,45 +48,44 @@ public class Nodo {
 		return this.tAirport.getId();
 	}
 
-	public Integer getAeropuetosComunicadosInfectados() {
-		return aeropuetosComunicadosInfectados;
-	}
-	
-	public boolean isInfectado() {
-		return infectado;
-	}
-	
-	public int getIndegree() {
-		return indegree;
-	}
-	
-	public int getOutdegree() {
-		return outdegree;
-	}
-	
-	public int getDegree() {
-		return degree;
-	}
-	
-	// Setters
 	public void setInfoAeropuertos(TAirport info) {
 		this.tAirport = info;
+	}
+
+	public Integer getAeropuetosComunicadosInfectados() {
+		return aeropuetosComunicadosInfectados;
 	}
 
 	public void setAeropuetosComunicadosInfectados(Integer aeropuetosComunicadosInfectados) {
 		this.aeropuetosComunicadosInfectados = aeropuetosComunicadosInfectados;
 	}
 
+	public boolean isInfectado() {
+		return infectado;
+	}
+
 	public void setInfectado(boolean infectado) {
 		this.infectado = infectado;
+	}
+
+	public int getIndegree() {
+		return indegree;
 	}
 
 	public void setIndegree(int indegree) {
 		this.indegree = indegree;
 	}
 
+	public int getOutdegree() {
+		return outdegree;
+	}
+
 	public void setOutdegree(int outdegree) {
 		this.outdegree = outdegree;
+	}
+
+	public int getDegree() {
+		return degree;
 	}
 
 	public void setDegree(int degree) {
@@ -102,18 +104,6 @@ public class Nodo {
 		this.outdegree++;
 	}
 
-	public void setUmbral(double umbral) {
-		this.umbral = umbral;
-	}
-	
-	// Añade al atributo HashMap, de aeropuertos comunicados, un nuevo aeropuerto con su id y su peso
-	public void addAeropuertoComunicado(int aeropuerto, int peso) {
-		this.aeropuertosComunicados.put(aeropuerto, peso);
-	}
-	
-	
-	
-	// Otra vez que hace esto?????????
 	@Override
 	public boolean equals(Object o) {
 		return o != null && o instanceof Nodo && ((Nodo) o).tAirport.getId() == this.tAirport.getId()

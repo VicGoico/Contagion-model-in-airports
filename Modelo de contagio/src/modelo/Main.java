@@ -1,8 +1,11 @@
 package modelo;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,14 +44,19 @@ public class Main {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+<<<<<<< HEAD
 
 	// Carga la ventana de control(que control, no se sabe)
+=======
+	
+>>>>>>> parent of f9cf59c... Comentando la practica en general
 	public static void loadVentanaControl() {
 		control = new VentanaControl(red.getNodos());
 		frame.setContentPane(control);
 		frame.setSize(622, 307);
 	}
 
+<<<<<<< HEAD
 	// Carga la red del fichero
 	public static void CargarRed(String fileNameCSVNodos, String fileNameCSVAristas, String fileNameCSVSalud,
 			String fileNameCSVPIB) throws IOException {
@@ -64,9 +72,23 @@ public class Main {
 		AirportNodesReader nodesReader = new AirportNodesReader(fileNameCSVNodos, nodos);
 		AristasReader aristasReader = new AristasReader(fileNameCSVAristas, red, nodos);
 
+=======
+	public static void CargarRed() throws IOException {
+		HashMap<Integer, Nodo> nodos = new HashMap<>();
+		red = new Red(nodos);
+		new CorrespondingCountry();
+		
+		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(EXPENDITUREHEALTH_FILENAME);
+		PIBReader pibReader = new PIBReader(PIB_FILENAME);
+		AirportNodesReader nodesReader = new AirportNodesReader(AIRPORT_NODES_FILENAME, nodos);
+		AristasReader aristasReader = new AristasReader(AIRPORT_ARISTAS_FILENAME, red, nodos);
 		
 		
-		// IGNORAR DE AQUI EN ADELANTE ???????????????????????????
+		
+>>>>>>> parent of f9cf59c... Comentando la practica en general
+		
+		
+		// IGNORAR DE AQUI EN ADELANTE
 		BufferedWriter out = new BufferedWriter(new FileWriter("temp" + new Date().getTime() + ".csv"));
 
 		HashMap<String, Boolean> lola = new HashMap<>();
@@ -90,8 +112,11 @@ public class Main {
 		out.close();
 	}
 
+<<<<<<< HEAD
 	// Metodo que gestiona la infeccion entre aeropuertos,
 	// se le pasa un nodo de la red, que representa un aeropuerto
+=======
+>>>>>>> parent of f9cf59c... Comentando la practica en general
 	public static void comenzarInfeccion(Nodo foco) {
 		ModeloContagio modelo = new ModeloContagio();
 		modelo.simular(red, red.getNodo(foco.getId()));
@@ -117,7 +142,6 @@ public class Main {
 
 	}
 
-	// Metodo que guarda un csv, que su nombre se le pasa por parametro
 	public static void guardar(String outputFileName) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
 

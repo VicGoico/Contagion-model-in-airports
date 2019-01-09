@@ -19,8 +19,12 @@ public class ExpenditureHealthReader implements ReaderConsumer {
 	private HashMap<String, Double> countriesUmbral;
 
 	public ExpenditureHealthReader(String fileName) throws IOException {
+<<<<<<< HEAD
 		if(fileName == null) fileName = Main.EXPENDITUREHEALTH_FILENAME;
 		this.countriesUmbral = new HashMap<String, Double>();
+=======
+		this.countriesUmbral = new HashMap<>();
+>>>>>>> parent of f9cf59c... Comentando la practica en general
 		this.countriesUmbral.put("", 0.0);
 		new CSVFileProcessor(fileName, this).process();
 		ExpenditureHealthReader.instance = this;
