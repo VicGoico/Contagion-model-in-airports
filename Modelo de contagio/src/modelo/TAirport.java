@@ -1,18 +1,18 @@
 package modelo;
 
 public class TAirport {
-	private int id; // 0
-	private String name; // 1
-	private String city; // 2
-	private String country; // 3
-	private String iata; // 4
-	private String icao; // 5
-	private double latitude; // 6
-	private double longitude; // 7
-	private int altitude; // 8
-	private int calculatedIndegree; // 9
-	private int calculatedOutdegree; // 10
-	private int calculatedDegree; // 11
+	private int id; 					// 0
+	private String name; 				// 1
+	private String city; 				// 2
+	private String country; 			// 3
+	private String iata; 				// 4
+	private String icao; 				// 5
+	private double latitude; 			// 6
+	private double longitude; 			// 7
+	private int altitude; 				// 8
+	private int calculatedIndegree; 	// 9
+	private int calculatedOutdegree; 	// 10
+	private int calculatedDegree; 		// 11
 
 	/**
 	 * Constructora

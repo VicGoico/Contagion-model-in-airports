@@ -1,9 +1,23 @@
 package vista;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import modelo.Main;
@@ -13,29 +27,39 @@ import java.util.TreeMap;
 
 public class VentanaControl extends javax.swing.JPanel {
 	private static final long serialVersionUID = 5388318295809628575L;
+	private JButton salirButton;
+	private JButton comenzarInfeccionButton;
+	private JPanel centerPanel;
+	private JPanel leftPanel;
+	private JPanel rightPanel;
+	private JPanel topPanel;
+	private JPanel bottPanel;
+	private JComboBox<String> jComboBoxAeropuertos;
+	private JComboBox<String> jComboBoxPaises;	
+	
+	private String paisSeleccionado;
+	private TreeMap<String, Nodo> aeropuertosOrdenados;
+	private TreeMap<String, TreeMap<String, Nodo>> informacionCompleta; // <Pais, <NombreAeropuerto,Nodo>>
 
 	/**
 	 * Creates new form Control
 	 */
 	public VentanaControl(HashMap<Integer, Nodo> nodos) {
+		initGUI();
 		initComponents(nodos);
 	}
 
 	private void initComponents(HashMap<Integer, Nodo> nodos) {
-
-		jLabel1 = new javax.swing.JLabel();
-		jComboBox1 = new javax.swing.JComboBox<>();
-		jButton1 = new javax.swing.JButton();
-		jLabel2 = new javax.swing.JLabel();
-		jComboBoxPaises = new javax.swing.JComboBox<>();
-
-		aeropuertosOrdenados = new TreeMap<String, Nodo>();
+		salirButton = new JButton("Salir");
+		comenzarInfeccionButton = new JButton("COMENZAR INFECCIÓN");
+		comenzarInfeccionButton.setEnabled(false);		
+		jComboBoxPaises = new JComboBox<>();
+		jComboBoxAeropuertos = new JComboBox<>();
+		jComboBoxAeropuertos.setEnabled(false);
 		informacionCompleta = new TreeMap<String, TreeMap<String, Nodo>>();
 
-		jLabel1.setText("Indica el aeropuerto en el que deseas comenzar la infección");
-
-		int i = 0;
 		aeropuertosOrdenados = new TreeMap<String, Nodo>();
+		int i = 0;
 		for (Map.Entry<Integer, Nodo> entry : nodos.entrySet()) {
 			aeropuertosOrdenados.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
 			if (informacionCompleta.containsKey(entry.getValue().getAirportInfo().getCountry())) {
@@ -62,105 +86,103 @@ public class VentanaControl extends javax.swing.JPanel {
 		 * += 1; } jComboBox1.setModel(new
 		 * javax.swing.DefaultComboBoxModel<>(aeropuertos));
 		 */
-
-		jButton1.setText("COMENZAR INFECCIÓN");
-
-		jLabel2.setText("Inidica el pais del aeropuerto donde quieres infectar");
-		/*
-		 * jComboBox1.setModel( new javax.swing.DefaultComboBoxModel<>(aeropuertos));
-		 */
+		
 		jComboBoxPaises.setModel(new javax.swing.DefaultComboBoxModel<>(paises));
+		jComboBoxPaises.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (!jComboBoxPaises.getSelectedItem().equals("Selección")) {
+					System.out.println("Pais seleccionado: " + jComboBoxPaises.getSelectedItem());
 
-		jComboBox1.setVisible(false);
-		jButton1.setVisible(false);
-		jLabel1.setVisible(false);
-		jComboBoxPaises.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				PaisesActionPerformed(evt);
+					TreeMap<String, Nodo> aeropuertosPaisSeleccionado = informacionCompleta.get(jComboBoxPaises.getSelectedItem());
+					int i = 0;
+					String[] aeropuertos = new String[aeropuertosPaisSeleccionado.size()];
+					for (Entry<String, Nodo> entry : aeropuertosPaisSeleccionado.entrySet()) {
+						aeropuertos[i] = entry.getKey();
+						i += 1;
+					}
+					jComboBoxAeropuertos.setModel(new javax.swing.DefaultComboBoxModel<>(aeropuertos));
+					jComboBoxAeropuertos.setEnabled(true);
+					
+					comenzarInfeccionButton.setEnabled(true);
+					paisSeleccionado = (String) jComboBoxPaises.getSelectedItem();
+				}
 			}
 		});
 
-		jButton1.addActionListener(new java.awt.event.ActionListener() {
+		comenzarInfeccionButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				
-				jButton1.setText("Cargando...");
-				jButton1.setEnabled(false);
+				comenzarInfeccionButton.setText("Cargando...");
+				comenzarInfeccionButton.setEnabled(false);
 				jComboBoxPaises.setEnabled(false);
-				jComboBox1.setEnabled(false);
+				jComboBoxAeropuertos.setEnabled(false);
 
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-						InfeccionActionPerformed(evt);
+						try {
+							Nodo foco = informacionCompleta.get(paisSeleccionado).get(jComboBoxAeropuertos.getSelectedItem());
+							System.out.println("Se va a cargar el umbral.");
+							Main.cargarUmbral();
+							System.out.println("Va a comenzar la infeccion desde " + foco.getAirportInfo().getName());
+							Main.comenzarInfeccion(foco);
+							comenzarInfeccionButton.setVisible(false);
+						} catch (IOException e) {
+							JFrame frame = new JFrame();
+							JOptionPane.showMessageDialog(frame,
+									"Ha ocurrido un error al cargar el umbral y realizar la infeccion!\n" + e.getMessage(), "Error!",
+									JOptionPane.ERROR_MESSAGE);
+							salirButton.setEnabled(true);
+							e.printStackTrace();
+						}
 					}
 				});
-				
+			}
+		});
+		
+		salirButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				System.exit(0);
 			}
 		});
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(170, 170, 170).addComponent(jButton1,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createSequentialGroup().addContainerGap()
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 295,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabel2))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-										.addComponent(jComboBoxPaises, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(jComboBox1, 0, 258, Short.MAX_VALUE))))
-				.addContainerGap(49, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup().addGap(49, 49, 49)
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel2)
-						.addComponent(jComboBoxPaises, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-				.addGap(18, 18, 18)
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-						.addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 84,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-				.addGap(18, 18, 18).addComponent(jButton1).addContainerGap(95, Short.MAX_VALUE)));
+		centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 20));
+		centerPanel.add(new JLabel("Indica el aeropuerto en el que deseas comenzar la infección:"));
+		centerPanel.add(jComboBoxPaises);
+		centerPanel.add(new JLabel("Inidica el pais del aeropuerto donde quieres infectar:"));
+		centerPanel.add(jComboBoxAeropuertos);
+		
+		bottPanel.add(comenzarInfeccionButton);
+		bottPanel.add(salirButton);
 	}
 
-	protected void PaisesActionPerformed(java.awt.event.ActionEvent evt) {
-		if (!this.jComboBoxPaises.getSelectedItem().equals("Selección")) {
-			System.out.println(this.jComboBoxPaises.getSelectedItem());
-
-			TreeMap<String, Nodo> aeropuertosPaisSeleccionado = informacionCompleta
-					.get(this.jComboBoxPaises.getSelectedItem());
-			int i = 0;
-			String[] aeropuertos = new String[aeropuertosPaisSeleccionado.size()];
-			for (Entry<String, Nodo> entry : aeropuertosPaisSeleccionado.entrySet()) {
-				aeropuertos[i] = entry.getKey();
-				i += 1;
-			}
-			jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(aeropuertos));
-			jComboBox1.setVisible(true);
-			jButton1.setVisible(true);
-			jLabel1.setVisible(true);
-			paisSeleccionado = (String) this.jComboBoxPaises.getSelectedItem();
-		}
+	private void initGUI() {
+		this.setLayout(new BorderLayout(5, 5));
+		centerPanel = createPanel(null, 50, 50);
+		this.add(centerPanel, BorderLayout.CENTER);
+		leftPanel = createPanel(null, 10, 50);
+		this.add(leftPanel, BorderLayout.LINE_START);
+		rightPanel = createPanel(null, 10, 50);
+		this.add(rightPanel, BorderLayout.LINE_END);
+		topPanel = createPanel(null, 20, 20);
+		this.add(topPanel, BorderLayout.PAGE_START);
+		bottPanel = createPanel(null, 20, 50);
+		this.add(bottPanel, BorderLayout.PAGE_END);
 	}
 
-	private void InfeccionActionPerformed(java.awt.event.ActionEvent evt) {
-		Nodo foco = informacionCompleta.get(paisSeleccionado).get(this.jComboBox1.getSelectedItem());
-		System.out.println("Va a comenzar la infeccion desde " + foco.getAirportInfo().getName());
-		Main.comenzarInfeccion(foco);
+	private JPanel createPanel(Color color, int x, int y) {
+		JPanel panel;
+		panel = new JPanel();
+		if (color != null)
+			panel.setBackground(color);
+		panel.setPreferredSize(new Dimension(x, y));
+		return panel;
 	}
-
-	private String paisSeleccionado;
-	private TreeMap<String, Nodo> aeropuertosOrdenados;
-	private TreeMap<String, TreeMap<String, Nodo>> informacionCompleta; // <Pais, <NombreAeropuerto,Nodo>>
-	private javax.swing.JButton jButton1;
-	private javax.swing.JComboBox<String> jComboBox1;
-	private javax.swing.JComboBox<String> jComboBoxPaises;
-	private javax.swing.JLabel jLabel1;
-	private javax.swing.JLabel jLabel2;
+	
+	public void setFullCenterPanel(Container c) {
+		this.remove(this.leftPanel);
+		this.remove(this.rightPanel);
+		this.remove(this.centerPanel);
+		this.remove(this.topPanel);
+		this.add(c, BorderLayout.CENTER);
+	}
 }

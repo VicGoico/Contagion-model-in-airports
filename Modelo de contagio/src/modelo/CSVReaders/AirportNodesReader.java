@@ -12,31 +12,42 @@ import modelo.red.Nodo;
 public class AirportNodesReader implements ReaderConsumer {
 	private static int lineCounter = 0;
 	private static boolean processing = true;
+	private static AirportNodesReader instance = null;
 	private HashMap<Integer, TAirport> airportsById;
 	private HashMap<String, ArrayList<TAirport>> airportsByCountry;
 	private HashMap<Integer, Nodo> loadedNodes;
-	
+
 	/**
 	 * Constructora
+	 * 
 	 * @param fileName Nombre del fichero donde se encuentran los nodos
-	 * @param nodes Nodos
+	 * @param nodes    Nodos
 	 * @throws IOException
 	 */
 	public AirportNodesReader(String fileName, HashMap<Integer, Nodo> nodes) throws IOException {
-		if(fileName == null) fileName = Main.AIRPORT_NODES_FILENAME;
+		if (fileName == null)
+			fileName = Main.AIRPORT_NODES_FILENAME;
 		this.loadedNodes = nodes;
 		this.airportsById = new HashMap<>();
 		this.airportsByCountry = new HashMap<>();
 
 		new CSVFileProcessor(fileName, this).process();
-		
-		System.out.println("pepe");
+		AirportNodesReader.instance = this;
 	}
 
-	
+	/**
+	 * Método para obtener la instancia de la clase
+	 * 
+	 * @return instancia
+	 * @throws IOException
+	 */
+	public static AirportNodesReader getInstance() throws IOException {
+		return AirportNodesReader.instance;
+	}
 
 	/**
 	 * Mediante un id obtiene un aeropuerto
+	 * 
 	 * @param id Identificador el aeropuerto que se quiere obtener
 	 * @return aeropuerto
 	 */
@@ -46,26 +57,24 @@ public class AirportNodesReader implements ReaderConsumer {
 
 	/**
 	 * Obtiene todos los aeropuertos de un país
+	 * 
 	 * @param country País del que se quieren obtener los aeropuertos
 	 * @return Lista de los aeropuertos del país
 	 */
 	public ArrayList<TAirport> getAirportsByCountry(String country) {
 		if (!this.airportsByCountry.containsKey(country)) {
-			if(CorrespondingCountry.map.containsKey(country)) {
-				if(CorrespondingCountry.map.get(country) == CorrespondingCountry.DEFAULTVALUE)
+			if (CorrespondingCountry.map.containsKey(country)) {
+				if (CorrespondingCountry.map.get(country) == CorrespondingCountry.DEFAULTVALUE)
 					return null;
 				return this.airportsByCountry.get(CorrespondingCountry.map.get(country));
-			}
-			else System.out.println("No se han podido obtener aeropuertos del pais: '" + country + "'");
+			} else
+				System.out.println("No se han podido obtener aeropuertos del pais: '" + country + "'");
 		}
 		return this.airportsByCountry.get(country);
 	}
-	
-	
 
 	/**
-	 * {@inheritDoc}
-	 * Se encarga de obtener de la información de los aeropuertos
+	 * {@inheritDoc} Se encarga de obtener de la información de los aeropuertos
 	 */
 	@Override
 	public void accept(ArrayList<String> t) {
@@ -82,7 +91,7 @@ public class AirportNodesReader implements ReaderConsumer {
 				airportName = t.get(3);
 				airportId = Integer.parseInt(t.get(0));
 				countryName = t.get(5);
-				
+
 				airport = new TAirport(airportId, airportName, t.get(4), countryName, t.get(6), t.get(7),
 						Double.parseDouble(t.get(8)), Double.parseDouble(t.get(9)), Integer.parseInt(t.get(10)),
 						Integer.parseInt(t.get(11)), Integer.parseInt(t.get(12)), Integer.parseInt(t.get(13)));
@@ -93,7 +102,8 @@ public class AirportNodesReader implements ReaderConsumer {
 					airportsByCountry.put(countryName, new ArrayList<>());
 				airportsByCountry.get(countryName).add(airport);
 			} catch (Exception e) {
-				System.err.println("No se ha podido leer el aeropuerto ( o no se ha podido almacenar ), compruebe el CSV que no este corrupto. (Cadenas no pueden contener \" y si contienen , se encierran entre comillas dobles");
+				System.err.println(
+						"No se ha podido leer el aeropuerto ( o no se ha podido almacenar ), compruebe el CSV que no este corrupto. (Cadenas no pueden contener \" y si contienen , se encierran entre comillas dobles");
 				e.printStackTrace();
 				System.out.println(t);
 				processing = false;
@@ -102,10 +112,11 @@ public class AirportNodesReader implements ReaderConsumer {
 		}
 		lineCounter++;
 	}
+
 	public HashMap<String, ArrayList<TAirport>> getAirportsByCountry() {
 		return airportsByCountry;
 	}
-	
+
 	@Override
 	public void atEndProcessing() {
 		if (processing) {
@@ -120,6 +131,5 @@ public class AirportNodesReader implements ReaderConsumer {
 	public boolean processing() {
 		return processing;
 	}
-	
-	
+
 }

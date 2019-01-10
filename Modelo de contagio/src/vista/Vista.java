@@ -50,6 +50,8 @@ public class Vista extends JPanel {
 	private void initComponents() {
 		loadButton = new JButton("Cargar los datos de todos los vuelos");
 		salirButton = new JButton("Salir");
+		continuarButton = new JButton("Continuar");
+		continuarButton.setEnabled(false);
 		guardarDatosProcesadosButton = new JButton("Guardar datos procesados");
 		fileNameProcesadosTextField = new JTextField(Main.OUTPUTFILENAME_PROCESSEDDATA);
 		fileNameExpenditureHelathTextField = new JTextField(Main.EXPENDITUREHEALTH_FILENAME);
@@ -58,8 +60,7 @@ public class Vista extends JPanel {
 		fileNamePIBTextField = new JTextField(Main.PIB_FILENAME);
 		fileNameCarbonDioxideTextField = new JTextField(Main.CARBONDIOXIDE_FILENAME);
 
-		continuarButton = new JButton("Continuar");
-		continuarButton.setEnabled(false);
+		
 
 		loadButton.addActionListener(new ActionListener() {
 			@Override
@@ -72,12 +73,13 @@ public class Vista extends JPanel {
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							Main.CargarRed(fileNameNodesTextField.getText(), fileNameAristasTextField.getText(),
+							Main.cargarRed(fileNameNodesTextField.getText(), fileNameAristasTextField.getText(),
 									fileNameExpenditureHelathTextField.getText(), fileNamePIBTextField.getText(),
 									fileNameCarbonDioxideTextField.getText());
 							continuarButton.setEnabled(true);
 							salirButton.setEnabled(true);
 							guardarDatosProcesadosButton.setEnabled(true);
+							loadButton.setText("Datos cargados, continue");
 							redCargada = true;
 						} catch (IOException e) {
 							JFrame frame = new JFrame();

@@ -37,61 +37,51 @@ public class Main {
 
 	public static void main(String[] args) {
 		vista = new Vista();
-		frame = new JFrame("Bienvenidos al lector de datos");
+		frame = new JFrame("Simulador de infeccion en aeropuertos");
 		frame.setSize(500, 550);
 		frame.setContentPane(vista);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+
 	public static void loadVentanaControl() {
 		control = new VentanaControl(red.getNodos());
 		frame.setContentPane(control);
-		frame.setSize(622, 307);
+		frame.setSize(500, 500);
 	}
 
-	// Carga la red del fichero
-	public static void CargarRed(String fileNameCSVNodos, String fileNameCSVAristas, String fileNameCSVSalud,
+	/**
+	 * Carga la "red" formada por los distintos datos cargados de los CSVs
+	 * 
+	 * @param fileNameCSVNodos   Nombre del fichero CSV que contiene los nodos
+	 *                           'aeropuertos'
+	 * @param fileNameCSVAristas Nombre del fichero CSV que contiene las aristas
+	 * @param fileNameCSVSalud   Nombre del fichero CSV que contiene el gasto en
+	 *                           salud respecto al PIB de cada pais
+	 * @param fileNameCSVPIB     Nombre del fichero CSV que contiene el PIB de cada
+	 *                           pais
+	 * @param fileNameCO2        Nombre del fichero CSV que contiene los datos de
+	 *                           emision de Dioxido de carbono en cada pais
+	 * @throws IOException Excepcion lanzada en caso de un error durante la lectura
+	 *                     de algun fichero.
+	 */
+	public static void cargarRed(String fileNameCSVNodos, String fileNameCSVAristas, String fileNameCSVSalud,
 			String fileNameCSVPIB, String fileNameCO2) throws IOException {
-		// O sea te declaras el atributo, para luego inicializarlo(y los getters para
-		// que estan?)
 		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
 		red = new Red(nodos);
-		new CorrespondingCountry();// Aqui podria ir perfectmente el HashMap y cargarlo
 
-		// Lo calculamos todos los ficheros si o si
+		new CorrespondingCountry();
+
+		// Se lee cada fichero CSV procesando cada fila a partir de los datos que se
+		// llevan hasta el momento
 		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(fileNameCSVSalud);
 		PIBReader pibReader = new PIBReader(fileNameCSVPIB);
 		AirportNodesReader nodesReader = new AirportNodesReader(fileNameCSVNodos, nodos);
-		// Leemos aqui
 		AristasReader aristasReader = new AristasReader(fileNameCSVAristas, red, nodos);
-
-		UmbralPIBSalud umbralPIBSalud = new UmbralPIBSalud(nodos,nodesReader.getAirportsByCountry());
-		// IGNORAR DE AQUI EN ADELANTE
-		BufferedWriter out = new BufferedWriter(new FileWriter("temp" + new Date().getTime() + ".csv"));
-
-		HashMap<String, Boolean> lola = new HashMap<>();
-
-		nodos.forEach(new BiConsumer<Integer, Nodo>() {
-			@Override
-			public void accept(Integer t, Nodo n) {
-				TAirport u = n.getAirportInfo();
-
-				System.out.println(t + "\t" + u.getCountry() + "\t\t" + n.getUmbral() + "\t\t\t" + n.getDegree());
-				try {
-					if (!lola.containsKey(u.getCountry())) {
-						out.write(t + "," + u.getCountry() + "," + expHReader.getUmbral(u.getCountry()) + "\n");
-						lola.put(u.getCountry(), true);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		out.close();
-		
-		Nodo aux = nodos.get(676);
-		System.out.println("pausa");
+	}
+	
+	public static void cargarUmbral() throws IOException {
+		UmbralPIBSalud umbralPIBSalud = new UmbralPIBSalud(red);
 	}
 
 	public static void comenzarInfeccion(Nodo foco) {
@@ -107,7 +97,10 @@ public class Main {
 		papplet.frame = frame;
 
 		frame.setResizable(true);
-		frame.setContentPane(papplet);
+		
+		((VentanaControl) frame.getContentPane()).setFullCenterPanel(papplet);
+		
+		// frame.setContentPane(papplet);
 		// frame.add(papplet, BorderLayout.CENTER);
 		papplet.init();
 
