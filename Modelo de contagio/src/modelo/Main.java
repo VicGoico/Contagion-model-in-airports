@@ -63,6 +63,7 @@ public class Main {
 		ExpenditureHealthReader expHReader = new ExpenditureHealthReader(fileNameCSVSalud);
 		PIBReader pibReader = new PIBReader(fileNameCSVPIB);
 		AirportNodesReader nodesReader = new AirportNodesReader(fileNameCSVNodos, nodos);
+		// Leemos aqui
 		AristasReader aristasReader = new AristasReader(fileNameCSVAristas, red, nodos);
 
 		UmbralPIBSalud umbralPIBSalud = new UmbralPIBSalud(nodos,nodesReader.getAirportsByCountry());
