@@ -17,6 +17,7 @@ import modelo.CSVReaders.PIBReader;
 import modelo.metricas.tools.CorrespondingCountry;
 import modelo.red.Nodo;
 import modelo.red.Red;
+import umbrales.UmbralPIBSalud;
 import vista.VentanaControl;
 import vista.Vista;
 
@@ -64,7 +65,7 @@ public class Main {
 		AirportNodesReader nodesReader = new AirportNodesReader(fileNameCSVNodos, nodos);
 		AristasReader aristasReader = new AristasReader(fileNameCSVAristas, red, nodos);
 
-		
+		UmbralPIBSalud umbralPIBSalud = new UmbralPIBSalud(nodos,nodesReader.getAirportsByCountry());
 		// IGNORAR DE AQUI EN ADELANTE
 		BufferedWriter out = new BufferedWriter(new FileWriter("temp" + new Date().getTime() + ".csv"));
 
@@ -87,6 +88,9 @@ public class Main {
 			}
 		});
 		out.close();
+		
+		Nodo aux = nodos.get(676);
+		System.out.println("pausa");
 	}
 
 	public static void comenzarInfeccion(Nodo foco) {
