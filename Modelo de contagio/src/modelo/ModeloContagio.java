@@ -47,23 +47,25 @@ public class ModeloContagio {
 					
 				}
 				
-				
-				aux.setAeropuetosComunicadosInfectados(aux.getAeropuetosComunicadosInfectados() + peso);
-				
-				double porcentajeContagiado = 
-						(aux.getAeropuetosComunicadosInfectados().doubleValue() / Double.valueOf(aux.getDegree()));
-				
-				System.out.println("porcentaje contagiado " + porcentajeContagiado + " umbral "+
-						aux.getUmbral() + " aeropuerto " + aux.getAirportInfo().getName() + " peso " + peso +
-						" aeropuertos contagiados " + aux.getAeropuetosComunicadosInfectados());
-				
-				if(porcentajeContagiado > aux.getUmbral() && !aux.isInfectado()) {
-					//Se contagia el aeropuerto
-					aux.setInfectado(true);
-					nodosContagiados.add(aux);
-					nodosContagiadosFin.add(aux);
-					System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
+				if(!aux.isInfectado()) {
+					aux.setAeropuetosComunicadosInfectados(aux.getAeropuetosComunicadosInfectados() + peso);
+					
+					double porcentajeContagiado = 
+							(aux.getAeropuetosComunicadosInfectados().doubleValue() / Double.valueOf(aux.getIndegree()));
+					
+					System.out.println("porcentaje contagiado " + porcentajeContagiado + " umbral "+
+							aux.getUmbral() + " aeropuerto " + aux.getAirportInfo().getName() + " peso " + peso +
+							" aeropuertos contagiados " + aux.getAeropuetosComunicadosInfectados());
+					
+					if(porcentajeContagiado > aux.getUmbral() && !aux.isInfectado()) {
+						//Se contagia el aeropuerto
+						aux.setInfectado(true);
+						nodosContagiados.add(aux);
+						nodosContagiadosFin.add(aux);
+						System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
+					}
 				}
+				
 			}
 			
 			nodosContagiados.remove(0);

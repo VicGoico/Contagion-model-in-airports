@@ -42,21 +42,27 @@ public class UmbralPIBSalud {
 			double gastoPais = this.PIBReader.getExpHealthUmbral(aeropuerto.getValue().getAirportInfo().getCountry());
 
 			if (gastoPais > mediaPaises) {
-				if (gastoPais < (mediaPaises * 1.5)) {
+				if (gastoPais < (mediaPaises * 1.25)) {
 					// Si el país gasta en sanidad mas que la media de países pero menos que la
 					// media
 					aeropuerto.getValue().setUmbral(0.6);
-				} else if (gastoPais < (mediaPaises * 3)) {
+				} else if (gastoPais < (mediaPaises * 2)) {
 					aeropuerto.getValue().setUmbral(0.75);
-				} else {
+				} else if (gastoPais < (mediaPaises * 2.5)){
 					aeropuerto.getValue().setUmbral(0.8);
+				}
+				else {
+					aeropuerto.getValue().setUmbral(0.9);
 				}
 			} else {
 				if (gastoPais > (mediaPaises * 0.75)) {
 					aeropuerto.getValue().setUmbral(0.4);
 				} else if (gastoPais > (mediaPaises * 0.5)) {
 					aeropuerto.getValue().setUmbral(0.25);
-				} else {
+				} else if (gastoPais > (mediaPaises * 0.25)) {
+					aeropuerto.getValue().setUmbral(0.15);
+				}
+				else {
 					aeropuerto.getValue().setUmbral(((gastoPais * 50) / mediaPaises) / 100);
 				}
 			}
