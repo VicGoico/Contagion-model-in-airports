@@ -71,6 +71,10 @@ public class Main {
 	 */
 	public static void cargarRed(String fileNameCSVNodos, String fileNameCSVAristas, String fileNameCSVSalud,
 			String fileNameCSVPIB, String fileNameCO2) throws IOException {
+		
+		// Empezamos a contar el tiempo que tarda a cargar y generar la red de aeropuertos
+		long tiempoInicio = System.currentTimeMillis();
+		
 		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
 		red = new Red(nodos);
 
@@ -82,6 +86,21 @@ public class Main {
 		PIBReader pibReader = new PIBReader(fileNameCSVPIB);
 		AirportNodesReader nodesReader = new AirportNodesReader(fileNameCSVNodos, nodos);
 		AristasReader aristasReader = new AristasReader(fileNameCSVAristas, red, nodos);
+		// Acabamos de contar
+		long tiempoFinal = System.currentTimeMillis();
+		// Restamos el tiempoFinal menos el tiempoInicio para saber la diferencia (en milisegundos)
+		long diferenciaTiempo =  tiempoFinal - tiempoInicio;
+		System.out.println("Aqui mirar");
+		System.out.println("Tiempo que tarda en cargar los ficheros y generar la red: " + diferenciaTiempo + " milisegundos");
+		long segundos = diferenciaTiempo/1000;// 1 segundos son 1000 milisegundos
+		if(segundos > 0)
+			System.out.println("En segundos: " + segundos);
+		long minutos = diferenciaTiempo/60000;// 1 minuto son 60000 milisegundos
+		if(minutos > 0){
+			System.out.println("En minutos: " + minutos);
+		}
+		
+		
 	}
 	
 	public static void cargarUmbral() throws IOException {
@@ -89,6 +108,8 @@ public class Main {
 	}
 
 	public static void comenzarInfeccion(Nodo foco) {
+		// Empezamos a contar el tiempo que tarda a cargar y generar la red de aeropuertos
+		long tiempoInicio = System.currentTimeMillis();
 		UmbralesModificaciones modelo = new UmbralesModificaciones();
 		//SI modelo = new SI();
 		//SIR modelo = new SIR();
@@ -110,7 +131,22 @@ public class Main {
 		// frame.setContentPane(papplet);
 		// frame.add(papplet, BorderLayout.CENTER);
 		papplet.init();
-
+		// Acabamos de contar
+		long tiempoFinal = System.currentTimeMillis();
+		// Restamos el tiempoFinal menos el tiempoInicio para saber la
+		// diferencia (en milisegundos)
+		long diferenciaTiempo = tiempoFinal - tiempoInicio;
+		System.out.println("Aqui mirar");
+		System.out.println("Tiempo que tarda en infectar la red con el aeropuerto "+ foco.getAirportInfo().getName()+" del pais "+ foco.getAirportInfo().getCountry() + " : " + diferenciaTiempo + " milisegundos");
+		long segundos = diferenciaTiempo / 1000;// 1 segundos son 1000
+												// milisegundos
+		if (segundos > 0)
+			System.out.println("En segundos: " + segundos);
+		long minutos = diferenciaTiempo / 60000;// 1 minuto son 60000
+												// milisegundos
+		if (minutos > 0) {
+			System.out.println("En minutos: " + minutos);
+		}
 		// PApplet.main(new String[] { HelloUnfoldingWorld.class.getName() });
 		// HelloUnfoldingWorld world = new HelloUnfoldingWorld();
 		// world.frame.setVisible(true);
