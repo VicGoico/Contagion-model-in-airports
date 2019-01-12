@@ -5,17 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import modelo.red.Arista;
 import modelo.red.Nodo;
 import modelo.red.Red;
 
-
-
-public class SIR implements modelo {
+public class SIRConMejora implements modelo {
 
 	private ArrayList<Nodo> nodosContagiadosFin;
 	private ArrayList<Nodo> nodosImmunes;
-	
 
 	@Override
 	public void simular(Red red, Nodo foco) {
@@ -45,15 +41,20 @@ public class SIR implements modelo {
 				
 				if(tasaRecuperación < r.nextDouble()) {
 					//Se recupera alguien
-					int posNodoRecuperado = r.nextInt(nodosContagiados.size() + nodosContagiadosFin.size());
-					Nodo nodoRecuperado = null;
-					if(posNodoRecuperado < nodosContagiados.size()) {
-						nodoRecuperado = nodosContagiados.get(posNodoRecuperado);						
-						nodosContagiados.remove(posNodoRecuperado);
+					
+					ArrayList<Nodo> todosNodos = new ArrayList<Nodo>(nodosContagiados);
+					todosNodos.addAll(nodosContagiadosFin);
+					Nodo nodoRecuperado = todosNodos.get(0);
+					for(int i = 1; i < todosNodos.size(); i++) {
+						if(todosNodos.get(i).getUmbral() > nodoRecuperado.getUmbral()) {
+							nodoRecuperado = todosNodos.get(i);
+						}
+					}
+					if(nodosContagiados.contains(nodoRecuperado)) {
+						nodosContagiados.remove(nodosContagiados.indexOf(nodoRecuperado));
 					}
 					else {
-						nodoRecuperado = nodosContagiadosFin.get(posNodoRecuperado - nodosContagiadosFin.size());
-						nodosContagiadosFin.remove(posNodoRecuperado - nodosContagiadosFin.size());
+						nodosContagiadosFin.remove(nodosContagiadosFin.indexOf(nodoRecuperado));
 					}
 					nodoRecuperado.setInfectado(false);
 					this.nodosImmunes.add(nodoRecuperado);
@@ -79,5 +80,5 @@ public class SIR implements modelo {
 	public ArrayList<Nodo> getNodosContagiados() {
 		return this.nodosContagiadosFin;
 	}
-
+	
 }
