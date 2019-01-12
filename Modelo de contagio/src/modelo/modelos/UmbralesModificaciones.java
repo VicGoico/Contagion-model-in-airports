@@ -14,8 +14,11 @@ public class UmbralesModificaciones implements modelo{
 	
 	/**
 	 * Método que se encarga de simular una infección
-	 * @param red Red sobre la que se pretende realizar la infección
-	 * @param foco Aeropuerto en el cual se quiere iniciar la infección
+	 * Modificaciones:
+	 * 		Umbral especifico para cada aeropuerto
+	 * 		No se mira el % de los vecinos si no el numero de vuelos infectados
+	 * @param red Red sobre la que se pretende realizar la infeccion
+	 * @param foco Aeropuerto en el cual se quiere iniciar la infeccion
 	 */
 	public void simular(Red red, Nodo foco) {
 		
