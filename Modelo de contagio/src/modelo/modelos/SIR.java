@@ -14,13 +14,13 @@ import modelo.red.Red;
 public class SIR implements modelo {
 
 	private ArrayList<Nodo> nodosContagiadosFin;
-	private ArrayList<Nodo> nodosImmunes;
+	private ArrayList<Nodo> nodosInmunes;
 	
 
 	@Override
 	public void simular(Red red, Nodo foco) {
 		nodosContagiadosFin = new ArrayList<>();
-		nodosImmunes = new ArrayList<>();
+		nodosInmunes = new ArrayList<>();
 
 		nodosContagiadosFin.add(foco);
 
@@ -30,7 +30,7 @@ public class SIR implements modelo {
 
 		foco.setInfectado(true);
 
-		double tasaRecuperación = 0.2;
+		double tasaRecuperación = 0.1;
 		
 		double tasaContagio = 0.6;
 		
@@ -45,21 +45,23 @@ public class SIR implements modelo {
 				
 				if(tasaRecuperación < r.nextDouble()) {
 					//Se recupera alguien
-					int posNodoRecuperado = r.nextInt(nodosContagiados.size() + nodosContagiadosFin.size());
-					Nodo nodoRecuperado = null;
-					if(posNodoRecuperado < nodosContagiados.size()) {
-						nodoRecuperado = nodosContagiados.get(posNodoRecuperado);						
-						nodosContagiados.remove(posNodoRecuperado);
-					}
-					else {
-						nodoRecuperado = nodosContagiadosFin.get(posNodoRecuperado - nodosContagiadosFin.size());
-						nodosContagiadosFin.remove(posNodoRecuperado - nodosContagiadosFin.size());
-					}
-					nodoRecuperado.setInfectado(false);
-					this.nodosImmunes.add(nodoRecuperado);
+					ArrayList<Nodo> todosNodos = new ArrayList<Nodo>(nodosContagiados);
+					todosNodos.addAll(nodosContagiadosFin);
+					if(todosNodos.size() > 0) {
+						Nodo nodoRecuperado = todosNodos.get(r.nextInt(todosNodos.size()));
+						System.out.println("Se ha recuperado " + nodoRecuperado.getAirportInfo().getName());
+						if(nodosContagiados.contains(nodoRecuperado)) {
+							nodosContagiados.remove(nodosContagiados.indexOf(nodoRecuperado));
+						}
+						else {
+							nodosContagiadosFin.remove(nodosContagiadosFin.indexOf(nodoRecuperado));
+						}
+						nodoRecuperado.setInfectado(false);
+						this.nodosInmunes.add(nodoRecuperado);
+					}					
 				}
 				Nodo aux = red.getNodos().get(entry.getKey());
-				if(tasaContagio < r.nextDouble() && !this.nodosImmunes.contains(aux)) {					
+				if(tasaContagio < r.nextDouble() && !aux.isInfectado() && !this.nodosInmunes.contains(aux)) {					
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);
@@ -68,7 +70,7 @@ public class SIR implements modelo {
 				}
 		
 			}
-
+			if(nodosContagiados.size() > 0)
 			nodosContagiados.remove(0);
 
 		}

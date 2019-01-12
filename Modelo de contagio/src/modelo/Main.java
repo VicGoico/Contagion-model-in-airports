@@ -15,6 +15,9 @@ import modelo.CSVReaders.AristasReader;
 import modelo.CSVReaders.ExpenditureHealthReader;
 import modelo.CSVReaders.PIBReader;
 import modelo.metricas.tools.CorrespondingCountry;
+import modelo.modelos.SI;
+import modelo.modelos.SIR;
+import modelo.modelos.SIRConMejora;
 import modelo.modelos.UmbralesModificaciones;
 import modelo.red.Nodo;
 import modelo.red.Red;
@@ -87,6 +90,9 @@ public class Main {
 
 	public static void comenzarInfeccion(Nodo foco) {
 		UmbralesModificaciones modelo = new UmbralesModificaciones();
+		//SI modelo = new SI();
+		//SIR modelo = new SIR();
+		//SIRConMejora modelo = new SIRConMejora();
 		modelo.simular(red, red.getNodo(foco.getId()));
 
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
