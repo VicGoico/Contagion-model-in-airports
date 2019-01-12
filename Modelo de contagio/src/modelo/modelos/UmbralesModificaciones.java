@@ -1,4 +1,4 @@
-package modelo;
+package modelo.modelos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import modelo.red.Arista;
 import modelo.red.Nodo;
 import modelo.red.Red;
 
-public class ModeloContagio {
+public class UmbralesModificaciones implements modelo{
 
 	private ArrayList<Nodo> nodosContagiadosFin;
 	
