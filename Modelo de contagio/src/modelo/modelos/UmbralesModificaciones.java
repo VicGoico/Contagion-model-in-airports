@@ -37,13 +37,18 @@ public class UmbralesModificaciones implements Modelo {
 		nodosContagiados.add(foco);
 
 		foco.setInfectado(true);
+		
+		System.out.println("Comienza la infección de " + foco.getId());
 
 		while (!nodosContagiados.isEmpty()) {
+			
 			Nodo nodoContagiado = nodosContagiados.get(0);
 			HashMap<Integer, Integer> listaAeropuertosALosQueVuela = nodoContagiado.getAeropuertosALosQueVuela();
 
 			for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
 				Nodo aux = this.red.getNodos().get(entry.getKey());
+				
+				System.out.println("Vuela a  " + entry.getKey());
 				Arista aristaAuxiliar = new Arista(nodoContagiado, aux, 0);
 				int peso = 0;
 
@@ -51,8 +56,11 @@ public class UmbralesModificaciones implements Modelo {
 					// Aquí se comprueba porque a lo mejor el eropuerto no vuela a ese nodo
 					peso = this.red.getAristas().get(this.red.getAristas().indexOf(aristaAuxiliar)).getPeso();
 				}
-
+				
+				System.out.println("INFECTADO: " + aux.isInfectado());
+				
 				if (!aux.isInfectado()) {
+					System.out.println("Aeropuertos comunicados infectados " + aux.getAeropuetosComunicadosInfectados());
 					aux.setAeropuetosComunicadosInfectados(aux.getAeropuetosComunicadosInfectados() + peso);
 
 					double porcentajeContagiado = (aux.getAeropuetosComunicadosInfectados().doubleValue()
@@ -68,12 +76,12 @@ public class UmbralesModificaciones implements Modelo {
 						nodosContagiados.add(aux);
 						nodosContagiadosFin.add(aux);
 						System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
-						
+						/*
 						// Formo una red contagiada que contiene solo aristas entre nodos contagiados
 						Nodo nC = this.redContagiada.getNodo(aux.getId()), nC2 = this.redContagiada.getNodo(nodoContagiado.getId());
 						nC.setInfectado(true);
 						nC2.setInfectado(true);
-						this.redContagiada.add(new Arista(nC2, nC, 0));
+						this.redContagiada.add(new Arista(nC2, nC, 0));*/
 					}
 				}
 

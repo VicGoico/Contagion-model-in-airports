@@ -3,10 +3,13 @@ package modelo;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -21,6 +24,7 @@ import modelo.modelos.SI;
 import modelo.modelos.SIR;
 import modelo.modelos.SIRConMejora;
 import modelo.modelos.UmbralesModificaciones;
+import modelo.red.Arista;
 import modelo.red.Nodo;
 import modelo.red.Red;
 import umbrales.UmbralPIBSalud;
@@ -59,32 +63,38 @@ public class Main {
 	/**
 	 * Carga la "red" formada por los distintos datos cargados de los CSVs
 	 * 
-	 * @param fileNameCSVNodos   Nombre del fichero CSV que contiene los nodos
-	 *                           'aeropuertos'
-	 * @param fileNameCSVAristas Nombre del fichero CSV que contiene las aristas
-	 * @param fileNameCSVSalud   Nombre del fichero CSV que contiene el gasto en
-	 *                           salud respecto al PIB de cada pais
-	 * @param fileNameCSVPIB     Nombre del fichero CSV que contiene el PIB de cada
-	 *                           pais
-	 * @param fileNameCO2        Nombre del fichero CSV que contiene los datos de
-	 *                           emision de Dioxido de carbono en cada pais
-	 * @throws IOException Excepcion lanzada en caso de un error durante la lectura
-	 *                     de algun fichero.
+	 * @param fileNameCSVNodos
+	 *            Nombre del fichero CSV que contiene los nodos 'aeropuertos'
+	 * @param fileNameCSVAristas
+	 *            Nombre del fichero CSV que contiene las aristas
+	 * @param fileNameCSVSalud
+	 *            Nombre del fichero CSV que contiene el gasto en salud respecto al
+	 *            PIB de cada pais
+	 * @param fileNameCSVPIB
+	 *            Nombre del fichero CSV que contiene el PIB de cada pais
+	 * @param fileNameCO2
+	 *            Nombre del fichero CSV que contiene los datos de emision de
+	 *            Dioxido de carbono en cada pais
+	 * @throws IOException
+	 *             Excepcion lanzada en caso de un error durante la lectura de algun
+	 *             fichero.
 	 */
 	public static void cargarRed(String fileNameCSVNodos, String fileNameCSVAristas, String fileNameCSVSalud,
 			String fileNameCSVPIB, String fileNameCO2) throws IOException {
-		
-		// Empezamos a contar el tiempo que tarda a cargar y generar la red de aeropuertos
+
+		// Empezamos a contar el tiempo que tarda a cargar y generar la red de
+		// aeropuertos
 		long tiempoInicio = System.currentTimeMillis();
-		
+
 		int MegaBytes = 1000000;
-		
+
 		long freeMemory = Runtime.getRuntime().freeMemory();
-		//long totalMemory = Runtime.getRuntime().totalMemory();
+		// long totalMemory = Runtime.getRuntime().totalMemory();
 		long maxMemory = Runtime.getRuntime().maxMemory();
-		long memoriaUsadaAntes = maxMemory-freeMemory;
-		System.out.println("Memoria usada antes de ejecutar nuestra aplicación nuestra aplicacion:	" + (int)(memoriaUsadaAntes/MegaBytes) + "	MegaBytes");
-		
+		long memoriaUsadaAntes = maxMemory - freeMemory;
+		System.out.println("Memoria usada antes de ejecutar nuestra aplicación nuestra aplicacion:	"
+				+ (int) (memoriaUsadaAntes / MegaBytes) + "	MegaBytes");
+
 		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
 		red = new Red(nodos);
 
@@ -98,51 +108,100 @@ public class Main {
 		AristasReader aristasReader = new AristasReader(fileNameCSVAristas, red, nodos);
 		// Acabamos de contar
 		long tiempoFinal = System.currentTimeMillis();
-		// Restamos el tiempoFinal menos el tiempoInicio para saber la diferencia (en milisegundos)
-		long diferenciaTiempo =  tiempoFinal - tiempoInicio;
+		// Restamos el tiempoFinal menos el tiempoInicio para saber la diferencia (en
+		// milisegundos)
+		long diferenciaTiempo = tiempoFinal - tiempoInicio;
 		System.out.println("Aqui mirar");
-		System.out.println("Tiempo que tarda en cargar los ficheros y generar la red: " + diferenciaTiempo + " milisegundos");
-		long segundos = diferenciaTiempo/1000;// 1 segundos son 1000 milisegundos
-		if(segundos > 0)
+		System.out.println(
+				"Tiempo que tarda en cargar los ficheros y generar la red: " + diferenciaTiempo + " milisegundos");
+		long segundos = diferenciaTiempo / 1000;// 1 segundos son 1000 milisegundos
+		if (segundos > 0)
 			System.out.println("En segundos: " + segundos);
-		long minutos = diferenciaTiempo/60000;// 1 minuto son 60000 milisegundos
-		if(minutos > 0){
+		long minutos = diferenciaTiempo / 60000;// 1 minuto son 60000 milisegundos
+		if (minutos > 0) {
 			System.out.println("En minutos: " + minutos);
 		}
-		
-		
-		
+
 		// Memoria usada por nuestra aplicación
 		freeMemory = Runtime.getRuntime().freeMemory();
-		//totalMemory = Runtime.getRuntime().totalMemory();
+		// totalMemory = Runtime.getRuntime().totalMemory();
 		maxMemory = Runtime.getRuntime().maxMemory();
-		
+
 		System.out.println("Pruebas de memoria");
-		
-		System.out.println("Memoria usada por nuestra aplicacion:	" + (int)(((maxMemory-freeMemory)-memoriaUsadaAntes)/MegaBytes) + "	MegaBytes");
-		/*System.out.println("Memoria libre en JVM:	" + freeMemory + "	MegaBytes");
-		System.out.println("Memoria total en JVM:	" + totalMemory + "	MegaBytes");
-		System.out.println("Memoria maxima en JVM:	" + maxMemory + "	MegaBytes");*/
-		
-		
+
+		System.out.println("Memoria usada por nuestra aplicacion:	"
+				+ (int) (((maxMemory - freeMemory) - memoriaUsadaAntes) / MegaBytes) + "	MegaBytes");
+		/*
+		 * System.out.println("Memoria libre en JVM:	" + freeMemory + "	MegaBytes");
+		 * System.out.println("Memoria total en JVM:	" + totalMemory + "	MegaBytes");
+		 * System.out.println("Memoria maxima en JVM:	" + maxMemory + "	MegaBytes");
+		 */
+
 	}
-	
+
 	public static void cargarUmbral() throws IOException {
 		UmbralPIBSalud umbralPIBSalud = new UmbralPIBSalud(red);
 	}
 
 	public static void comenzarInfeccion(Nodo foco) {
-		// Empezamos a contar el tiempo que tarda a cargar y generar la red de aeropuertos
+
+		/*
+		FileWriter fichero = null;
+		PrintWriter pw = null;
+		try {
+			fichero = new FileWriter("pruebaSIR.txt");
+			pw = new PrintWriter(fichero);
+			
+			for (Map.Entry<Integer, Nodo> entry : red.getNodos().entrySet()) {
+				restablecer(red);
+				//Red redAux = clonarRed();
+				//UmbralesModificaciones m = new UmbralesModificaciones(red);
+				//SI m = new SI(red,0.6);
+				SIR m = new SIR(red,0.1,0.6);
+				m.simular(red.getNodo(entry.getKey()));
+				pw.println(entry.getKey() + "	" + m.getNodosContagiados().size());
+			}
+		 */
+			/*for (Iterator<Nodo> i = red.getNodos().values().iterator(); i.hasNext();) {
+				//restablecer(red);
+				Red redAux = new Red((HashMap<Integer, Nodo>) red.getNodos().clone());
+				redAux.setAristas((ArrayList<Arista>) red.getAristas().clone());
+				Nodo n = (Nodo) i.next();
+				UmbralesModificaciones m = new UmbralesModificaciones(redAux);
+				// SI modelo = new SI(0.6);
+				// SIR modelo = new SIR(0.1,0.6);
+				// SIRConMejora modelo = new SIRConMejora(0.1,0.6);
+				m.simular(redAux.getNodo(n.getId()));
+				pw.println(n.getId() + "	" + m.getNodosContagiados().size());
+			}*/
+		/*
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				// Nuevamente aprovechamos el finally para
+				// asegurarnos que se cierra el fichero.
+				if (null != fichero)
+					fichero.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		*/
+		// Empezamos a contar el tiempo que tarda a cargar y generar la red de
+		// aeropuertos
 		long tiempoInicio = System.currentTimeMillis();
+		//restablecer(red);
 		UmbralesModificaciones modelo = new UmbralesModificaciones(red);
-		//SI modelo = new SI(0.6);
-		//SIR modelo = new SIR(0.1,0.6);
-		//SIRConMejora modelo = new SIRConMejora(0.1,0.6);
+		// SI modelo = new SI(0.6);
+		// SIR modelo = new SIR(0.1,0.6);
+		// SIRConMejora modelo = new SIRConMejora(0.1,0.6);
 		modelo.simular(red.getNodo(foco.getId()));
-		
+
 		try {
 			// Guardamos en un CSV la infeccion simulada
-			new RedWriter().write(modelo.getRedContagiada(), "red-simulada-" + foco.getId() + "-" + new Date().getTime() + ".csv");
+			new RedWriter().write(modelo.getRedContagiada(),
+					"red-simulada-" + foco.getId() + "-" + new Date().getTime() + ".csv");
 		} catch (IOException e) {
 			JFrame frame = new JFrame();
 			JOptionPane.showMessageDialog(frame,
@@ -159,9 +218,9 @@ public class Main {
 		papplet.frame = frame;
 
 		frame.setResizable(true);
-		
+
 		((VentanaControl) frame.getContentPane()).setFullCenterPanel(papplet);
-		
+
 		// frame.setContentPane(papplet);
 		// frame.add(papplet, BorderLayout.CENTER);
 		papplet.init();
@@ -171,7 +230,9 @@ public class Main {
 		// diferencia (en milisegundos)
 		long diferenciaTiempo = tiempoFinal - tiempoInicio;
 		System.out.println("Aqui mirar");
-		System.out.println("Tiempo que tarda en infectar la red con el aeropuerto "+ foco.getAirportInfo().getName()+" del pais "+ foco.getAirportInfo().getCountry() + " : " + diferenciaTiempo + " milisegundos");
+		System.out.println("Tiempo que tarda en infectar la red con el aeropuerto " + foco.getAirportInfo().getName()
+				+ " del pais " + foco.getAirportInfo().getCountry() + " : " + diferenciaTiempo + " milisegundos");
+		System.out.println("aeropuertos contagiados " +modelo.getNodosContagiados().size());
 		long segundos = diferenciaTiempo / 1000;// 1 segundos son 1000
 												// milisegundos
 		if (segundos > 0)
@@ -188,7 +249,21 @@ public class Main {
 		// world.draw();
 
 	}
+	private static Red clonarRed() {
+		HashMap<Integer,Nodo> nodos = new HashMap<Integer,Nodo>(red.getNodos());
+		Red redAux = new Red(nodos);
+		ArrayList<Arista> aristas = new ArrayList<Arista>(red.getAristas());
+		redAux.setAristas(aristas);
+		return redAux;
+	}
 
+	private static void restablecer(Red red) {
+		for (Map.Entry<Integer, Nodo> entry : red.getNodos().entrySet()) {
+		    entry.getValue().setInfectado(false);
+		    entry.getValue().setAeropuetosComunicadosInfectados(0);
+		}
+	}
+	
 	public static void guardar(String outputFileName) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
 

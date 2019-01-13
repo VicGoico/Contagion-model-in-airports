@@ -79,7 +79,7 @@ public class Red {
 		return this.getNodos().get(nodo);
 	}
 
-	public List<Arista> getAristas() {
+	public ArrayList<Arista> getAristas() {
 		return aristas;
 	}
 

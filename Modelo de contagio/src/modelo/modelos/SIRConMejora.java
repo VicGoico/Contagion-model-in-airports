@@ -45,7 +45,7 @@ public class SIRConMejora implements Modelo {
 
 				Random r = new Random();
 
-				if (this.tasaRecuperacion < r.nextDouble()) {
+				if (r.nextDouble() < this.tasaRecuperacion) {
 					// Se recupera alguien
 
 					ArrayList<Nodo> todosNodos = new ArrayList<Nodo>(nodosContagiados);
@@ -68,7 +68,7 @@ public class SIRConMejora implements Modelo {
 					}
 				}
 				Nodo aux = red.getNodos().get(entry.getKey());
-				if (this.tasaContagio < r.nextDouble() && !this.nodosInmunes.contains(aux)) {
+				if (r.nextDouble() < this.tasaContagio  && !this.nodosInmunes.contains(aux)) {
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);

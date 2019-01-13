@@ -44,7 +44,7 @@ public class SI implements Modelo {
 				
 				Random r = new Random();
 				Nodo aux = red.getNodos().get(entry.getKey());
-				if(this.tasaContagio < r.nextDouble() && !aux.isInfectado()) {
+				if(r.nextDouble() < this.tasaContagio  && !aux.isInfectado()) {
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);
