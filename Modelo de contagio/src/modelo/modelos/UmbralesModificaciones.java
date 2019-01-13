@@ -92,4 +92,7 @@ public class UmbralesModificaciones implements Modelo {
 	public ArrayList<Nodo> getNodosContagiados() {
 		return this.nodosContagiadosFin;
 	}
+	public Red getRedContagiada() {
+		return this.redContagiada;
+	}
 }

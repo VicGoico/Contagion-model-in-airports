@@ -142,7 +142,7 @@ public class Main {
 		
 		try {
 			// Guardamos en un CSV la infeccion simulada
-			new RedWriter().write(red, "red-simulada-" + foco.getId() + "-" + new Date().getTime() + ".csv");
+			new RedWriter().write(modelo.getRedContagiada(), "red-simulada-" + foco.getId() + "-" + new Date().getTime() + ".csv");
 		} catch (IOException e) {
 			JFrame frame = new JFrame();
 			JOptionPane.showMessageDialog(frame,
