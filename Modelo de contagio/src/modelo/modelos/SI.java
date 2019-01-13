@@ -8,14 +8,14 @@ import java.util.Random;
 import modelo.red.Nodo;
 import modelo.red.Red;
 
-public class SI implements modelo {
+public class SI implements Modelo {
 
 	private ArrayList<Nodo> nodosContagiadosFin;
-	
+	private Red red;
 	private double tasaContagio;
 
-	public SI(double tasaContagio) {
-		super();
+	public SI(Red red, double tasaContagio) {
+		this.red = red;
 		this.tasaContagio = tasaContagio;
 	}
 	/**
@@ -23,7 +23,7 @@ public class SI implements modelo {
 	 * tasa de contagio = 0.6
 	 */
 	@Override
-	public void simular(Red red, Nodo foco) {
+	public void simular(Nodo foco) {
 
 		nodosContagiadosFin = new ArrayList<Nodo>();
 

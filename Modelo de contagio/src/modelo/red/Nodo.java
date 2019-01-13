@@ -8,7 +8,7 @@ public class Nodo {
 	private TAirport tAirport;
 	private double umbral;
 	private HashMap<Integer, Integer> aeropuertosComunicados; // <IDAeropuerto, Peso>
-	private int aeropuetosComunicadosInfectados = 0;
+	private int numAeropuetosComunicadosInfectados = 0;
 	private boolean infectado = false;
 	private int indegree;
 	private int outdegree;
@@ -16,35 +16,43 @@ public class Nodo {
 
 	/**
 	 * Constructor
-	 * @param info contiene la información del aeropuerto
+	 * 
+	 * @param info   contiene la información del aeropuerto
 	 * @param umbral Umbral que va a tener el aeropuerto
 	 */
 	public Nodo(TAirport info, double umbral) {
 		this.tAirport = info;
 		this.umbral = umbral;
-		aeropuertosComunicados = new HashMap<Integer, Integer>();
+		this.aeropuertosComunicados = new HashMap<Integer, Integer>();
 	}
 
 	/**
 	 * Añade a los aeropuertos a los que viaja ese aeropuerto un nuevo aeropuerto
+	 * 
 	 * @param aeropuerto Identificador del aeropuerto al que viaja
-	 * @param peso Cuantas veces viaja al aeropuerto
+	 * @param peso       Cuantas veces viaja al aeropuerto
 	 */
 	public void addAeropuertoComunicado(int aeropuerto, int peso) {
-		this.aeropuertosComunicados.put(aeropuerto, peso);
+		this.aeropuertosComunicados.put(aeropuerto,
+				(this.aeropuertosComunicados.containsKey(aeropuerto) ? this.aeropuertosComunicados.get(aeropuerto) : 0)
+						+ peso);
 	}
 
 	/**
 	 * Método para obtener cuantas veces viaja a un aeropuerto
-	 * @param aeropuerto Aeropuerto al que se quiere saber cuantas veces se viaja desde este
+	 * 
+	 * @param aeropuerto Aeropuerto al que se quiere saber cuantas veces se viaja
+	 *                   desde este
 	 * @return Cuántas veces se viaja
 	 */
 	public Integer getPesoAeropComunicado(int aeropuerto) {
-		return aeropuertosComunicados.get(aeropuerto);
+		return this.aeropuertosComunicados.get(aeropuerto);
 	}
 
 	/**
-	 * Método para obtener la información de todos los aeropuertos a los que vuela este Nodo
+	 * Método para obtener la información de todos los aeropuertos a los que vuela
+	 * este Nodo
+	 * 
 	 * @return Todos los aeropuertos a los que vuela y cuantas veces lo hace
 	 */
 	public HashMap<Integer, Integer> getAeropuertosALosQueVuela() {
@@ -72,11 +80,11 @@ public class Nodo {
 	}
 
 	public Integer getAeropuetosComunicadosInfectados() {
-		return aeropuetosComunicadosInfectados;
+		return numAeropuetosComunicadosInfectados;
 	}
 
 	public void setAeropuetosComunicadosInfectados(Integer aeropuetosComunicadosInfectados) {
-		this.aeropuetosComunicadosInfectados = aeropuetosComunicadosInfectados;
+		this.numAeropuetosComunicadosInfectados = aeropuetosComunicadosInfectados;
 	}
 
 	public boolean isInfectado() {
@@ -124,10 +132,8 @@ public class Nodo {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * Método para comprobar si dos nodos son iguales
-	 * Serán iguales si tienen el mismo identificador y el mismo
-	 * código iata, grado y nombre
+	 * {@inheritDoc} Método para comprobar si dos nodos son iguales Serán iguales si
+	 * tienen el mismo identificador y el mismo código iata, grado y nombre
 	 */
 	@Override
 	public boolean equals(Object o) {

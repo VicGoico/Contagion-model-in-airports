@@ -41,23 +41,20 @@ public class Red {
 		 * De esta forma cada aeropuerto tendrá una lista con todos los aeropuertos a los
 		 * que vuela y cuantas veces lo hace
 		 */
-		if (n1.getPesoAeropComunicado(n2.getId()) != null) { // Existe nodo
-			n1.addAeropuertoComunicado(n2.getId(), n1.getPesoAeropComunicado(n2.getId()) + 1);
-		} else {
-			n1.addAeropuertoComunicado(n2.getId(), 1);
-		}
+		
+		n1.addAeropuertoComunicado(n2.getId(), 1);
 
-		int index = aristas.indexOf(a);
+		int index = this.aristas.indexOf(a);
 		if (index >= 0) {
-			Arista aux = aristas.get(index);
+			Arista aux = this.aristas.get(index);
 			aux.setPeso(aux.getPeso() + 1);
 		} else {
-			this.aristas.add(new Arista(n1, n2, 1));
+			a.setPeso(1);
 			n1.incrementOutDegree();
 			n2.incrementInDegree();
-			
 			n1.incrementDegree();
 			n2.incrementDegree();
+			this.aristas.add(a);
 		}
 
 	}
@@ -85,24 +82,6 @@ public class Red {
 
 	public void setAristas(ArrayList<Arista> aristas) {
 		this.aristas = aristas;
-	}
-
-	/**
-	 * Método para obtener el nodo con el grado más alto
-	 * @return Nodo con el grado más alto
-	 */
-	public Nodo getLargestHubDegree() {
-		int max = 0;
-		Nodo nMax = null;
-
-		for (Nodo n : this.getNodos().values()) {
-			if (n.getDegree() > max) {
-				max = n.getDegree();
-				nMax = n;
-			}
-		}
-
-		return nMax;
 	}
 
 	public void setNodos(HashMap<Integer, Nodo> nodos) {

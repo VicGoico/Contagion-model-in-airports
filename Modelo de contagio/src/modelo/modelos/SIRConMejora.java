@@ -8,23 +8,23 @@ import java.util.Random;
 import modelo.red.Nodo;
 import modelo.red.Red;
 
-public class SIRConMejora implements modelo {
+public class SIRConMejora implements Modelo {
 
 	private ArrayList<Nodo> nodosContagiadosFin;
 	private ArrayList<Nodo> nodosInmunes;
-	
+	private Red red;
 	private double tasaRecuperacion;
 	private double tasaContagio;
 	
-	public SIRConMejora(double tasaRecuperación, double tasaContagio) {
-		super();
+	public SIRConMejora(Red red, double tasaRecuperación, double tasaContagio) {
+		this.red = red;
 		this.tasaRecuperacion = tasaRecuperación;
 		this.tasaContagio = tasaContagio;
 		
 	}
 
 	@Override
-	public void simular(Red red, Nodo foco) {
+	public void simular(Nodo foco) {
 		nodosContagiadosFin = new ArrayList<>();
 		nodosInmunes = new ArrayList<>();
 

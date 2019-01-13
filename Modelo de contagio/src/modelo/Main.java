@@ -132,11 +132,11 @@ public class Main {
 	public static void comenzarInfeccion(Nodo foco) {
 		// Empezamos a contar el tiempo que tarda a cargar y generar la red de aeropuertos
 		long tiempoInicio = System.currentTimeMillis();
-		UmbralesModificaciones modelo = new UmbralesModificaciones();
+		UmbralesModificaciones modelo = new UmbralesModificaciones(red);
 		//SI modelo = new SI(0.6);
 		//SIR modelo = new SIR(0.1,0.6);
 		//SIRConMejora modelo = new SIRConMejora(0.1,0.6);
-		modelo.simular(red, red.getNodo(foco.getId()));
+		modelo.simular(red.getNodo(foco.getId()));
 
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 
