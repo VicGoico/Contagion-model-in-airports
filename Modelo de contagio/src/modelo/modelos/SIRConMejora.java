@@ -12,6 +12,16 @@ public class SIRConMejora implements modelo {
 
 	private ArrayList<Nodo> nodosContagiadosFin;
 	private ArrayList<Nodo> nodosInmunes;
+	
+	private double tasaRecuperación;
+	private double tasaContagio;
+	
+	public SIRConMejora(double tasaRecuperación, double tasaContagio) {
+		super();
+		this.tasaRecuperación = tasaRecuperación;
+		this.tasaContagio = tasaContagio;
+		
+	}
 
 	@Override
 	public void simular(Red red, Nodo foco) {
@@ -26,10 +36,6 @@ public class SIRConMejora implements modelo {
 
 		foco.setInfectado(true);
 
-		double tasaRecuperación = 0.1;
-
-		double tasaContagio = 0.6;
-
 		while (!nodosContagiados.isEmpty()) {
 
 			HashMap<Integer, Integer> listaAeropuertosALosQueVuela = nodosContagiados.get(0)
@@ -39,7 +45,7 @@ public class SIRConMejora implements modelo {
 
 				Random r = new Random();
 
-				if (tasaRecuperación < r.nextDouble()) {
+				if (this.tasaRecuperación < r.nextDouble()) {
 					// Se recupera alguien
 
 					ArrayList<Nodo> todosNodos = new ArrayList<Nodo>(nodosContagiados);
@@ -62,7 +68,7 @@ public class SIRConMejora implements modelo {
 					}
 				}
 				Nodo aux = red.getNodos().get(entry.getKey());
-				if (tasaContagio < r.nextDouble() && !this.nodosInmunes.contains(aux)) {
+				if (this.tasaContagio < r.nextDouble() && !this.nodosInmunes.contains(aux)) {
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);

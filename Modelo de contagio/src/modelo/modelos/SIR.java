@@ -16,6 +16,15 @@ public class SIR implements modelo {
 	private ArrayList<Nodo> nodosContagiadosFin;
 	private ArrayList<Nodo> nodosInmunes;
 	
+	private double tasaRecuperación;
+	private double tasaContagio;
+	
+	public SIR(double tasaRecuperación, double tasaContagio) {
+		super();
+		this.tasaRecuperación = tasaRecuperación;
+		this.tasaContagio = tasaContagio;
+		
+	}
 
 	@Override
 	public void simular(Red red, Nodo foco) {
@@ -29,10 +38,6 @@ public class SIR implements modelo {
 		nodosContagiados.add(foco);
 
 		foco.setInfectado(true);
-
-		double tasaRecuperación = 0.1;
-		
-		double tasaContagio = 0.6;
 		
 		while (!nodosContagiados.isEmpty()) {
 
@@ -43,7 +48,7 @@ public class SIR implements modelo {
 				
 				Random r = new Random();
 				
-				if(tasaRecuperación < r.nextDouble()) {
+				if(this.tasaRecuperación < r.nextDouble()) {
 					//Se recupera alguien
 					ArrayList<Nodo> todosNodos = new ArrayList<Nodo>(nodosContagiados);
 					todosNodos.addAll(nodosContagiadosFin);
@@ -61,7 +66,7 @@ public class SIR implements modelo {
 					}					
 				}
 				Nodo aux = red.getNodos().get(entry.getKey());
-				if(tasaContagio < r.nextDouble() && !aux.isInfectado() && !this.nodosInmunes.contains(aux)) {					
+				if(this.tasaContagio < r.nextDouble() && !aux.isInfectado() && !this.nodosInmunes.contains(aux)) {					
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);

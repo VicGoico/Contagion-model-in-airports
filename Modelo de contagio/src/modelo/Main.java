@@ -133,9 +133,9 @@ public class Main {
 		// Empezamos a contar el tiempo que tarda a cargar y generar la red de aeropuertos
 		long tiempoInicio = System.currentTimeMillis();
 		UmbralesModificaciones modelo = new UmbralesModificaciones();
-		//SI modelo = new SI();
-		//SIR modelo = new SIR();
-		//SIRConMejora modelo = new SIRConMejora();
+		//SI modelo = new SI(0.6);
+		//SIR modelo = new SIR(0.1,0.6);
+		//SIRConMejora modelo = new SIRConMejora(0.1,0.6);
 		modelo.simular(red, red.getNodo(foco.getId()));
 
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();

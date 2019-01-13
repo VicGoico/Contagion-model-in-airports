@@ -11,8 +11,13 @@ import modelo.red.Red;
 public class SI implements modelo {
 
 	private ArrayList<Nodo> nodosContagiadosFin;
-
 	
+	private double tasaContagio;
+
+	public SI(double tasaContagio) {
+		super();
+		this.tasaContagio = tasaContagio;
+	}
 	/**
 	 * Modelo de contagio simple
 	 * tasa de contagio = 0.6
@@ -29,8 +34,6 @@ public class SI implements modelo {
 		nodosContagiados.add(foco);
 
 		foco.setInfectado(true);
-
-		double tasaContagio = 0.6;
 		
 		while (!nodosContagiados.isEmpty()) {
 
@@ -41,7 +44,7 @@ public class SI implements modelo {
 				
 				Random r = new Random();
 				Nodo aux = red.getNodos().get(entry.getKey());
-				if(tasaContagio < r.nextDouble() && !aux.isInfectado()) {
+				if(this.tasaContagio < r.nextDouble() && !aux.isInfectado()) {
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);
