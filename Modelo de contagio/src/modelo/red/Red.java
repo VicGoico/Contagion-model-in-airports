@@ -1,5 +1,8 @@
 package modelo.red;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,6 +93,12 @@ public class Red {
 
 	public HashMap<Integer, Nodo> getNodos() {
 		return nodos;
+	}
+	
+	public void toCSVFormat(BufferedWriter s) throws IOException {
+		for(Arista a : this.aristas) {
+			s.write(a.getNodo1().getId() + "," + a.getNodo2().getId() + System.getProperty("line.separator"));
+		}
 	}
 
 	@Override

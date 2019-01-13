@@ -9,11 +9,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.function.BiConsumer;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import modelo.CSVReaders.AirportNodesReader;
 import modelo.CSVReaders.AristasReader;
 import modelo.CSVReaders.ExpenditureHealthReader;
 import modelo.CSVReaders.PIBReader;
+import modelo.CSVWriters.RedWriter;
 import modelo.metricas.tools.CorrespondingCountry;
 import modelo.modelos.SI;
 import modelo.modelos.SIR;
@@ -137,6 +139,16 @@ public class Main {
 		//SIR modelo = new SIR(0.1,0.6);
 		//SIRConMejora modelo = new SIRConMejora(0.1,0.6);
 		modelo.simular(red.getNodo(foco.getId()));
+		
+		try {
+			// Guardamos en un CSV la infeccion simulada
+			new RedWriter().write(red, "red-simulada-" + foco.getId() + "-" + new Date().getTime() + ".csv");
+		} catch (IOException e) {
+			JFrame frame = new JFrame();
+			JOptionPane.showMessageDialog(frame,
+					"Ha ocurrido un error al guardar los resultados de la simulacion!\n" + e.getMessage(), "Error!",
+					JOptionPane.ERROR_MESSAGE);
+		}
 
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 
