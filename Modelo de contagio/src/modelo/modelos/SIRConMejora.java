@@ -13,12 +13,12 @@ public class SIRConMejora implements modelo {
 	private ArrayList<Nodo> nodosContagiadosFin;
 	private ArrayList<Nodo> nodosInmunes;
 	
-	private double tasaRecuperación;
+	private double tasaRecuperacion;
 	private double tasaContagio;
 	
 	public SIRConMejora(double tasaRecuperación, double tasaContagio) {
 		super();
-		this.tasaRecuperación = tasaRecuperación;
+		this.tasaRecuperacion = tasaRecuperación;
 		this.tasaContagio = tasaContagio;
 		
 	}
@@ -45,7 +45,7 @@ public class SIRConMejora implements modelo {
 
 				Random r = new Random();
 
-				if (this.tasaRecuperación < r.nextDouble()) {
+				if (this.tasaRecuperacion < r.nextDouble()) {
 					// Se recupera alguien
 
 					ArrayList<Nodo> todosNodos = new ArrayList<Nodo>(nodosContagiados);

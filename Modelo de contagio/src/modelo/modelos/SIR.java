@@ -16,12 +16,12 @@ public class SIR implements modelo {
 	private ArrayList<Nodo> nodosContagiadosFin;
 	private ArrayList<Nodo> nodosInmunes;
 	
-	private double tasaRecuperación;
+	private double tasaRecuperacion;
 	private double tasaContagio;
 	
 	public SIR(double tasaRecuperación, double tasaContagio) {
 		super();
-		this.tasaRecuperación = tasaRecuperación;
+		this.tasaRecuperacion = tasaRecuperación;
 		this.tasaContagio = tasaContagio;
 		
 	}
@@ -48,7 +48,7 @@ public class SIR implements modelo {
 				
 				Random r = new Random();
 				
-				if(this.tasaRecuperación < r.nextDouble()) {
+				if(this.tasaRecuperacion < r.nextDouble()) {
 					//Se recupera alguien
 					ArrayList<Nodo> todosNodos = new ArrayList<Nodo>(nodosContagiados);
 					todosNodos.addAll(nodosContagiadosFin);
