@@ -75,6 +75,14 @@ public class Main {
 		// Empezamos a contar el tiempo que tarda a cargar y generar la red de aeropuertos
 		long tiempoInicio = System.currentTimeMillis();
 		
+		int MegaBytes = 1000000;
+		
+		long freeMemory = Runtime.getRuntime().freeMemory();
+		//long totalMemory = Runtime.getRuntime().totalMemory();
+		long maxMemory = Runtime.getRuntime().maxMemory();
+		long memoriaUsadaAntes = maxMemory-freeMemory;
+		System.out.println("Memoria usada antes de ejecutar nuestra aplicación nuestra aplicacion:	" + (int)(memoriaUsadaAntes/MegaBytes) + "	MegaBytes");
+		
 		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
 		red = new Red(nodos);
 
@@ -99,6 +107,20 @@ public class Main {
 		if(minutos > 0){
 			System.out.println("En minutos: " + minutos);
 		}
+		
+		
+		
+		// Memoria usada por nuestra aplicación
+		freeMemory = Runtime.getRuntime().freeMemory();
+		//totalMemory = Runtime.getRuntime().totalMemory();
+		maxMemory = Runtime.getRuntime().maxMemory();
+		
+		System.out.println("Pruebas de memoria");
+		
+		System.out.println("Memoria usada por nuestra aplicacion:	" + (int)(((maxMemory-freeMemory)-memoriaUsadaAntes)/MegaBytes) + "	MegaBytes");
+		/*System.out.println("Memoria libre en JVM:	" + freeMemory + "	MegaBytes");
+		System.out.println("Memoria total en JVM:	" + totalMemory + "	MegaBytes");
+		System.out.println("Memoria maxima en JVM:	" + maxMemory + "	MegaBytes");*/
 		
 		
 	}
