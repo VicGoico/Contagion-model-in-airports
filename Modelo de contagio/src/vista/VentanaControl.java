@@ -29,6 +29,7 @@ public class VentanaControl extends javax.swing.JPanel {
 	private static final long serialVersionUID = 5388318295809628575L;
 	private JButton salirButton;
 	private JButton comenzarInfeccionButton;
+	private JButton volverButton;
 	private JPanel centerPanel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
@@ -51,6 +52,8 @@ public class VentanaControl extends javax.swing.JPanel {
 
 	private void initComponents(HashMap<Integer, Nodo> nodos) {
 		salirButton = new JButton("Salir");
+		volverButton = new JButton("Volver");
+		volverButton.setVisible(false);
 		comenzarInfeccionButton = new JButton("COMENZAR INFECCIÓN");
 		comenzarInfeccionButton.setEnabled(false);		
 		jComboBoxPaises = new JComboBox<>();
@@ -130,8 +133,10 @@ public class VentanaControl extends javax.swing.JPanel {
 							JOptionPane.showMessageDialog(frame,
 									"Ha ocurrido un error al cargar el umbral y realizar la infeccion!\n" + e.getMessage(), "Error!",
 									JOptionPane.ERROR_MESSAGE);
-							salirButton.setEnabled(true);
 							e.printStackTrace();
+						} finally {
+							comenzarInfeccionButton.setText("COMENZAR INFECCIÓN");
+							salirButton.setEnabled(true);
 						}
 					}
 				});
@@ -144,6 +149,13 @@ public class VentanaControl extends javax.swing.JPanel {
 				System.exit(0);
 			}
 		});
+		
+		volverButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				restoreGUI();
+			}
+		});
 
 		centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 20));
 		centerPanel.add(new JLabel("Indica el aeropuerto en el que deseas comenzar la infección:"));
@@ -152,6 +164,7 @@ public class VentanaControl extends javax.swing.JPanel {
 		centerPanel.add(jComboBoxAeropuertos);
 		
 		bottPanel.add(comenzarInfeccionButton);
+		bottPanel.add(volverButton);
 		bottPanel.add(salirButton);
 	}
 
@@ -184,5 +197,22 @@ public class VentanaControl extends javax.swing.JPanel {
 		this.remove(this.centerPanel);
 		this.remove(this.topPanel);
 		this.add(c, BorderLayout.CENTER);
+		this.volverButton.setVisible(true);
+	}
+	
+	private void restoreGUI() {
+		this.volverButton.setVisible(false);
+		this.comenzarInfeccionButton.setVisible(true);
+		this.jComboBoxPaises.setEnabled(true);
+		this.jComboBoxAeropuertos.setEnabled(true);
+		
+		this.removeAll();
+		
+		this.setLayout(new BorderLayout(5, 5));
+		this.add(centerPanel, BorderLayout.CENTER);
+		this.add(leftPanel, BorderLayout.LINE_START);
+		this.add(rightPanel, BorderLayout.LINE_END);
+		this.add(topPanel, BorderLayout.PAGE_START);
+		this.add(bottPanel, BorderLayout.PAGE_END);
 	}
 }
