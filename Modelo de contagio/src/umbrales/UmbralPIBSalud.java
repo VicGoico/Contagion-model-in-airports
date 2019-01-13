@@ -48,7 +48,7 @@ public class UmbralPIBSalud {
 					aeropuerto.getValue().setUmbral(0.6);
 				} else if (gastoPais < (mediaPaises * 2)) {
 					aeropuerto.getValue().setUmbral(0.75);
-				} else if (gastoPais < (mediaPaises * 2.5)){
+				} else if (gastoPais < (mediaPaises * 3)){
 					aeropuerto.getValue().setUmbral(0.8);
 				}
 				else {
@@ -85,13 +85,14 @@ public class UmbralPIBSalud {
 			}
 
 			for (TAirport aeropuerto : entry.getValue()) {
-				// Si el aeropuerto efectua menos del 30% de los vuelos del país sufre una
-				// pequeña penalización del 10%
-				if (((aeropuerto.getCalculatedDegree() * 100) / totalVuelosPais) < 15) {
-					loadedNodes.get(aeropuerto.getId())
-							.setUmbral(loadedNodes.get(aeropuerto.getId()).getUmbral() * 0.9);
-				}
+				// Si el aeropuerto efectua menos del 10% de los vuelos del país sufre una
+				// pequeña penalización del 10%, si tiene menos del 5% de los vuelos, 
+				//la penaización es del 15%
 				if (((aeropuerto.getCalculatedDegree() * 100) / totalVuelosPais) < 5) {
+					loadedNodes.get(aeropuerto.getId())
+							.setUmbral(loadedNodes.get(aeropuerto.getId()).getUmbral() * 0.85);
+				}
+				else if (((aeropuerto.getCalculatedDegree() * 100) / totalVuelosPais) < 10) {
 					loadedNodes.get(aeropuerto.getId())
 							.setUmbral(loadedNodes.get(aeropuerto.getId()).getUmbral() * 0.9);
 				}
