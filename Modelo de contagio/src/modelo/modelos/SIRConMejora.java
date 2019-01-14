@@ -69,7 +69,7 @@ public class SIRConMejora implements Modelo {
 				
 				Nodo aux = red.getNodos().get(entry.getKey());
 				this.aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(nodoContagiado.getId(), aux.getId(), 0));
-				if (r.nextDouble() < this.tasaContagio  && !this.nodosInmunes.contains(aux)) {
+				if (!aux.isInfectado() && r.nextDouble() < this.tasaContagio  && !this.nodosInmunes.contains(aux)) {
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);
