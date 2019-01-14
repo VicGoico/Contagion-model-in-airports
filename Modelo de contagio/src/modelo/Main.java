@@ -20,6 +20,7 @@ import modelo.CSVReaders.ExpenditureHealthReader;
 import modelo.CSVReaders.PIBReader;
 import modelo.CSVWriters.RedWriter;
 import modelo.metricas.tools.CorrespondingCountry;
+import modelo.modelos.InfoRedContagiada;
 import modelo.modelos.SI;
 import modelo.modelos.SIR;
 import modelo.modelos.SIRConMejora;
@@ -144,37 +145,27 @@ public class Main {
 	}
 
 	public static void comenzarInfeccion(Nodo foco) {
-
+		//Descomentar esto para realizar infección desde todos los aeropuertos posibles
 		/*
+		
 		FileWriter fichero = null;
 		PrintWriter pw = null;
 		try {
-			fichero = new FileWriter("pruebaSIR.txt");
+			fichero = new FileWriter("pruebaSIR2.txt");
 			pw = new PrintWriter(fichero);
-			
+			int i = 0;
 			for (Map.Entry<Integer, Nodo> entry : red.getNodos().entrySet()) {
+				i+=1;
+				System.out.println(i + " de " + red.getNodos().size());
 				restablecer(red);
 				//Red redAux = clonarRed();
-				//UmbralesModificaciones m = new UmbralesModificaciones(red);
-				//SI m = new SI(red,0.6);
-				SIR m = new SIR(red,0.1,0.6);
+				UmbralesModificaciones m = new UmbralesModificaciones(red);
+				//SI m = new SI(red,0.75);
+				//SIR m = new SIR(red,0.05,1.0);
 				m.simular(red.getNodo(entry.getKey()));
 				pw.println(entry.getKey() + "	" + m.getNodosContagiados().size());
+				
 			}
-		 */
-			/*for (Iterator<Nodo> i = red.getNodos().values().iterator(); i.hasNext();) {
-				//restablecer(red);
-				Red redAux = new Red((HashMap<Integer, Nodo>) red.getNodos().clone());
-				redAux.setAristas((ArrayList<Arista>) red.getAristas().clone());
-				Nodo n = (Nodo) i.next();
-				UmbralesModificaciones m = new UmbralesModificaciones(redAux);
-				// SI modelo = new SI(0.6);
-				// SIR modelo = new SIR(0.1,0.6);
-				// SIRConMejora modelo = new SIRConMejora(0.1,0.6);
-				m.simular(redAux.getNodo(n.getId()));
-				pw.println(n.getId() + "	" + m.getNodosContagiados().size());
-			}*/
-		/*
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -193,11 +184,46 @@ public class Main {
 		long tiempoInicio = System.currentTimeMillis();
 		//restablecer(red);
 		UmbralesModificaciones modelo = new UmbralesModificaciones(red);
-		// SI modelo = new SI(0.6);
+		//SIR modelo = new SIR(red,0.05,0.75);
+		//SI modelo = new SI(red,0.75);
 		// SIR modelo = new SIR(0.1,0.6);
 		// SIRConMejora modelo = new SIRConMejora(0.1,0.6);
 		modelo.simular(red.getNodo(foco.getId()));
-
+		
+		//A partir de aquí genera el CSV con las aristas infectadas
+		ArrayList<InfoRedContagiada> redFinalContagiada = new ArrayList<>();
+		
+		for(int i = 0; i < modelo.getRedContagiada().size(); i++) {
+			Nodo aux1 = red.getNodo(modelo.getRedContagiada().get(i).getNodo1());
+			Nodo aux2 = red.getNodo(modelo.getRedContagiada().get(i).getNodo2());
+			if(modelo.getNodosContagiados().contains(aux1) && modelo.getNodosContagiados().contains(aux2)) {
+				redFinalContagiada.add(modelo.getRedContagiada().get(i));
+			}
+		}
+		FileWriter ficheroAristasRedCotnagiada = null;
+		PrintWriter pwAristasRedCotnagiada = null;
+		
+		try {
+			ficheroAristasRedCotnagiada = new FileWriter("aristasInfectadas.csv");
+			pwAristasRedCotnagiada = new PrintWriter(ficheroAristasRedCotnagiada);
+			pwAristasRedCotnagiada.println("Source;Target;Weight");
+			for(int i = 0; i < redFinalContagiada.size(); i++) {
+				pwAristasRedCotnagiada.println(redFinalContagiada.get(i).getNodo1() + ";" + redFinalContagiada.get(i).getNodo2() +
+						";" + redFinalContagiada.get(i).getPeso());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				// Nuevamente aprovechamos el finally para
+				// asegurarnos que se cierra el fichero.
+				if (null != ficheroAristasRedCotnagiada)
+					ficheroAristasRedCotnagiada.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		/*
 		try {
 			// Guardamos en un CSV la infeccion simulada
 			new RedWriter().write(modelo.getRedContagiada(),
@@ -208,7 +234,7 @@ public class Main {
 					"Ha ocurrido un error al guardar los resultados de la simulacion!\n" + e.getMessage(), "Error!",
 					JOptionPane.ERROR_MESSAGE);
 		}
-
+		 */
 		ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 
 		frame.setSize(1200, 700);

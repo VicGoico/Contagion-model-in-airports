@@ -52,7 +52,7 @@ public class SIR implements Modelo {
 					todosNodos.addAll(nodosContagiadosFin);
 					if(todosNodos.size() > 0) {
 						Nodo nodoRecuperado = todosNodos.get(r.nextInt(todosNodos.size()));
-						System.out.println("Se ha recuperado " + nodoRecuperado.getAirportInfo().getName());
+						//System.out.println("Se ha recuperado " + nodoRecuperado.getAirportInfo().getName());
 						if(nodosContagiados.contains(nodoRecuperado)) {
 							nodosContagiados.remove(nodosContagiados.indexOf(nodoRecuperado));
 						}
@@ -64,11 +64,12 @@ public class SIR implements Modelo {
 					}					
 				}
 				Nodo aux = red.getNodos().get(entry.getKey());
-				if(r.nextDouble() < this.tasaContagio && !aux.isInfectado() && !this.nodosInmunes.contains(aux)) {					
+				if(r.nextDouble() < this.tasaContagio && !aux.isInfectado() && !this.nodosInmunes.contains(aux)) {	
+					System.out.println("Se ha infectado " + aux.getId() + " tiene un grado de " + aux.getDegree());
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);
-					System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
+					//System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
 					
 				}
 		
