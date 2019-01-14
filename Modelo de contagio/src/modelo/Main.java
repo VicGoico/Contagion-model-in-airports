@@ -68,7 +68,7 @@ public class Main {
 					Modelo modelo = parseModelo(modeloS, args.length > 2 ? args[3] : null,
 							args.length > 3 ? args[4] : null);
 					Main.comenzarInfeccion(modelo, focoId);
-					Main.guardarNodos(OUTPUTFILENAME_PROCESSEDDATA + "-nodosContagiados-" + modelo.getClass().getName()
+					Main.guardarNodos(OUTPUTFILENAME_PROCESSEDDATA + "-nodos-" + modelo.getClass().getSimpleName()
 							+ "-" + new Date().getTime() + ".csv");
 					Main.guardarAristasContagiadas(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-aristasContagiadas-"
 							+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
@@ -87,7 +87,7 @@ public class Main {
 					Modelo modelo = parseModelo(modeloS, args.length > 7 ? args[8] : null,
 							args.length > 8 ? args[9] : null);
 					Main.comenzarInfeccion(modelo, focoId);
-					Main.guardarNodos(rutaCSVResultados + "-nodosContagiados-" + modelo.getClass().getName() + "-"
+					Main.guardarNodos(rutaCSVResultados + "-nodos-" + modelo.getClass().getSimpleName() + "-"
 							+ new Date().getTime() + ".csv");
 					Main.guardarAristasContagiadas(modelo, rutaCSVResultados + "-aristasContagiadas-"
 							+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
@@ -265,11 +265,12 @@ public class Main {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
 
 		out.write(
-				"id,umbral,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
+				"id,umbral,contagiado,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
 
 		for (Iterator<Nodo> i = red.getNodos().values().iterator(); i.hasNext();) {
 			Nodo n = (Nodo) i.next();
-			out.write(n.getId() + "," + n.getUmbral() + "," + n.getAirportInfo().toString() + "\n");
+			
+			out.write(n.getId() + "," + n.getUmbral() + "," + n.isInfectado() + "," + n.getAirportInfo().toString() + "\n");
 		}
 
 		out.close();
@@ -279,7 +280,7 @@ public class Main {
 	 * Muestra la informacion sobre el uso del programa sin interfaz
 	 */
 	public static void showUsage() {
-		System.out.println("\tPOR FAVOR INGRESE LOS PARAMETROS DE LA SIGUIENTE FORMA:");
+		System.out.println("POR FAVOR INGRESE LOS PARAMETROS DE LA SIGUIENTE FORMA:");
 		System.out.println(
 				"\tprograma.jar <ruta-CSV-Nodos> <ruta-CSV-Aristas> <ruta-CSV-Salud> <ruta-CSV-PIB> <ruta-CSV-CO2> <ruta-CSV-resultados> <modelo> <foco-AeropuertoID> <otros-parametros-modelo>");
 		System.out.println(
