@@ -9,37 +9,36 @@ import modelo.red.Nodo;
 import modelo.red.Red;
 
 public class SIRConMejora implements Modelo {
-
 	private ArrayList<Nodo> nodosContagiadosFin;
 	private ArrayList<Nodo> nodosInmunes;
+	private ArrayList<AristaContagiadaSimple> aristasHanProvocadoInfeccion;
 	private Red red;
 	private double tasaRecuperacion;
 	private double tasaContagio;
 	
-	public SIRConMejora(Red red, double tasaRecuperación, double tasaContagio) {
+	public SIRConMejora(Red red, double tasaRecuperacion, double tasaContagio) {
 		this.red = red;
-		this.tasaRecuperacion = tasaRecuperación;
+		this.tasaRecuperacion = tasaRecuperacion;
 		this.tasaContagio = tasaContagio;
 		
 	}
 
 	@Override
 	public void simular(Nodo foco) {
+		ArrayList<Nodo> nodosContagiados = new ArrayList<Nodo>();
+		
 		nodosContagiadosFin = new ArrayList<>();
 		nodosInmunes = new ArrayList<>();
-
+		aristasHanProvocadoInfeccion = new ArrayList<>();
+		
 		nodosContagiadosFin.add(foco);
-
-		ArrayList<Nodo> nodosContagiados = new ArrayList<Nodo>();
-
 		nodosContagiados.add(foco);
 
 		foco.setInfectado(true);
 
 		while (!nodosContagiados.isEmpty()) {
-
-			HashMap<Integer, Integer> listaAeropuertosALosQueVuela = nodosContagiados.get(0)
-					.getAeropuertosALosQueVuela();
+			Nodo nodoContagiado = nodosContagiados.get(0);
+			HashMap<Integer, Integer> listaAeropuertosALosQueVuela = nodoContagiado.getAeropuertosALosQueVuela();
 
 			for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
 
@@ -67,7 +66,9 @@ public class SIRConMejora implements Modelo {
 						this.nodosInmunes.add(nodoRecuperado);
 					}
 				}
+				
 				Nodo aux = red.getNodos().get(entry.getKey());
+				this.aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(nodoContagiado.getId(), aux.getId(), 0));
 				if (r.nextDouble() < this.tasaContagio  && !this.nodosInmunes.contains(aux)) {
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
@@ -87,6 +88,11 @@ public class SIRConMejora implements Modelo {
 	@Override
 	public ArrayList<Nodo> getNodosContagiados() {
 		return this.nodosContagiadosFin;
+	}
+
+	@Override
+	public ArrayList<AristaContagiadaSimple> getAristasContagiadas() {
+		return this.aristasHanProvocadoInfeccion;
 	}
 
 }

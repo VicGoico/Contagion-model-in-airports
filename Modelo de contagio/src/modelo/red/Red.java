@@ -2,10 +2,9 @@ package modelo.red;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class Red {
 	protected ArrayList<Arista> aristas;
@@ -114,5 +113,20 @@ public class Red {
 			sOut += a + System.getProperty("line.separator");
 
 		return sOut;
+	}
+	
+	public static Red clonarRed(Red red) {
+		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>(red.getNodos());
+		Red redAux = new Red(nodos);
+		ArrayList<Arista> aristas = new ArrayList<Arista>(red.getAristas());
+		redAux.setAristas(aristas);
+		return redAux;
+	}
+
+	public static void restablecer(Red red) {
+		for (Map.Entry<Integer, Nodo> entry : red.getNodos().entrySet()) {
+			entry.getValue().setInfectado(false);
+			entry.getValue().setAeropuetosComunicadosInfectados(0);
+		}
 	}
 }

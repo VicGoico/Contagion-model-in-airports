@@ -1,12 +1,12 @@
 package modelo.modelos;
 
-public class InfoRedContagiada {
+public class AristaContagiadaSimple {
 
 	private int nodo1;
 	private int nodo2;
 	private int peso;
 	
-	public InfoRedContagiada(int nodo1, int nodo2, int peso) {
+	public AristaContagiadaSimple(int nodo1, int nodo2, int peso) {
 		this.setNodo1(nodo1);
 		this.setNodo2(nodo2);
 		this.setPeso(peso);

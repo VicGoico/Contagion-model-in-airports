@@ -10,16 +10,12 @@ import modelo.red.Red;
 
 public class UmbralesModificaciones implements Modelo {
 	// private Red redContagiada;
-	private ArrayList<InfoRedContagiada> aristasHanProvocadoInfeccion;
+	private ArrayList<AristaContagiadaSimple> aristasHanProvocadoInfeccion;
 	private Red red;
 	private ArrayList<Nodo> nodosContagiadosFin;
 
 	public UmbralesModificaciones(Red red) {
 		this.red = red;
-		// this.redContagiada = new Red((HashMap<Integer, Nodo>)
-		// red.getNodos().clone());
-
-		this.aristasHanProvocadoInfeccion = new ArrayList<>();
 	}
 
 	/**
@@ -33,10 +29,9 @@ public class UmbralesModificaciones implements Modelo {
 	 *            Aeropuerto en el cual se quiere iniciar la infeccion
 	 */
 	public void simular(Nodo foco) {
-
-		nodosContagiadosFin = new ArrayList<Nodo>();
-
-		nodosContagiadosFin.add(foco);
+		this.aristasHanProvocadoInfeccion = new ArrayList<>();
+		this.nodosContagiadosFin = new ArrayList<Nodo>();
+		this.nodosContagiadosFin.add(foco);
 
 		ArrayList<Nodo> nodosContagiados = new ArrayList<Nodo>();
 
@@ -62,10 +57,8 @@ public class UmbralesModificaciones implements Modelo {
 					// Aquí se comprueba porque a lo mejor el eropuerto no vuela a ese nodo
 					peso = this.red.getAristas().get(this.red.getAristas().indexOf(aristaAuxiliar)).getPeso();
 				}
-				
-				InfoRedContagiada info = new InfoRedContagiada(nodoContagiado.getId(), aux.getId(), peso);
 
-				aristasHanProvocadoInfeccion.add(info);
+				aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(nodoContagiado.getId(), aux.getId(), peso));
 				
 				System.out.println("INFECTADO: " + aux.isInfectado());
 
@@ -85,7 +78,8 @@ public class UmbralesModificaciones implements Modelo {
 						// Se contagia el aeropuerto
 						aux.setInfectado(true);
 						nodosContagiados.add(aux);
-						nodosContagiadosFin.add(aux);
+						this.nodosContagiadosFin.add(aux);
+						
 						System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
 						/*
 						 * // Formo una red contagiada que contiene solo aristas entre nodos contagiados
@@ -108,14 +102,13 @@ public class UmbralesModificaciones implements Modelo {
 	 * 
 	 * @return ArrayList con los aeropuertos que se han infectado
 	 */
+	@Override
 	public ArrayList<Nodo> getNodosContagiados() {
 		return this.nodosContagiadosFin;
 	}
 
-	/*public Red getRedContagiada() {
-		return this.redContagiada;
-	}*/
-	public ArrayList<InfoRedContagiada> getRedContagiada(){
+	@Override
+	public ArrayList<AristaContagiadaSimple> getAristasContagiadas() {
 		return this.aristasHanProvocadoInfeccion;
 	}
 }

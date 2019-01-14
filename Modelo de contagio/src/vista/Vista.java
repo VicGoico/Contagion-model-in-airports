@@ -53,7 +53,7 @@ public class Vista extends JPanel {
 		continuarButton = new JButton("Continuar");
 		continuarButton.setEnabled(false);
 		guardarDatosProcesadosButton = new JButton("Guardar datos procesados");
-		fileNameProcesadosTextField = new JTextField(Main.OUTPUTFILENAME_PROCESSEDDATA);
+		fileNameProcesadosTextField = new JTextField(Main.OUTPUTFILENAME_PROCESSEDDATA + ".csv");
 		fileNameExpenditureHelathTextField = new JTextField(Main.EXPENDITUREHEALTH_FILENAME);
 		fileNameAristasTextField = new JTextField(Main.AIRPORT_ARISTAS_FILENAME);
 		fileNameNodesTextField = new JTextField(Main.AIRPORT_NODES_FILENAME);
@@ -97,7 +97,11 @@ public class Vista extends JPanel {
 		continuarButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Main.loadVentanaControl();
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						Main.loadVentanaControl();
+					}
+				});
 			}
 		});
 
@@ -120,7 +124,7 @@ public class Vista extends JPanel {
 					public void run() {
 						if (redCargada) {
 							try {
-								Main.guardar(fileNameProcesadosTextField.getText());
+								Main.guardarNodos(fileNameProcesadosTextField.getText());
 
 								JFrame frame = new JFrame();
 								JOptionPane.showMessageDialog(frame, "Archivo guardado correctamente!", "Listo!",

@@ -5,21 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import modelo.red.Arista;
 import modelo.red.Nodo;
 import modelo.red.Red;
 
 public class SIR implements Modelo {
-
 	private ArrayList<Nodo> nodosContagiadosFin;
 	private ArrayList<Nodo> nodosInmunes;
+	private ArrayList<AristaContagiadaSimple> aristasHanProvocadoInfeccion;
 	private Red red;
 	private double tasaRecuperacion;
 	private double tasaContagio;
 	
-	public SIR(Red red, double tasaRecuperación, double tasaContagio) {
+	public SIR(Red red, double tasaRecuperacion, double tasaContagio) {
 		this.red = red;
-		this.tasaRecuperacion = tasaRecuperación;
+		this.tasaRecuperacion = tasaRecuperacion;
 		this.tasaContagio = tasaContagio;
 		
 	}
@@ -28,6 +27,7 @@ public class SIR implements Modelo {
 	public void simular(Nodo foco) {
 		nodosContagiadosFin = new ArrayList<>();
 		nodosInmunes = new ArrayList<>();
+		aristasHanProvocadoInfeccion = new ArrayList<>();
 
 		nodosContagiadosFin.add(foco);
 
@@ -38,9 +38,8 @@ public class SIR implements Modelo {
 		foco.setInfectado(true);
 		
 		while (!nodosContagiados.isEmpty()) {
-
-			HashMap<Integer, Integer> listaAeropuertosALosQueVuela = nodosContagiados.get(0)
-					.getAeropuertosALosQueVuela();
+			Nodo nodoContagiado = nodosContagiados.get(0);
+			HashMap<Integer, Integer> listaAeropuertosALosQueVuela = nodoContagiado.getAeropuertosALosQueVuela();
 
 			for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
 				
@@ -64,6 +63,8 @@ public class SIR implements Modelo {
 					}					
 				}
 				Nodo aux = red.getNodos().get(entry.getKey());
+				this.aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(nodoContagiado.getId(), aux.getId(), 0));
+				
 				if(r.nextDouble() < this.tasaContagio && !aux.isInfectado() && !this.nodosInmunes.contains(aux)) {	
 					System.out.println("Se ha infectado " + aux.getId() + " tiene un grado de " + aux.getDegree());
 					aux.setInfectado(true);
@@ -84,6 +85,11 @@ public class SIR implements Modelo {
 	@Override
 	public ArrayList<Nodo> getNodosContagiados() {
 		return this.nodosContagiadosFin;
+	}
+
+	@Override
+	public ArrayList<AristaContagiadaSimple> getAristasContagiadas() {
+		return this.aristasHanProvocadoInfeccion;
 	}
 
 }
