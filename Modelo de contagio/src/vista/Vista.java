@@ -169,7 +169,7 @@ public class Vista extends JPanel {
 
 		JPanel exportPanel = new JPanel(new GridLayout(3, 1, 10, 10));
 		exportPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
-		exportPanel.add(new JLabel("Nombre del fichero a exportar:"));
+		exportPanel.add(new JLabel("Guardar nodos sin infectar al fichero:"));
 		exportPanel.add(fileNameProcesadosTextField);
 		exportPanel.add(guardarDatosProcesadosButton);
 		centerPanel.add(exportPanel);
