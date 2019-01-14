@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -200,6 +202,7 @@ public class Main {
 	 * @param foco   Nodo infectado
 	 */
 	public static void comenzarInfeccion(Modelo modelo, int foco) {
+		
 		Performance.Begin("Main.comenzarInfeccion");
 		Performance.Register("Main.comenzarInfeccion");
 
@@ -228,6 +231,7 @@ public class Main {
 		}
 		Performance.Register("Main.comenzarInfeccion");
 		Performance.getSummary("Main.comenzarInfeccion");
+		restablecer(red);
 	}
 
 	/**
@@ -293,5 +297,11 @@ public class Main {
 		System.out.println(
 				"En modelo puede usarse alguna de las siguientes opciones: 'BASADO-EN-UMBRAL' (por defecto), 'SI', 'SIR', 'SIR-MEJORADO' y a continuacion los parametros del modelo si son necesarios.");
 		System.out.println("El foto-AeropuertoID es el id del nodo aeropuerto desde el cual comienza la infeccion.");
+	}
+	private static void restablecer(Red red) {
+		for (Map.Entry<Integer, Nodo> entry : red.getNodos().entrySet()) {
+		    entry.getValue().setInfectado(false);
+		    entry.getValue().setAeropuetosComunicadosInfectados(0);
+		}
 	}
 }
