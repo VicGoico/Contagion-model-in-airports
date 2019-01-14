@@ -62,11 +62,11 @@ public class Main {
 				try {
 					String modeloS = args[0];
 					int focoId = Integer.parseInt(args[1]);
-
+					Modelo modelo = parseModelo(modeloS, args.length > 2 ? args[2] : null,
+							args.length > 3 ? args[3] : null);
+					
 					Main.cargarRed(null, null, null, null, null);
 					Main.cargarUmbral();
-					Modelo modelo = parseModelo(modeloS, args.length > 2 ? args[3] : null,
-							args.length > 3 ? args[4] : null);
 					Main.comenzarInfeccion(modelo, focoId);
 					Main.guardarNodos(OUTPUTFILENAME_PROCESSEDDATA + "-nodos-" + modelo.getClass().getSimpleName()
 							+ "-" + new Date().getTime() + ".csv");
@@ -81,11 +81,11 @@ public class Main {
 				try {
 					String modeloS = args[6], rutaCSVResultados = args[5];
 					int focoId = Integer.parseInt(args[7]);
-
+					Modelo modelo = parseModelo(modeloS, args.length > 8 ? args[8] : null,
+							args.length > 9 ? args[9] : null);
+					
 					Main.cargarRed(args[0], args[1], args[2], args[3], args[4]);
 					Main.cargarUmbral();
-					Modelo modelo = parseModelo(modeloS, args.length > 7 ? args[8] : null,
-							args.length > 8 ? args[9] : null);
 					Main.comenzarInfeccion(modelo, focoId);
 					Main.guardarNodos(rutaCSVResultados + "-nodos-" + modelo.getClass().getSimpleName() + "-"
 							+ new Date().getTime() + ".csv");
@@ -204,7 +204,12 @@ public class Main {
 		Performance.Register("Main.comenzarInfeccion");
 
 		Nodo nodoInfeccion = red.getNodo(foco);
-		modelo.simular(nodoInfeccion);
+		
+		
+		if(nodoInfeccion != null)
+			modelo.simular(nodoInfeccion);
+		else
+			throw new IllegalArgumentException("Foco de infeccion erroneo, la red no contiene ese nodo.");
 
 		if (Main.guiMode) {
 			Performance.Register("Main.comenzarInfeccion");

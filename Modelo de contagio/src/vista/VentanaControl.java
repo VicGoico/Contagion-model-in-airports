@@ -132,38 +132,17 @@ public class VentanaControl extends javax.swing.JPanel {
 		jComboBoxModelos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nombreModelo = (String) jComboBoxModelos.getSelectedItem();
-
-				try {
-					switch (nombreModelo) {
-					case "---------": break;
-					case "SI":
-						modelo = new SI(Main.red, Double.parseDouble(tasaContagioField.getText()));
-						break;
-					case "SIR":
-						modelo = new SIR(Main.red, Double.parseDouble(tasaRecuperacionField.getText()),
-								Double.parseDouble(tasaContagioField.getText()));
-						break;
-					case "SIR mejorado":
-						modelo = new SIRConMejora(Main.red, Double.parseDouble(tasaRecuperacionField.getText()),
-								Double.parseDouble(tasaContagioField.getText()));
-						break;
-					default:
-						modelo = new UmbralesModificaciones(Main.red);
-						break;
-					}
-				} catch (Exception err) {
-					JFrame frame = new JFrame();
-					JOptionPane.showMessageDialog(frame,
-							"Por favor compruebe los parametros del modelo seleccionado!\n" + err.getMessage(),
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				}
+				if(paisSeleccionado != null)
+				comenzarInfeccionButton.setEnabled(true);
 			}
 		});
 
 		comenzarInfeccionButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				if (modelo == null) {
+				String nombreModelo = (String)jComboBoxModelos.getSelectedItem();
+				loadModelo(nombreModelo);
+				
+				if (modelo == null || nombreModelo == "---------") {
 					JFrame frame = new JFrame();
 					JOptionPane.showMessageDialog(frame, "Primero debe seleccionar un modelo!", "Error!",
 							JOptionPane.ERROR_MESSAGE);
@@ -215,10 +194,14 @@ public class VentanaControl extends javax.swing.JPanel {
 		});
 
 		centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 20));
-		centerPanel.add(new JLabel("Indica el aeropuerto en el que deseas comenzar la infección:"));
-		centerPanel.add(this.jComboBoxPaises);
-		centerPanel.add(new JLabel("Inidica el pais del aeropuerto donde quieres infectar:"));
-		centerPanel.add(this.jComboBoxAeropuertos);
+		
+		JPanel panelSeleccionAeropuerto = new JPanel(new GridLayout(4, 2, 10, 10));
+		panelSeleccionAeropuerto.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+		panelSeleccionAeropuerto.add(new JLabel("Indica el aeropuerto en el que deseas comenzar la infección:"));
+		panelSeleccionAeropuerto.add(this.jComboBoxPaises);
+		panelSeleccionAeropuerto.add(new JLabel("Inidica el pais del aeropuerto donde quieres infectar:"));
+		panelSeleccionAeropuerto.add(this.jComboBoxAeropuertos);
+		centerPanel.add(panelSeleccionAeropuerto);
 
 		JPanel panelModelo = new JPanel(new GridLayout(6, 2, 10, 10));
 		panelModelo.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
@@ -233,6 +216,33 @@ public class VentanaControl extends javax.swing.JPanel {
 		bottPanel.add(comenzarInfeccionButton);
 		bottPanel.add(volverButton);
 		bottPanel.add(salirButton);
+	}
+	
+	private void loadModelo(String nombreModelo) {
+		try {
+			switch (nombreModelo) {
+			case "---------": break;
+			case "SI":
+				modelo = new SI(Main.red, Double.parseDouble(tasaContagioField.getText()));
+				break;
+			case "SIR":
+				modelo = new SIR(Main.red, Double.parseDouble(tasaRecuperacionField.getText()),
+						Double.parseDouble(tasaContagioField.getText()));
+				break;
+			case "SIR mejorado":
+				modelo = new SIRConMejora(Main.red, Double.parseDouble(tasaRecuperacionField.getText()),
+						Double.parseDouble(tasaContagioField.getText()));
+				break;
+			default:
+				modelo = new UmbralesModificaciones(Main.red);
+				break;
+			}
+		} catch (Exception err) {
+			JFrame frame = new JFrame();
+			JOptionPane.showMessageDialog(frame,
+					"Por favor compruebe los parametros del modelo seleccionado!\n" + err.getMessage(),
+					"Error!", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void initGUI() {
