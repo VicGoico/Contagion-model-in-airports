@@ -3,6 +3,7 @@ package modelo.modelos;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import modelo.red.Arista;
 import modelo.red.Nodo;
@@ -14,8 +15,15 @@ public class UmbralesModificaciones implements Modelo {
 	private Red red;
 	private ArrayList<Nodo> nodosContagiadosFin;
 
+	private ArrayList<ArrayList<Integer>> nodosSusceptibles;
+	// ej pos0 -> array con todos los aeropuertos susceptibles en el instante 0
+	private ArrayList<ArrayList<Integer>> nodosInfectados;
+	// ej pos0 -> array con todos los aeropuertos infectados en el instante 0
+
 	public UmbralesModificaciones(Red red) {
 		this.red = red;
+		nodosSusceptibles = new ArrayList<>();
+		nodosInfectados = new ArrayList<>();
 	}
 
 	/**
@@ -29,72 +37,71 @@ public class UmbralesModificaciones implements Modelo {
 	 *            Aeropuerto en el cual se quiere iniciar la infeccion
 	 */
 	public void simular(Nodo foco) {
-		this.aristasHanProvocadoInfeccion = new ArrayList<>();
-		this.nodosContagiadosFin = new ArrayList<Nodo>();
-		this.nodosContagiadosFin.add(foco);
+		nodosContagiadosFin = new ArrayList<>();
+		aristasHanProvocadoInfeccion = new ArrayList<>();
 
-		ArrayList<Nodo> nodosContagiados = new ArrayList<Nodo>();
-
-		nodosContagiados.add(foco);
+		nodosContagiadosFin.add(foco);
 
 		foco.setInfectado(true);
 
-		System.out.println("Comienza la infección de " + foco.getId());
+		int instante = 0;
 
-		while (!nodosContagiados.isEmpty()) {
+		ArrayList<Integer> instanteCero = new ArrayList<Integer>();
+		instanteCero.add(foco.getId());
+		nodosInfectados.add(instante, instanteCero);
 
-			Nodo nodoContagiado = nodosContagiados.get(0);
-			HashMap<Integer, Integer> listaAeropuertosALosQueVuela = nodoContagiado.getAeropuertosALosQueVuela();
+		while (nodosInfectados.get(instante) != null && nodosInfectados.get(instante).size() > 0) {
 
-			for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
-				Nodo aux = this.red.getNodos().get(entry.getKey());
+			ArrayList<Integer> nodosInfectadosInstante = new ArrayList<>();
 
-				System.out.println("Vuela a  " + entry.getKey());
-				Arista aristaAuxiliar = new Arista(nodoContagiado, aux, 0);
-				int peso = 0;
+			for (Integer i : nodosInfectados.get(instante)) {
+				HashMap<Integer, Integer> listaAeropuertosALosQueVuela = red.getNodo(i).getAeropuertosALosQueVuela();
+				for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
+					Random r = new Random();
+					Nodo aux = red.getNodos().get(entry.getKey());
+					Arista aristaAuxiliar = new Arista(red.getNodo(i), aux, 0);
+					int peso = 0;
 
-				if (this.red.getAristas().contains(aristaAuxiliar)) {
-					// Aquí se comprueba porque a lo mejor el eropuerto no vuela a ese nodo
-					peso = this.red.getAristas().get(this.red.getAristas().indexOf(aristaAuxiliar)).getPeso();
-				}
+					if (this.red.getAristas().contains(aristaAuxiliar)) {
+						// Aquí se comprueba porque a lo mejor el eropuerto no vuela a ese nodo
+						peso = this.red.getAristas().get(this.red.getAristas().indexOf(aristaAuxiliar)).getPeso();
+					}
 
-				aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(nodoContagiado.getId(), aux.getId(), peso));
-				
-				System.out.println("INFECTADO: " + aux.isInfectado());
+					aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(i, aux.getId(), peso));
 
-				if (!aux.isInfectado()) {
-					System.out
-							.println("Aeropuertos comunicados infectados " + aux.getAeropuetosComunicadosInfectados());
-					aux.setAeropuetosComunicadosInfectados(aux.getAeropuetosComunicadosInfectados() + peso);
+					if (!aux.isInfectado()) {
+						aux.setAeropuetosComunicadosInfectados(aux.getAeropuetosComunicadosInfectados() + peso);
 
-					double porcentajeContagiado = (aux.getAeropuetosComunicadosInfectados().doubleValue()
-							/ Double.valueOf(aux.getIndegree()));
+						double porcentajeContagiado = (aux.getAeropuetosComunicadosInfectados().doubleValue()
+								/ Double.valueOf(aux.getIndegree()));
 
-					System.out.println("porcentaje contagiado " + porcentajeContagiado + " umbral " + aux.getUmbral()
-							+ " aeropuerto " + aux.getAirportInfo().getName() + " peso " + peso
-							+ " aeropuertos contagiados " + aux.getAeropuetosComunicadosInfectados());
+						System.out.println("porcentaje contagiado " + porcentajeContagiado + " umbral "
+								+ aux.getUmbral() + " aeropuerto " + aux.getAirportInfo().getName() + " peso " + peso
+								+ " aeropuertos contagiados " + aux.getAeropuetosComunicadosInfectados());
 
-					if (porcentajeContagiado > aux.getUmbral() && !aux.isInfectado()) {
-						// Se contagia el aeropuerto
-						aux.setInfectado(true);
-						nodosContagiados.add(aux);
-						this.nodosContagiadosFin.add(aux);
-						
-						System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
-						/*
-						 * // Formo una red contagiada que contiene solo aristas entre nodos contagiados
-						 * Nodo nC = this.redContagiada.getNodo(aux.getId()), nC2 =
-						 * this.redContagiada.getNodo(nodoContagiado.getId()); nC.setInfectado(true);
-						 * nC2.setInfectado(true); this.redContagiada.add(new Arista(nC2, nC, 0));
-						 */
+						if (porcentajeContagiado > aux.getUmbral() && !aux.isInfectado()) {
+							// Se contagia el aeropuerto
+							aux.setInfectado(true);
+							this.nodosContagiadosFin.add(aux);
+							nodosInfectadosInstante.add(aux.getId());
+							System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
+							/*
+							 * // Formo una red contagiada que contiene solo aristas entre nodos contagiados
+							 * Nodo nC = this.redContagiada.getNodo(aux.getId()), nC2 =
+							 * this.redContagiada.getNodo(nodoContagiado.getId()); nC.setInfectado(true);
+							 * nC2.setInfectado(true); this.redContagiada.add(new Arista(nC2, nC, 0));
+							 */
+						}
 					}
 				}
 
 			}
-
-			nodosContagiados.remove(0);
+			instante += 1;
+			nodosInfectados.add(instante, nodosInfectadosInstante);
 
 		}
+
+		System.out.println("PAUSA");
 	}
 
 	/**
