@@ -2,8 +2,10 @@ package modelo.modelos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import modelo.red.Nodo;
 import modelo.red.Red;
@@ -20,6 +22,8 @@ public class SIR implements Modelo {
 	// ej pos0 -> array con todos los aeropuertos susceptibles en el instante 0
 	private ArrayList<ArrayList<Integer>> nodosInfectados;
 	// ej pos0 -> array con todos los aeropuertos infectados en el instante 0
+	private ArrayList<ArrayList<Integer>> nodosRecuperados;
+	// ej pos0 -> array con todos los aeropuertos infectados en el instante 0
 
 	public SIR(Red red, double tasaRecuperacion, double tasaContagio) {
 		this.red = red;
@@ -27,7 +31,7 @@ public class SIR implements Modelo {
 		this.tasaContagio = tasaContagio;
 		nodosSusceptibles = new ArrayList<>();
 		nodosInfectados = new ArrayList<>();
-
+		nodosRecuperados = new ArrayList<>();
 	}
 
 	@Override
@@ -44,10 +48,12 @@ public class SIR implements Modelo {
 		ArrayList<Integer> instanteCero = new ArrayList<Integer>();
 		instanteCero.add(foco.getId());
 		nodosInfectados.add(instante, instanteCero);
+		nodosRecuperados.add(instante, new ArrayList<>());
 
 		while (nodosInfectados.get(instante) != null && nodosInfectados.get(instante).size() > 0) {
 
 			ArrayList<Integer> nodosInfectadosInstante = new ArrayList<>();
+			ArrayList<Integer> nodosRecuperadosInstante = new ArrayList<>();
 
 			Random r = new Random();
 
@@ -61,6 +67,7 @@ public class SIR implements Modelo {
 							// Se recupera el nodo
 							aux.setInfectado(false);
 							this.nodosInmunes.add(aux);
+							nodosRecuperadosInstante.add(aux.getId());
 						} else {
 							this.aristasHanProvocadoInfeccion
 									.add(new AristaContagiadaSimple(red.getNodo(i).getId(), aux.getId(), 1));
@@ -74,11 +81,10 @@ public class SIR implements Modelo {
 			}
 			instante += 1;
 			nodosInfectados.add(instante, nodosInfectadosInstante);
-
+			nodosRecuperados.add(instante, nodosRecuperadosInstante);
 		}
 
-		System.out.println("PAUSA");
-
+		System.out.println("PAUSA");		
 	}
 
 	@Override
@@ -118,9 +124,17 @@ public class SIR implements Modelo {
 	@Override
 	public int numInfectados() {
 		int total = 0;
-		for (ArrayList<Integer> instante : this.nodosInfectados) {
-			total += instante.size();
+		
+		HashSet<Integer> nodosInfectados = new HashSet<>();
+		HashSet<Integer> nodosRecuperados = new HashSet<>();
+		
+		for (int i = 0; i < this.nodosInfectados.size(); i++) {
+			nodosInfectados.addAll(this.nodosInfectados.get(i));
+			nodosRecuperados.addAll(this.nodosRecuperados.get(i));
 		}
+		
+		total = nodosInfectados.size() - nodosRecuperados.size();
+		
 		return total;
 	}
 }
