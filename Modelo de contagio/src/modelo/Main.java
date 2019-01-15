@@ -214,6 +214,7 @@ public class Main {
 		else
 			throw new IllegalArgumentException("Foco de infeccion erroneo, la red no contiene ese nodo.");
 
+		guardarAristasContagiadas(modelo,"aristasInfectadas.csv");
 		if (Main.guiMode) {
 			Performance.Register("Main.comenzarInfeccion");
 			ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();

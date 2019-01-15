@@ -42,8 +42,8 @@ public class SI implements Modelo {
 			for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
 				Random r = new Random();
 				Nodo aux = red.getNodos().get(entry.getKey());
-				this.aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(nodoContagiado.getId(), aux.getId(), 0));
 				if (r.nextDouble() < this.tasaContagio && !aux.isInfectado()) {
+					this.aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(nodoContagiado.getId(), aux.getId(), 1));
 					aux.setInfectado(true);
 					nodosContagiados.add(aux);
 					nodosContagiadosFin.add(aux);
