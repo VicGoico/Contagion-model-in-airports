@@ -19,7 +19,6 @@ import modelo.modelos.AristaContagiadaSimple;
 import modelo.modelos.Modelo;
 import modelo.modelos.SI;
 import modelo.modelos.SIR;
-import modelo.modelos.SIRConMejora;
 import modelo.modelos.UmbralesModificaciones;
 import modelo.red.Nodo;
 import modelo.red.Red;
@@ -123,11 +122,11 @@ public class Main {
 			tasaRecuperacion = Double.parseDouble(tasaRecuperaciónS);
 			return new SIR(red, tasaRecuperacion, tasaContagio);
 		case "SIR-MEJORADO":
-			if (tasaContagioS == null || tasaRecuperaciónS == null)
+			/*if (tasaContagioS == null || tasaRecuperaciónS == null)
 				throw new IllegalArgumentException("No se ha pasado la tasa de contagio o de recuperacion al modelo.");
 			tasaContagio = Double.parseDouble(tasaContagioS);
 			tasaRecuperacion = Double.parseDouble(tasaRecuperaciónS);
-			return new SIRConMejora(red, tasaRecuperacion, tasaContagio);
+			return new SIRConMejora(red, tasaRecuperacion, tasaContagio);*/
 		default:
 			return new UmbralesModificaciones(red);
 		}

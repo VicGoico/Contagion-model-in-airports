@@ -26,7 +26,6 @@ import modelo.Main;
 import modelo.modelos.Modelo;
 import modelo.modelos.SI;
 import modelo.modelos.SIR;
-import modelo.modelos.SIRConMejora;
 import modelo.modelos.UmbralesModificaciones;
 import modelo.red.Nodo;
 
@@ -52,7 +51,7 @@ public class VentanaControl extends javax.swing.JPanel {
 	private String paisSeleccionado;
 	private TreeMap<String, Nodo> aeropuertosOrdenados;
 	private TreeMap<String, TreeMap<String, Nodo>> informacionCompleta; // <Pais, <NombreAeropuerto,Nodo>>
-	private String[] nombreModelos = { "---------", "Basado en Umbral", "SI", "SIR", "SIR mejorado" };
+	private String[] nombreModelos = { "---------", "Basado en Umbral", "SI", "SIR"};
 
 	/**
 	 * Creates new form Control
@@ -244,10 +243,6 @@ public class VentanaControl extends javax.swing.JPanel {
 				break;
 			case "SIR":
 				modelo = new SIR(Main.red, Double.parseDouble(tasaRecuperacionField.getText()),
-						Double.parseDouble(tasaContagioField.getText()));
-				break;
-			case "SIR mejorado":
-				modelo = new SIRConMejora(Main.red, Double.parseDouble(tasaRecuperacionField.getText()),
 						Double.parseDouble(tasaContagioField.getText()));
 				break;
 			default:

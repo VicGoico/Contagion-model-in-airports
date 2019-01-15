@@ -15,70 +15,69 @@ public class SIR implements Modelo {
 	private Red red;
 	private double tasaRecuperacion;
 	private double tasaContagio;
-	
+
+	private ArrayList<ArrayList<Integer>> nodosSusceptibles;
+	// ej pos0 -> array con todos los aeropuertos susceptibles en el instante 0
+	private ArrayList<ArrayList<Integer>> nodosInfectados;
+	// ej pos0 -> array con todos los aeropuertos infectados en el instante 0
+
 	public SIR(Red red, double tasaRecuperacion, double tasaContagio) {
 		this.red = red;
 		this.tasaRecuperacion = tasaRecuperacion;
 		this.tasaContagio = tasaContagio;
-		
+		nodosSusceptibles = new ArrayList<>();
+		nodosInfectados = new ArrayList<>();
+
 	}
 
 	@Override
 	public void simular(Nodo foco) {
 		nodosContagiadosFin = new ArrayList<>();
-		nodosInmunes = new ArrayList<>();
 		aristasHanProvocadoInfeccion = new ArrayList<>();
-
+		nodosInmunes = new ArrayList<>();
 		nodosContagiadosFin.add(foco);
 
-		ArrayList<Nodo> nodosContagiados = new ArrayList<Nodo>();
-
-		nodosContagiados.add(foco);
-
 		foco.setInfectado(true);
-		
-		while (!nodosContagiados.isEmpty()) {
-			Nodo nodoContagiado = nodosContagiados.get(0);
-			HashMap<Integer, Integer> listaAeropuertosALosQueVuela = nodoContagiado.getAeropuertosALosQueVuela();
 
-			for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
-				
-				Random r = new Random();
-				
-				if(r.nextDouble() < this.tasaRecuperacion) {
-					//Se recupera alguien
-					ArrayList<Nodo> todosNodos = new ArrayList<Nodo>(nodosContagiados);
-					todosNodos.addAll(nodosContagiadosFin);
-					if(todosNodos.size() > 0) {
-						Nodo nodoRecuperado = todosNodos.get(r.nextInt(todosNodos.size()));
-						//System.out.println("Se ha recuperado " + nodoRecuperado.getAirportInfo().getName());
-						if(nodosContagiados.contains(nodoRecuperado)) {
-							nodosContagiados.remove(nodosContagiados.indexOf(nodoRecuperado));
+		int instante = 0;
+
+		ArrayList<Integer> instanteCero = new ArrayList<Integer>();
+		instanteCero.add(foco.getId());
+		nodosInfectados.add(instante, instanteCero);
+
+		while (nodosInfectados.get(instante) != null && nodosInfectados.get(instante).size() > 0) {
+
+			ArrayList<Integer> nodosInfectadosInstante = new ArrayList<>();
+
+			Random r = new Random();
+
+			for (Integer i : nodosInfectados.get(instante)) {
+				HashMap<Integer, Integer> listaAeropuertosALosQueVuela = red.getNodo(i).getAeropuertosALosQueVuela();
+				for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
+
+					Nodo aux = red.getNodos().get(entry.getKey());
+					if (r.nextDouble() < this.tasaContagio && !aux.isInfectado() && !this.nodosInmunes.contains(aux)) {
+						if (r.nextDouble() < this.tasaRecuperacion) {
+							// Se recupera el nodo
+							aux.setInfectado(false);
+							this.nodosInmunes.add(aux);
+						} else {
+							this.aristasHanProvocadoInfeccion
+									.add(new AristaContagiadaSimple(red.getNodo(i).getId(), aux.getId(), 1));
+							nodosContagiadosFin.add(aux);
+							aux.setInfectado(true);
+							nodosInfectadosInstante.add(aux.getId());
 						}
-						else {
-							nodosContagiadosFin.remove(nodosContagiadosFin.indexOf(nodoRecuperado));
-						}
-						nodoRecuperado.setInfectado(false);
-						this.nodosInmunes.add(nodoRecuperado);
-					}					
+					}
 				}
-				Nodo aux = red.getNodos().get(entry.getKey());
-				this.aristasHanProvocadoInfeccion.add(new AristaContagiadaSimple(nodoContagiado.getId(), aux.getId(), 0));
-				
-				if(r.nextDouble() < this.tasaContagio && !aux.isInfectado() && !this.nodosInmunes.contains(aux)) {	
-					System.out.println("Se ha infectado " + aux.getId() + " tiene un grado de " + aux.getDegree());
-					aux.setInfectado(true);
-					nodosContagiados.add(aux);
-					nodosContagiadosFin.add(aux);
-					//System.out.println("Se ha contagiado " + aux.getAirportInfo().getName());
-					
-				}
-		
+
 			}
-			if(nodosContagiados.size() > 0)
-			nodosContagiados.remove(0);
+			instante += 1;
+			nodosInfectados.add(instante, nodosInfectadosInstante);
 
 		}
+
+		System.out.println("PAUSA");
 
 	}
 
@@ -90,6 +89,25 @@ public class SIR implements Modelo {
 	@Override
 	public ArrayList<AristaContagiadaSimple> getAristasContagiadas() {
 		return this.aristasHanProvocadoInfeccion;
+	}
+
+	private void actualizarNodosInfectados(int instante) {
+		ArrayList<Integer> nodosInfectadosEnInstante = new ArrayList<>();
+		for (Nodo n : this.nodosContagiadosFin) {
+			nodosInfectadosEnInstante.add(n.getId());
+		}
+		this.nodosInfectados.add(instante, nodosInfectadosEnInstante);
+
+	}
+
+	private void actualizarNodosSusceptibles(int instante) {
+		ArrayList<Integer> nodosSusceptiblesEnInstante = new ArrayList<>();
+		for (Nodo nodo : this.red.getNodos()) {
+			if (!nodosContagiadosFin.contains(nodo)) {
+				nodosSusceptiblesEnInstante.add(nodo.getId());
+			}
+		}
+
 	}
 
 }
