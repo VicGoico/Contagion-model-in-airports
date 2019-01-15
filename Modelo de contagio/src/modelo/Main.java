@@ -289,12 +289,26 @@ public class Main {
 
 		out.write("tiempo,infectados\n");
 		int i = 0;
-		int total = 0;
 		for(ArrayList<Integer> instante: modelo.getInfeccionTiempo()) {
-			total += instante.size();
-			out.write(i + "," + total + System.getProperty("line.separator"));
+			out.write(i + "," + instante.size() + System.getProperty("line.separator"));
 			i+=1;
 		}
+		out.close();
+	}
+	
+	public static void guardarInfeccionEnFuncionDeTDetallada(Modelo modelo, String outputFileName, int instante) throws IOException{
+		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
+
+		out.write(
+				"id,umbral,contagiado,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
+
+		for(int i = 0; i < instante; i++) {
+			for(Integer k : modelo.getInfeccionTiempo().get(i)) {
+				Nodo n = red.getNodo(k);
+				out.write(n.getId() + "," + n.getUmbral() + "," + n.isInfectado() + "," + n.getAirportInfo().toString() + "\n");
+			}
+		}
+		
 		out.close();
 	}
 
