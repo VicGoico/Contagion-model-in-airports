@@ -118,4 +118,9 @@ public class UmbralesModificaciones implements Modelo {
 	public ArrayList<AristaContagiadaSimple> getAristasContagiadas() {
 		return this.aristasHanProvocadoInfeccion;
 	}
+
+	@Override
+	public ArrayList<ArrayList<Integer>> getInfeccionTiempo() {
+		return this.nodosInfectados;
+	}
 }

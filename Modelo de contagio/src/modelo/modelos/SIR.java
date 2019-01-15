@@ -110,4 +110,9 @@ public class SIR implements Modelo {
 
 	}
 
+	@Override
+	public ArrayList<ArrayList<Integer>> getInfeccionTiempo() {
+		return this.nodosInfectados;
+	}
+
 }

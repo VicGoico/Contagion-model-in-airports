@@ -210,6 +210,11 @@ public class Main {
 			throw new IllegalArgumentException("Foco de infeccion erroneo, la red no contiene ese nodo.");
 
 		guardarAristasContagiadas(modelo,"aristasInfectadas.csv");
+		try {
+			guardarInfeccionEnFuncionDeT(modelo,"infeccionEnT.csv");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		if (Main.guiMode) {
 			Performance.Register("Main.comenzarInfeccion");
 			ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
@@ -278,6 +283,19 @@ public class Main {
 		}
 		out.close();
 		
+	}
+	public static void guardarInfeccionEnFuncionDeT(Modelo modelo, String outputFileName) throws IOException{
+		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
+
+		out.write("tiempo,infectados\n");
+		int i = 0;
+		int total = 0;
+		for(ArrayList<Integer> instante: modelo.getInfeccionTiempo()) {
+			total += instante.size();
+			out.write(i + "," + total + System.getProperty("line.separator"));
+			i+=1;
+		}
+		out.close();
 	}
 
 	/**

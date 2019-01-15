@@ -100,4 +100,9 @@ public class SI implements Modelo {
 
 	}
 
+	@Override
+	public ArrayList<ArrayList<Integer>> getInfeccionTiempo() {
+		return this.nodosInfectados;
+	}
+
 }
