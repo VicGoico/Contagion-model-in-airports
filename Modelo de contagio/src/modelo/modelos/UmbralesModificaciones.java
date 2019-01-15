@@ -14,7 +14,6 @@ public class UmbralesModificaciones implements Modelo {
 	private ArrayList<AristaContagiadaSimple> aristasHanProvocadoInfeccion;
 	private Red red;
 	private ArrayList<Nodo> nodosContagiadosFin;
-
 	private ArrayList<ArrayList<Integer>> nodosSusceptibles;
 	// ej pos0 -> array con todos los aeropuertos susceptibles en el instante 0
 	private ArrayList<ArrayList<Integer>> nodosInfectados;
@@ -122,5 +121,14 @@ public class UmbralesModificaciones implements Modelo {
 	@Override
 	public ArrayList<ArrayList<Integer>> getInfeccionTiempo() {
 		return this.nodosInfectados;
+	}
+
+	@Override
+	public int numInfectados() {
+		int total = 0;
+		for (ArrayList<Integer> instante : this.nodosInfectados) {
+			total += instante.size();
+		}
+		return total;
 	}
 }

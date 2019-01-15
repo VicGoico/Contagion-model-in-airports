@@ -42,6 +42,8 @@ public class VentanaControl extends javax.swing.JPanel {
 	private JPanel rightPanel;
 	private JPanel topPanel;
 	private JPanel bottPanel;
+	private JPanel panelNumInfectados;
+	private JLabel numTotalInfectados;
 	private JComboBox<String> jComboBoxAeropuertos;
 	private JComboBox<String> jComboBoxPaises;
 	private JComboBox<String> jComboBoxModelos;
@@ -75,6 +77,7 @@ public class VentanaControl extends javax.swing.JPanel {
 		tasaRecuperacionField.setEnabled(false);
 		comenzarInfeccionButton = new JButton("COMENZAR INFECCIÓN");
 		comenzarInfeccionButton.setEnabled(false);
+		numTotalInfectados = new JLabel("0");
 		jComboBoxPaises = new JComboBox<>();
 		jComboBoxAeropuertos = new JComboBox<>();
 		jComboBoxAeropuertos.setEnabled(false);
@@ -178,6 +181,9 @@ public class VentanaControl extends javax.swing.JPanel {
 								System.out
 										.println("Va a comenzar la infeccion desde " + foco.getAirportInfo().getName());
 								Main.comenzarInfeccion(modelo, foco.getId());
+								
+								numTotalInfectados.setText(Integer.toString(modelo.numInfectados()));
+								panelNumInfectados.setVisible(true);
 								guardarResultadosButton.setVisible(true);
 								comenzarInfeccionButton.setVisible(false);
 							} catch (IOException e) {
@@ -252,6 +258,12 @@ public class VentanaControl extends javax.swing.JPanel {
 		bottPanel.add(guardarResultadosButton);
 		bottPanel.add(volverButton);
 		bottPanel.add(salirButton);
+		
+		panelNumInfectados = new JPanel(new GridLayout(1, 2, 10, 10));
+		panelNumInfectados.setVisible(false);
+		panelNumInfectados.add(new JLabel("Num. infectados:"));
+		panelNumInfectados.add(numTotalInfectados);
+		bottPanel.add(panelNumInfectados);
 	}
 
 	private void loadModelo(String nombreModelo) {
@@ -315,6 +327,7 @@ public class VentanaControl extends javax.swing.JPanel {
 		this.comenzarInfeccionButton.setVisible(true);
 		this.jComboBoxPaises.setEnabled(true);
 		this.jComboBoxAeropuertos.setEnabled(true);
+		this.panelNumInfectados.setVisible(false);
 
 		this.removeAll();
 

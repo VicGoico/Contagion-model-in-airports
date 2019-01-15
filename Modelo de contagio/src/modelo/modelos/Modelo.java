@@ -8,4 +8,5 @@ public interface Modelo {
 	public ArrayList<Nodo> getNodosContagiados();
 	public ArrayList<AristaContagiadaSimple> getAristasContagiadas();
 	public ArrayList<ArrayList<Integer>> getInfeccionTiempo();
+	public int numInfectados();
 }

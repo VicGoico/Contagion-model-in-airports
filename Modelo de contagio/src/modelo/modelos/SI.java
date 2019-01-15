@@ -104,5 +104,13 @@ public class SI implements Modelo {
 	public ArrayList<ArrayList<Integer>> getInfeccionTiempo() {
 		return this.nodosInfectados;
 	}
-
+	
+	@Override
+	public int numInfectados() {
+		int total = 0;
+		for (ArrayList<Integer> instante : this.nodosInfectados) {
+			total += instante.size();
+		}
+		return total;
+	}
 }
