@@ -9,8 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
@@ -58,12 +57,12 @@ public class VentanaControl extends javax.swing.JPanel {
 	/**
 	 * Creates new form Control
 	 */
-	public VentanaControl(HashMap<Integer, Nodo> nodos) {
+	public VentanaControl(ArrayList<Nodo> nodos) {
 		initGUI();
 		initComponents(nodos);
 	}
 
-	private void initComponents(HashMap<Integer, Nodo> nodos) {
+	private void initComponents(ArrayList<Nodo> nodos) {
 		salirButton = new JButton("Salir");
 		volverButton = new JButton("Volver");
 		volverButton.setVisible(false);
@@ -81,15 +80,15 @@ public class VentanaControl extends javax.swing.JPanel {
 
 		aeropuertosOrdenados = new TreeMap<String, Nodo>();
 		int i = 0;
-		for (Map.Entry<Integer, Nodo> entry : nodos.entrySet()) {
-			aeropuertosOrdenados.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
-			if (informacionCompleta.containsKey(entry.getValue().getAirportInfo().getCountry())) {
-				informacionCompleta.get(entry.getValue().getAirportInfo().getCountry())
-						.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
+		for(Nodo entry : nodos) {
+			aeropuertosOrdenados.put(entry.getAirportInfo().getName(), entry);
+			if (informacionCompleta.containsKey(entry.getAirportInfo().getCountry())) {
+				informacionCompleta.get(entry.getAirportInfo().getCountry())
+						.put(entry.getAirportInfo().getName(), entry);
 			} else {
-				informacionCompleta.put(entry.getValue().getAirportInfo().getCountry(), new TreeMap<String, Nodo>());
-				informacionCompleta.get(entry.getValue().getAirportInfo().getCountry())
-						.put(entry.getValue().getAirportInfo().getName(), entry.getValue());
+				informacionCompleta.put(entry.getAirportInfo().getCountry(), new TreeMap<String, Nodo>());
+				informacionCompleta.get(entry.getAirportInfo().getCountry())
+						.put(entry.getAirportInfo().getName(), entry);
 			}
 		}
 		String[] paises = new String[informacionCompleta.size() + 1];

@@ -5,10 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -33,8 +29,8 @@ import vista.Vista;
 
 public class Main {
 	public static String OUTPUTFILENAME_PROCESSEDDATA = "resultado";
-	public static String AIRPORT_NODES_FILENAME = "nodos.csv";
-	public static String AIRPORT_ARISTAS_FILENAME = "aristas.csv";
+	public static String AIRPORT_NODES_FILENAME = "nodosCambiados2.csv";
+	public static String AIRPORT_ARISTAS_FILENAME = "aristasCambiadas2.csv";
 	public static String EXPENDITUREHEALTH_FILENAME = "salud.csv";
 	public static String PIB_FILENAME = "PIB.csv";
 	public static String CARBONDIOXIDE_FILENAME = "CarbonDioxideEmissionEstimates.csv";
@@ -166,7 +162,7 @@ public class Main {
 		Performance.Begin("Main.cargarRed");
 		Performance.Register("Main.cargarRed");
 
-		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>();
+		ArrayList<Nodo> nodos = new ArrayList<Nodo>();
 		Main.red = new Red(nodos);
 		new CorrespondingCountry();
 
@@ -277,13 +273,12 @@ public class Main {
 		out.write(
 				"id,umbral,contagiado,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
 
-		for (Iterator<Nodo> i = red.getNodos().values().iterator(); i.hasNext();) {
-			Nodo n = (Nodo) i.next();
-			
+		for(Nodo n : red.getNodos()) {
 			out.write(n.getId() + "," + n.getUmbral() + "," + n.isInfectado() + "," + n.getAirportInfo().toString() + "\n");
-		}
 
+		}
 		out.close();
+		
 	}
 
 	/**
@@ -300,9 +295,9 @@ public class Main {
 		System.out.println("El foto-AeropuertoID es el id del nodo aeropuerto desde el cual comienza la infeccion.");
 	}
 	private static void restablecer(Red red) {
-		for (Map.Entry<Integer, Nodo> entry : red.getNodos().entrySet()) {
-		    entry.getValue().setInfectado(false);
-		    entry.getValue().setAeropuetosComunicadosInfectados(0);
+		for(Nodo entry : red.getNodos()) {
+			entry.setInfectado(false);
+		    entry.setAeropuetosComunicadosInfectados(0);
 		}
 	}
 }

@@ -3,18 +3,17 @@ package modelo.red;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Red {
 	protected ArrayList<Arista> aristas;
-	private HashMap<Integer, Nodo> nodos;
+	private ArrayList<Nodo> nodos;
+	//private HashMap<Integer, Nodo> nodos;
 
 	/**
 	 * Constructor
 	 * @param nodos Nodos de la red
 	 */
-	public Red(HashMap<Integer, Nodo> nodos) {
+	public Red(ArrayList<Nodo> nodos) {
 		this.aristas = new ArrayList<>();
 		this.nodos = nodos;
 	}
@@ -86,11 +85,11 @@ public class Red {
 		this.aristas = aristas;
 	}
 
-	public void setNodos(HashMap<Integer, Nodo> nodos) {
+	public void setNodos(ArrayList<Nodo> nodos) {
 		this.nodos = nodos;
 	}
 
-	public HashMap<Integer, Nodo> getNodos() {
+	public ArrayList<Nodo> getNodos() {
 		return nodos;
 	}
 	
@@ -104,7 +103,7 @@ public class Red {
 	public String toString() {
 		String sOut = "###### NODOS ######" + System.getProperty("line.separator");
 
-		for (Nodo n : this.getNodos().values())
+		for (Nodo n : this.getNodos())
 			sOut += n + System.getProperty("line.separator");
 
 		sOut = "###### ARISTAS ######" + System.getProperty("line.separator");
@@ -116,7 +115,7 @@ public class Red {
 	}
 	
 	public static Red clonarRed(Red red) {
-		HashMap<Integer, Nodo> nodos = new HashMap<Integer, Nodo>(red.getNodos());
+		ArrayList<Nodo> nodos = new ArrayList<Nodo>(red.getNodos());
 		Red redAux = new Red(nodos);
 		ArrayList<Arista> aristas = new ArrayList<Arista>(red.getAristas());
 		redAux.setAristas(aristas);
@@ -124,9 +123,10 @@ public class Red {
 	}
 
 	public static void restablecer(Red red) {
-		for (Map.Entry<Integer, Nodo> entry : red.getNodos().entrySet()) {
-			entry.getValue().setInfectado(false);
-			entry.getValue().setAeropuetosComunicadosInfectados(0);
+		for(int i = 0; i < red.getNodos().size(); i++) {
+			red.getNodo(i).setInfectado(false);
+			red.getNodo(i).setAeropuetosComunicadosInfectados(0);
+			
 		}
 	}
 }

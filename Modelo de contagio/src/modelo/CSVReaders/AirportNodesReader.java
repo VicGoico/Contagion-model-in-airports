@@ -15,7 +15,7 @@ public class AirportNodesReader implements ReaderConsumer {
 	private static AirportNodesReader instance = null;
 	private HashMap<Integer, TAirport> airportsById;
 	private HashMap<String, ArrayList<TAirport>> airportsByCountry;
-	private HashMap<Integer, Nodo> loadedNodes;
+	private ArrayList<Nodo> loadedNodes;
 
 	/**
 	 * Constructora
@@ -24,7 +24,7 @@ public class AirportNodesReader implements ReaderConsumer {
 	 * @param nodes    Nodos
 	 * @throws IOException
 	 */
-	public AirportNodesReader(String fileName, HashMap<Integer, Nodo> nodes) throws IOException {
+	public AirportNodesReader(String fileName, ArrayList<Nodo> nodes) throws IOException {
 		if (fileName == null)
 			fileName = Main.AIRPORT_NODES_FILENAME;
 		this.loadedNodes = nodes;
@@ -97,7 +97,7 @@ public class AirportNodesReader implements ReaderConsumer {
 						Integer.parseInt(t.get(11)), Integer.parseInt(t.get(12)), Integer.parseInt(t.get(13)));
 
 				this.airportsById.put(airportId, airport);
-				this.loadedNodes.put(airportId, new Nodo(airport, 0.0));
+				this.loadedNodes.add(airportId, new Nodo(airport, 0.0));
 				if (!airportsByCountry.containsKey(countryName))
 					airportsByCountry.put(countryName, new ArrayList<>());
 				airportsByCountry.get(countryName).add(airport);

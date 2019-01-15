@@ -16,7 +16,7 @@ import modelo.red.Red;
  *
  */
 public class UmbralPIBSalud {
-	private HashMap<Integer, Nodo> loadedNodes;
+	private ArrayList<Nodo> loadedNodes;
 	private PIBReader PIBReader;
 	private HashMap<String, ArrayList<TAirport>> airportsByCountry;
 
@@ -38,35 +38,34 @@ public class UmbralPIBSalud {
 	private void calculaUmbralPorPaises() {
 		double mediaPaises = this.PIBReader.getAvgHealthExpenditure();
 
-		for (Map.Entry<Integer, Nodo> aeropuerto : this.loadedNodes.entrySet()) {
-			double gastoPais = this.PIBReader.getExpHealthUmbral(aeropuerto.getValue().getAirportInfo().getCountry());
+		for(Nodo aeropuerto : this.loadedNodes) {
+			double gastoPais = this.PIBReader.getExpHealthUmbral(aeropuerto.getAirportInfo().getCountry());
 
 			if (gastoPais > mediaPaises) {
 				if (gastoPais < (mediaPaises * 1.25)) {
 					// Si el país gasta en sanidad mas que la media de países pero menos que la
 					// media
-					aeropuerto.getValue().setUmbral(0.6);
+					aeropuerto.setUmbral(0.6);
 				} else if (gastoPais < (mediaPaises * 2)) {
-					aeropuerto.getValue().setUmbral(0.75);
+					aeropuerto.setUmbral(0.75);
 				} else if (gastoPais < (mediaPaises * 3)){
-					aeropuerto.getValue().setUmbral(0.8);
+					aeropuerto.setUmbral(0.8);
 				}
 				else {
-					aeropuerto.getValue().setUmbral(0.9);
+					aeropuerto.setUmbral(0.9);
 				}
 			} else {
 				if (gastoPais > (mediaPaises * 0.75)) {
-					aeropuerto.getValue().setUmbral(0.4);
+					aeropuerto.setUmbral(0.4);
 				} else if (gastoPais > (mediaPaises * 0.5)) {
-					aeropuerto.getValue().setUmbral(0.25);
+					aeropuerto.setUmbral(0.25);
 				} else if (gastoPais > (mediaPaises * 0.25)) {
-					aeropuerto.getValue().setUmbral(0.15);
+					aeropuerto.setUmbral(0.15);
 				}
 				else {
-					aeropuerto.getValue().setUmbral(((gastoPais * 50) / mediaPaises) / 100);
+					aeropuerto.setUmbral(((gastoPais * 50) / mediaPaises) / 100);
 				}
 			}
-
 		}
 	}
 

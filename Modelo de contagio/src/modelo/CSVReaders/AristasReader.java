@@ -2,8 +2,6 @@ package modelo.CSVReaders;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import modelo.Main;
 import modelo.metricas.tools.CSVFileProcessor;
 import modelo.red.Arista;
@@ -13,7 +11,7 @@ import modelo.red.Red;
 public class AristasReader implements ReaderConsumer {
 	private static int lineCounter = 0;
 	private static boolean processing = true;
-	private HashMap<Integer, Nodo> nodos;
+	private ArrayList<Nodo> nodos;
 	private Red red;
 
 	/**
@@ -23,7 +21,7 @@ public class AristasReader implements ReaderConsumer {
 	 * @param nodos Aeropuertos
 	 * @throws IOException
 	 */
-	public AristasReader(String fileName, Red red, HashMap<Integer, Nodo> nodos) throws IOException {
+	public AristasReader(String fileName, Red red, ArrayList<Nodo> nodos) throws IOException {
 		if(fileName == null) fileName = Main.AIRPORT_ARISTAS_FILENAME;
 		this.red = red;
 		this.nodos = nodos;
