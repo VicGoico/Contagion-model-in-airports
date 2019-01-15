@@ -61,15 +61,14 @@ public class Main {
 					int focoId = Integer.parseInt(args[1]);
 					Modelo modelo = parseModelo(modeloS, args.length > 2 ? args[2] : null,
 							args.length > 3 ? args[3] : null);
-					
+
 					Main.cargarRed(null, null, null, null, null);
 					Main.cargarUmbral();
 					Main.comenzarInfeccion(modelo, focoId);
-					Main.guardarNodos(OUTPUTFILENAME_PROCESSEDDATA + "-nodos-" + modelo.getClass().getSimpleName()
-							+ "-" + new Date().getTime() + ".csv");
-					Main.guardarAristasContagiadas(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-aristasContagiadas-"
-							+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
+					Main.guardarNodos(OUTPUTFILENAME_PROCESSEDDATA + "-nodos-" + modelo.getClass().getSimpleName() + "-"
+							+ new Date().getTime() + ".csv");
 
+					Main.guardarResultadosInfeccion(modelo);
 				} catch (Exception e) {
 					e.printStackTrace();
 					Main.showUsage();
@@ -80,15 +79,13 @@ public class Main {
 					int focoId = Integer.parseInt(args[7]);
 					Modelo modelo = parseModelo(modeloS, args.length > 8 ? args[8] : null,
 							args.length > 9 ? args[9] : null);
-					
+
 					Main.cargarRed(args[0], args[1], args[2], args[3], args[4]);
 					Main.cargarUmbral();
 					Main.comenzarInfeccion(modelo, focoId);
 					Main.guardarNodos(rutaCSVResultados + "-nodos-" + modelo.getClass().getSimpleName() + "-"
 							+ new Date().getTime() + ".csv");
-					Main.guardarAristasContagiadas(modelo, rutaCSVResultados + "-aristasContagiadas-"
-							+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
-
+					Main.guardarResultadosInfeccion(modelo);
 				} catch (Exception e) {
 					e.printStackTrace();
 					Main.showUsage();
@@ -122,11 +119,13 @@ public class Main {
 			tasaRecuperacion = Double.parseDouble(tasaRecuperaciónS);
 			return new SIR(red, tasaRecuperacion, tasaContagio);
 		case "SIR-MEJORADO":
-			/*if (tasaContagioS == null || tasaRecuperaciónS == null)
-				throw new IllegalArgumentException("No se ha pasado la tasa de contagio o de recuperacion al modelo.");
-			tasaContagio = Double.parseDouble(tasaContagioS);
-			tasaRecuperacion = Double.parseDouble(tasaRecuperaciónS);
-			return new SIRConMejora(red, tasaRecuperacion, tasaContagio);*/
+			/*
+			 * if (tasaContagioS == null || tasaRecuperaciónS == null) throw new
+			 * IllegalArgumentException("No se ha pasado la tasa de contagio o de recuperacion al modelo."
+			 * ); tasaContagio = Double.parseDouble(tasaContagioS); tasaRecuperacion =
+			 * Double.parseDouble(tasaRecuperaciónS); return new SIRConMejora(red,
+			 * tasaRecuperacion, tasaContagio);
+			 */
 		default:
 			return new UmbralesModificaciones(red);
 		}
@@ -197,24 +196,24 @@ public class Main {
 	 * @param foco   Nodo infectado
 	 */
 	public static void comenzarInfeccion(Modelo modelo, int foco) {
-		
+
 		Performance.Begin("Main.comenzarInfeccion");
 		Performance.Register("Main.comenzarInfeccion");
 
 		Nodo nodoInfeccion = red.getNodo(foco);
-		
-		
-		if(nodoInfeccion != null)
+
+		if (nodoInfeccion != null)
 			modelo.simular(nodoInfeccion);
 		else
 			throw new IllegalArgumentException("Foco de infeccion erroneo, la red no contiene ese nodo.");
 
-		guardarAristasContagiadas(modelo,"aristasInfectadas.csv");
-		try {
-			guardarInfeccionEnFuncionDeT(modelo,"infeccionEnT.csv");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		/*
+		 * guardarAristasContagiadas(modelo,"aristasInfectadas.csv");
+		 * 
+		 * try { guardarInfeccionEnFuncionDeT(modelo,"infeccionEnT.csv"); } catch
+		 * (IOException e) { e.printStackTrace(); }
+		 */
+
 		if (Main.guiMode) {
 			Performance.Register("Main.comenzarInfeccion");
 			ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
@@ -277,39 +276,73 @@ public class Main {
 		out.write(
 				"id,umbral,contagiado,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
 
-		for(Nodo n : red.getNodos()) {
-			out.write(n.getId() + "," + n.getUmbral() + "," + n.isInfectado() + "," + n.getAirportInfo().toString() + "\n");
+		for (Nodo n : red.getNodos()) {
+			out.write(n.getId() + "," + n.getUmbral() + "," + n.isInfectado() + "," + n.getAirportInfo().toString()
+					+ "\n");
 
 		}
 		out.close();
-		
+
 	}
-	public static void guardarInfeccionEnFuncionDeT(Modelo modelo, String outputFileName) throws IOException{
+
+	/**
+	 * Guarda un estadistico del numero de infectados a lo largo del tiempo
+	 * 
+	 * @param modelo
+	 * @param outputFileName
+	 * @throws IOException
+	 */
+	public static void guardarInfeccionEnFuncionDeT(Modelo modelo, String outputFileName) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
 
 		out.write("tiempo,infectados\n");
 		int i = 0;
-		for(ArrayList<Integer> instante: modelo.getInfeccionTiempo()) {
-			out.write(i + "," + instante.size() + System.getProperty("line.separator"));
-			i+=1;
+		int total = 0;
+		for (ArrayList<Integer> instante : modelo.getInfeccionTiempo()) {
+			total += instante.size();
+			out.write(i + "," + total + System.getProperty("line.separator"));
+			i += 1;
 		}
 		out.close();
 	}
-	
-	public static void guardarInfeccionEnFuncionDeTDetallada(Modelo modelo, String outputFileName, int instante) throws IOException{
+
+	/**
+	 * Guarda los aeropuertos contagiados en un instante de tiempo
+	 * 
+	 * @param modelo
+	 * @param outputFileName
+	 * @param instante
+	 * @throws IOException
+	 */
+	public static void guardarInfeccionEnFuncionDeTDetallada(Modelo modelo, String outputFileName, int instante)
+			throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
 
 		out.write(
 				"id,umbral,contagiado,airportId,name,city,country,iata,icao,latitude,longitude,altitude,calculatedIndegree,calculatedOutdegree,calculatedDegree\n");
 
-		for(int i = 0; i < instante; i++) {
-			for(Integer k : modelo.getInfeccionTiempo().get(i)) {
+		for (int i = 0; i < instante; i++) {
+			for (Integer k : modelo.getInfeccionTiempo().get(i)) {
 				Nodo n = red.getNodo(k);
-				out.write(n.getId() + "," + n.getUmbral() + "," + n.isInfectado() + "," + n.getAirportInfo().toString() + "\n");
+				out.write(n.getId() + "," + n.getUmbral() + "," + n.isInfectado() + "," + n.getAirportInfo().toString()
+						+ "\n");
 			}
 		}
-		
+
 		out.close();
+	}
+
+	/**
+	 * Permite guardar los resultados de la infeccion
+	 * 
+	 * @param modelo
+	 * @throws IOException
+	 */
+	public static void guardarResultadosInfeccion(Modelo modelo) throws IOException {
+		Main.guardarAristasContagiadas(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-aristasContagiadas-"
+				+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
+		Main.guardarInfeccionEnFuncionDeT(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-infeccionEnT-"
+				+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
 	}
 
 	/**
@@ -325,10 +358,11 @@ public class Main {
 				"En modelo puede usarse alguna de las siguientes opciones: 'BASADO-EN-UMBRAL' (por defecto), 'SI', 'SIR', 'SIR-MEJORADO' y a continuacion los parametros del modelo si son necesarios.");
 		System.out.println("El foto-AeropuertoID es el id del nodo aeropuerto desde el cual comienza la infeccion.");
 	}
+
 	private static void restablecer(Red red) {
-		for(Nodo entry : red.getNodos()) {
+		for (Nodo entry : red.getNodos()) {
 			entry.setInfectado(false);
-		    entry.setAeropuetosComunicadosInfectados(0);
+			entry.setAeropuetosComunicadosInfectados(0);
 		}
 	}
 }

@@ -36,6 +36,7 @@ public class VentanaControl extends javax.swing.JPanel {
 	private JButton salirButton;
 	private JButton comenzarInfeccionButton;
 	private JButton volverButton;
+	private JButton guardarResultadosButton;
 	private JPanel centerPanel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
@@ -51,7 +52,7 @@ public class VentanaControl extends javax.swing.JPanel {
 	private String paisSeleccionado;
 	private TreeMap<String, Nodo> aeropuertosOrdenados;
 	private TreeMap<String, TreeMap<String, Nodo>> informacionCompleta; // <Pais, <NombreAeropuerto,Nodo>>
-	private String[] nombreModelos = { "---------", "Basado en Umbral", "SI", "SIR"};
+	private String[] nombreModelos = { "---------", "Basado en Umbral", "SI", "SIR" };
 
 	/**
 	 * Creates new form Control
@@ -64,6 +65,8 @@ public class VentanaControl extends javax.swing.JPanel {
 	private void initComponents(ArrayList<Nodo> nodos) {
 		salirButton = new JButton("Salir");
 		volverButton = new JButton("Volver");
+		guardarResultadosButton = new JButton("Guardar resultados");
+		guardarResultadosButton.setVisible(false);
 		volverButton.setVisible(false);
 		jComboBoxModelos = new JComboBox<>(nombreModelos);
 		tasaContagioField = new JTextField("0.0");
@@ -79,15 +82,15 @@ public class VentanaControl extends javax.swing.JPanel {
 
 		aeropuertosOrdenados = new TreeMap<String, Nodo>();
 		int i = 0;
-		for(Nodo entry : nodos) {
+		for (Nodo entry : nodos) {
 			aeropuertosOrdenados.put(entry.getAirportInfo().getName(), entry);
 			if (informacionCompleta.containsKey(entry.getAirportInfo().getCountry())) {
-				informacionCompleta.get(entry.getAirportInfo().getCountry())
-						.put(entry.getAirportInfo().getName(), entry);
+				informacionCompleta.get(entry.getAirportInfo().getCountry()).put(entry.getAirportInfo().getName(),
+						entry);
 			} else {
 				informacionCompleta.put(entry.getAirportInfo().getCountry(), new TreeMap<String, Nodo>());
-				informacionCompleta.get(entry.getAirportInfo().getCountry())
-						.put(entry.getAirportInfo().getName(), entry);
+				informacionCompleta.get(entry.getAirportInfo().getCountry()).put(entry.getAirportInfo().getName(),
+						entry);
 			}
 		}
 		String[] paises = new String[informacionCompleta.size() + 1];
@@ -132,20 +135,18 @@ public class VentanaControl extends javax.swing.JPanel {
 		jComboBoxModelos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(paisSeleccionado != null)
-				comenzarInfeccionButton.setEnabled(true);
-				if(jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("Basado en Umbral")) {
+				if (paisSeleccionado != null)
+					comenzarInfeccionButton.setEnabled(true);
+				if (jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("Basado en Umbral")) {
 					tasaContagioField.setEnabled(false);
 					tasaRecuperacionField.setEnabled(false);
-				}
-				else if(jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SIR") ||
-						jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SIR mejorado")){
+				} else if (jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SIR")
+						|| jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SIR mejorado")) {
 					tasaContagioField.setEnabled(true);
 					tasaRecuperacionField.setEnabled(true);
 					tasaContagioField.setText("0.75");
 					tasaRecuperacionField.setText("0.05");
-				}
-				else if(jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SI")) {
+				} else if (jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SI")) {
 					tasaContagioField.setEnabled(true);
 					tasaRecuperacionField.setEnabled(false);
 					tasaContagioField.setText("0.75");
@@ -155,9 +156,9 @@ public class VentanaControl extends javax.swing.JPanel {
 
 		comenzarInfeccionButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				String nombreModelo = (String)jComboBoxModelos.getSelectedItem();
+				String nombreModelo = (String) jComboBoxModelos.getSelectedItem();
 				loadModelo(nombreModelo);
-				
+
 				if (modelo == null || nombreModelo == "---------") {
 					JFrame frame = new JFrame();
 					JOptionPane.showMessageDialog(frame, "Primero debe seleccionar un modelo!", "Error!",
@@ -177,6 +178,7 @@ public class VentanaControl extends javax.swing.JPanel {
 								System.out
 										.println("Va a comenzar la infeccion desde " + foco.getAirportInfo().getName());
 								Main.comenzarInfeccion(modelo, foco.getId());
+								guardarResultadosButton.setVisible(true);
 								comenzarInfeccionButton.setVisible(false);
 							} catch (IOException e) {
 								JFrame frame = new JFrame();
@@ -209,13 +211,30 @@ public class VentanaControl extends javax.swing.JPanel {
 			}
 		});
 
+		guardarResultadosButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Main.guardarResultadosInfeccion(modelo);
+					
+					JFrame frame = new JFrame();
+					JOptionPane.showMessageDialog(frame, "Se han exportado los resultados correctamente.", "Resultados de contagio", JOptionPane.INFORMATION_MESSAGE);
+				} catch (IOException e1) {
+					JFrame frame = new JFrame();
+					JOptionPane.showMessageDialog(frame,
+							"Ha ocurrido un error al guardar los resultados de la infeccion!\n" + e1.getMessage(),
+							"Error!", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
 		centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 20));
-		
+
 		JPanel panelSeleccionAeropuerto = new JPanel(new GridLayout(4, 2, 10, 10));
 		panelSeleccionAeropuerto.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
-		panelSeleccionAeropuerto.add(new JLabel("Indica el pais del aeropuerto en el que deseas comenzar la infección:"));
+		panelSeleccionAeropuerto.add(new JLabel("Indica el aeropuerto en el que deseas comenzar la infección:"));
 		panelSeleccionAeropuerto.add(this.jComboBoxPaises);
-		panelSeleccionAeropuerto.add(new JLabel("Inidica el aeropuerto que quieres infectar:"));
+		panelSeleccionAeropuerto.add(new JLabel("Inidica el pais del aeropuerto donde quieres infectar:"));
 		panelSeleccionAeropuerto.add(this.jComboBoxAeropuertos);
 		centerPanel.add(panelSeleccionAeropuerto);
 
@@ -230,14 +249,16 @@ public class VentanaControl extends javax.swing.JPanel {
 		centerPanel.add(panelModelo);
 
 		bottPanel.add(comenzarInfeccionButton);
+		bottPanel.add(guardarResultadosButton);
 		bottPanel.add(volverButton);
 		bottPanel.add(salirButton);
 	}
-	
+
 	private void loadModelo(String nombreModelo) {
 		try {
 			switch (nombreModelo) {
-			case "---------": break;
+			case "---------":
+				break;
 			case "SI":
 				modelo = new SI(Main.red, Double.parseDouble(tasaContagioField.getText()));
 				break;
@@ -252,8 +273,8 @@ public class VentanaControl extends javax.swing.JPanel {
 		} catch (Exception err) {
 			JFrame frame = new JFrame();
 			JOptionPane.showMessageDialog(frame,
-					"Por favor compruebe los parametros del modelo seleccionado!\n" + err.getMessage(),
-					"Error!", JOptionPane.ERROR_MESSAGE);
+					"Por favor compruebe los parametros del modelo seleccionado!\n" + err.getMessage(), "Error!",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
