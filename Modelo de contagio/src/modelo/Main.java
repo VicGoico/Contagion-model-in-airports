@@ -197,9 +197,16 @@ public class Main {
 	 */
 	public static void comenzarInfeccion(Modelo modelo, int foco) {
 
-		Performance.Begin("Main.comenzarInfeccion");
-		Performance.Register("Main.comenzarInfeccion");
-
+		/*Performance.Begin("Main.comenzarInfeccion");
+		Performance.Register("Main.comenzarInfeccion");*/
+		long empieza = System.currentTimeMillis();
+		int MegaBytes = 1000000;
+		
+		long freeMemory = Runtime.getRuntime().freeMemory();
+		long totalMemory = Runtime.getRuntime().totalMemory();
+		long maxMemory = Runtime.getRuntime().maxMemory();
+		long memoriaUsadaAntes = maxMemory-freeMemory;
+		
 		Nodo nodoInfeccion = red.getNodo(foco);
 
 		if (nodoInfeccion != null)
@@ -215,7 +222,7 @@ public class Main {
 		 */
 
 		if (Main.guiMode) {
-			Performance.Register("Main.comenzarInfeccion");
+			//Performance.Register("Main.comenzarInfeccion");
 			ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 			frame.setSize(1200, 700);
 			papplet = new HelloUnfoldingWorld();
@@ -229,8 +236,20 @@ public class Main {
 			// frame.add(papplet, BorderLayout.CENTER);
 			papplet.init();
 		}
-		Performance.Register("Main.comenzarInfeccion");
-		Performance.getSummary("Main.comenzarInfeccion");
+		long acaba = System.currentTimeMillis();
+		
+		System.out.println("Tiempo que ha tardao: "+ (acaba-empieza));
+		// Memoria usada por nuestra aplicacion
+		freeMemory = Runtime.getRuntime().freeMemory();
+		totalMemory = Runtime.getRuntime().totalMemory();
+		maxMemory = Runtime.getRuntime().maxMemory();
+
+		System.out.println("Pruebas de memoria");
+
+		System.out.println("Memoria usada por nuestra aplicacion:	"
+				+ (int) (((totalMemory - freeMemory)) / MegaBytes) + "	MegaBytes");
+		/*Performance.Register("Main.comenzarInfeccion");
+		Performance.getSummary("Main.comenzarInfeccion");*/
 		restablecer(red);
 	}
 
