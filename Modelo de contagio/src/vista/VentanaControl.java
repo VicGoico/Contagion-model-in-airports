@@ -67,9 +67,9 @@ public class VentanaControl extends javax.swing.JPanel {
 		volverButton.setVisible(false);
 		jComboBoxModelos = new JComboBox<>(nombreModelos);
 		tasaContagioField = new JTextField("0.0");
-		tasaContagioField.setVisible(false);
+		tasaContagioField.setEnabled(false);
 		tasaRecuperacionField = new JTextField("0.0");
-		tasaRecuperacionField.setVisible(false);
+		tasaRecuperacionField.setEnabled(false);
 		comenzarInfeccionButton = new JButton("COMENZAR INFECCIÓN");
 		comenzarInfeccionButton.setEnabled(false);
 		jComboBoxPaises = new JComboBox<>();
@@ -135,19 +135,19 @@ public class VentanaControl extends javax.swing.JPanel {
 				if(paisSeleccionado != null)
 				comenzarInfeccionButton.setEnabled(true);
 				if(jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("Basado en Umbral")) {
-					tasaContagioField.setVisible(false);
-					tasaRecuperacionField.setVisible(false);
+					tasaContagioField.setEnabled(false);
+					tasaRecuperacionField.setEnabled(false);
 				}
 				else if(jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SIR") ||
 						jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SIR mejorado")){
-					tasaContagioField.setVisible(true);
-					tasaRecuperacionField.setVisible(true);
+					tasaContagioField.setEnabled(true);
+					tasaRecuperacionField.setEnabled(true);
 					tasaContagioField.setText("0.75");
 					tasaRecuperacionField.setText("0.05");
 				}
 				else if(jComboBoxModelos.getSelectedItem().toString().equalsIgnoreCase("SI")) {
-					tasaContagioField.setVisible(true);
-					tasaRecuperacionField.setVisible(false);
+					tasaContagioField.setEnabled(true);
+					tasaRecuperacionField.setEnabled(false);
 					tasaContagioField.setText("0.75");
 				}
 			}
