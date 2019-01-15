@@ -8,6 +8,7 @@ import de.fhpotsdam.unfolding.marker.AbstractMarker;
 
 /**
  * This marker displays an image at its location.
+ * Esta clase se encarga de poner el punto rojo, que da a entender que el aeropuerto se ha infectado
  */
 public class ImageMarker extends AbstractMarker {
 
