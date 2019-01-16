@@ -59,7 +59,7 @@ public class Vista extends JPanel {
 		fileNameNodesTextField = new JTextField(Main.AIRPORT_NODES_FILENAME);
 		fileNamePIBTextField = new JTextField(Main.PIB_FILENAME);
 		fileNameCarbonDioxideTextField = new JTextField(Main.CARBONDIOXIDE_FILENAME);
-
+		fileNameCarbonDioxideTextField.setEnabled(false);
 		
 
 		loadButton.addActionListener(new ActionListener() {
@@ -162,7 +162,9 @@ public class Vista extends JPanel {
 		csvsPanel.add(fileNameExpenditureHelathTextField);
 		csvsPanel.add(new JLabel("CSV PIB:"));
 		csvsPanel.add(fileNamePIBTextField);
-		csvsPanel.add(new JLabel("CSV Emision de CO2:"));
+		JLabel co2Label = new JLabel("CSV Emision de CO2:");
+		co2Label.setEnabled(false);
+		csvsPanel.add(co2Label);
 		csvsPanel.add(fileNameCarbonDioxideTextField);
 		centerPanel.add(csvsPanel);
 		centerPanel.add(loadButton);
