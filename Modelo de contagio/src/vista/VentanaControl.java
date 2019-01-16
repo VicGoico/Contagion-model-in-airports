@@ -52,6 +52,7 @@ public class VentanaControl extends javax.swing.JPanel {
 
 	private Modelo modelo;
 	private String paisSeleccionado;
+	private String aeropuertoSeleccionado;
 	private TreeMap<String, Nodo> aeropuertosOrdenados;
 	private TreeMap<String, TreeMap<String, Nodo>> informacionCompleta; // <Pais, <NombreAeropuerto,Nodo>>
 	private String[] nombreModelos = { "---------", "Basado en Umbral", "SI", "SIR" };
@@ -176,6 +177,7 @@ public class VentanaControl extends javax.swing.JPanel {
 							try {
 								Nodo foco = informacionCompleta.get(paisSeleccionado)
 										.get(jComboBoxAeropuertos.getSelectedItem());
+								aeropuertoSeleccionado = foco.getAirportInfo().getName().replaceAll("\\W+", "");
 								System.out.println("Se va a cargar el umbral.");
 								Main.cargarUmbral();
 								System.out
@@ -221,7 +223,7 @@ public class VentanaControl extends javax.swing.JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Main.guardarResultadosInfeccion(modelo);
+					Main.guardarResultadosInfeccion(modelo, aeropuertoSeleccionado);
 					
 					JFrame frame = new JFrame();
 					JOptionPane.showMessageDialog(frame, "Se han exportado los resultados correctamente.", "Resultados de contagio", JOptionPane.INFORMATION_MESSAGE);

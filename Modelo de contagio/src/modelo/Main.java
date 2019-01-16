@@ -68,7 +68,7 @@ public class Main {
 					Main.guardarNodos(OUTPUTFILENAME_PROCESSEDDATA + "-nodos-" + modelo.getClass().getSimpleName() + "-"
 							+ new Date().getTime() + ".csv");
 
-					Main.guardarResultadosInfeccion(modelo);
+					Main.guardarResultadosInfeccion(modelo, Integer.toString(focoId));
 				} catch (Exception e) {
 					e.printStackTrace();
 					Main.showUsage();
@@ -85,7 +85,7 @@ public class Main {
 					Main.comenzarInfeccion(modelo, focoId);
 					Main.guardarNodos(rutaCSVResultados + "-nodos-" + modelo.getClass().getSimpleName() + "-"
 							+ new Date().getTime() + ".csv");
-					Main.guardarResultadosInfeccion(modelo);
+					Main.guardarResultadosInfeccion(modelo, Integer.toString(focoId));
 				} catch (Exception e) {
 					e.printStackTrace();
 					Main.showUsage();
@@ -118,14 +118,6 @@ public class Main {
 			tasaContagio = Double.parseDouble(tasaContagioS);
 			tasaRecuperacion = Double.parseDouble(tasaRecuperaciónS);
 			return new SIR(red, tasaRecuperacion, tasaContagio);
-		case "SIR-MEJORADO":
-			/*
-			 * if (tasaContagioS == null || tasaRecuperaciónS == null) throw new
-			 * IllegalArgumentException("No se ha pasado la tasa de contagio o de recuperacion al modelo."
-			 * ); tasaContagio = Double.parseDouble(tasaContagioS); tasaRecuperacion =
-			 * Double.parseDouble(tasaRecuperaciónS); return new SIRConMejora(red,
-			 * tasaRecuperacion, tasaContagio);
-			 */
 		default:
 			return new UmbralesModificaciones(red);
 		}
@@ -196,17 +188,9 @@ public class Main {
 	 * @param foco   Nodo infectado
 	 */
 	public static void comenzarInfeccion(Modelo modelo, int foco) {
+		Performance.Begin("Main.comenzarInfeccion");
+		Performance.Register("Main.comenzarInfeccion", "Inicia simulacion de infeccion.");
 
-		/*Performance.Begin("Main.comenzarInfeccion");
-		Performance.Register("Main.comenzarInfeccion");*/
-		long empieza = System.currentTimeMillis();
-		int MegaBytes = 1000000;
-		
-		long freeMemory = Runtime.getRuntime().freeMemory();
-		long totalMemory = Runtime.getRuntime().totalMemory();
-		long maxMemory = Runtime.getRuntime().maxMemory();
-		long memoriaUsadaAntes = maxMemory-freeMemory;
-		
 		Nodo nodoInfeccion = red.getNodo(foco);
 
 		if (nodoInfeccion != null)
@@ -214,15 +198,8 @@ public class Main {
 		else
 			throw new IllegalArgumentException("Foco de infeccion erroneo, la red no contiene ese nodo.");
 
-		/*
-		 * guardarAristasContagiadas(modelo,"aristasInfectadas.csv");
-		 * 
-		 * try { guardarInfeccionEnFuncionDeT(modelo,"infeccionEnT.csv"); } catch
-		 * (IOException e) { e.printStackTrace(); }
-		 */
-
 		if (Main.guiMode) {
-			//Performance.Register("Main.comenzarInfeccion");
+			Performance.Register("Main.comenzarInfeccion", "Pintado en GUI");
 			ArrayList<Nodo> nodosContagiados = modelo.getNodosContagiados();
 			frame.setSize(1200, 700);
 			papplet = new HelloUnfoldingWorld();
@@ -232,24 +209,11 @@ public class Main {
 
 			((VentanaControl) frame.getContentPane()).setFullCenterPanel(papplet);
 
-			// frame.setContentPane(papplet);
-			// frame.add(papplet, BorderLayout.CENTER);
 			papplet.init();
 		}
-		long acaba = System.currentTimeMillis();
-		
-		System.out.println("Tiempo que ha tardao: "+ (acaba-empieza));
-		// Memoria usada por nuestra aplicacion
-		freeMemory = Runtime.getRuntime().freeMemory();
-		totalMemory = Runtime.getRuntime().totalMemory();
-		maxMemory = Runtime.getRuntime().maxMemory();
 
-		System.out.println("Pruebas de memoria");
-
-		System.out.println("Memoria usada por nuestra aplicacion:	"
-				+ (int) (((totalMemory - freeMemory)) / MegaBytes) + "	MegaBytes");
-		/*Performance.Register("Main.comenzarInfeccion");
-		Performance.getSummary("Main.comenzarInfeccion");*/
+		Performance.Register("Main.comenzarInfeccion", "Finaliza.");
+		Performance.getSummary("Main.comenzarInfeccion");
 		restablecer(red);
 	}
 
@@ -316,9 +280,9 @@ public class Main {
 
 		out.write("tiempo,infectados\n");
 		int i = 0;
-		//int total = 0;
+		// int total = 0;
 		for (ArrayList<Integer> instante : modelo.getInfeccionTiempo()) {
-			//total += instante.size();
+			// total += instante.size();
 			out.write(i + "," + instante.size() + System.getProperty("line.separator"));
 			i += 1;
 		}
@@ -350,6 +314,14 @@ public class Main {
 
 		out.close();
 	}
+
+	/**
+	 * Guarda los aeropuertos que se han recuperado en cada instante de tiempo
+	 * 
+	 * @param modelo
+	 * @param outputFileName
+	 * @throws IOException
+	 */
 	public static void guardarRecuperados(Modelo modelo, String outputFileName) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
 
@@ -368,18 +340,16 @@ public class Main {
 	 * @param modelo
 	 * @throws IOException
 	 */
-	public static void guardarResultadosInfeccion(Modelo modelo) throws IOException {
-		Main.guardarAristasContagiadas(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-aristasContagiadas-"
+	public static void guardarResultadosInfeccion(Modelo modelo, String nombreFoco) throws IOException {
+		Main.guardarAristasContagiadas(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-" + nombreFoco + "-aristasContagiadas-"
 				+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
-		Main.guardarInfeccionEnFuncionDeT(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-infeccionEnT-"
+		Main.guardarInfeccionEnFuncionDeT(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-" + nombreFoco + "-infeccionEnT-"
 				+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
-		
-		if(modelo.getInfeccionRecuperados() != null) {
-			Main.guardarRecuperados(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-aeropuertosRecuperados-"
-				+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
+
+		if (modelo.getInfeccionRecuperados() != null) {
+			Main.guardarRecuperados(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-" + nombreFoco + "-aeropuertosRecuperados-"
+					+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
 		}
-		
-		System.out.println("PAUSA");
 	}
 
 	/**
@@ -396,6 +366,11 @@ public class Main {
 		System.out.println("El foto-AeropuertoID es el id del nodo aeropuerto desde el cual comienza la infeccion.");
 	}
 
+	/**
+	 * Restablece los nodos de una red a su estado inicial
+	 * 
+	 * @param red
+	 */
 	private static void restablecer(Red red) {
 		for (Nodo entry : red.getNodos()) {
 			entry.setInfectado(false);

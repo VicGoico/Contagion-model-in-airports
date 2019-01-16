@@ -14,15 +14,13 @@ public class SI implements Modelo {
 	private Red red;
 	private double tasaContagio;
 
-	private ArrayList<ArrayList<Integer>> nodosSusceptibles;
-	// ej pos0 -> array con todos los aeropuertos susceptibles en el instante 0
 	private ArrayList<ArrayList<Integer>> nodosInfectados; 
 	// ej pos0 -> array con todos los aeropuertos infectados en el instante 0
 
 	public SI(Red red, double tasaContagio) {
 		this.red = red;
 		this.tasaContagio = tasaContagio;
-		nodosSusceptibles = new ArrayList<>();
+		new ArrayList<>();
 		nodosInfectados = new ArrayList<>();
 	}
 
@@ -99,25 +97,6 @@ public class SI implements Modelo {
 	@Override
 	public ArrayList<AristaContagiadaSimple> getAristasContagiadas() {
 		return this.aristasHanProvocadoInfeccion;
-	}
-
-	private void actualizarNodosInfectados(int instante) {
-		ArrayList<Integer> nodosInfectadosEnInstante = new ArrayList<>();
-		for (Nodo n : this.nodosContagiadosFin) {
-			nodosInfectadosEnInstante.add(n.getId());
-		}
-		this.nodosInfectados.add(instante, nodosInfectadosEnInstante);
-
-	}
-
-	private void actualizarNodosSusceptibles(int instante) {
-		ArrayList<Integer> nodosSusceptiblesEnInstante = new ArrayList<>();
-		for (Nodo nodo : this.red.getNodos()) {
-			if (!nodosContagiadosFin.contains(nodo)) {
-				nodosSusceptiblesEnInstante.add(nodo.getId());
-			}
-		}
-
 	}
 
 	@Override

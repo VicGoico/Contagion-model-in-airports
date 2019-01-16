@@ -3,8 +3,6 @@ package modelo.modelos;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-
 import modelo.red.Arista;
 import modelo.red.Nodo;
 import modelo.red.Red;
@@ -14,14 +12,11 @@ public class UmbralesModificaciones implements Modelo {
 	private ArrayList<AristaContagiadaSimple> aristasHanProvocadoInfeccion;
 	private Red red;
 	private ArrayList<Nodo> nodosContagiadosFin;
-	private ArrayList<ArrayList<Integer>> nodosSusceptibles;
-	// ej pos0 -> array con todos los aeropuertos susceptibles en el instante 0
 	private ArrayList<ArrayList<Integer>> nodosInfectados;
 	// ej pos0 -> array con todos los aeropuertos infectados en el instante 0
 
 	public UmbralesModificaciones(Red red) {
 		this.red = red;
-		nodosSusceptibles = new ArrayList<>();
 		nodosInfectados = new ArrayList<>();
 	}
 
@@ -56,7 +51,6 @@ public class UmbralesModificaciones implements Modelo {
 			for (Integer i : nodosInfectados.get(instante)) {
 				HashMap<Integer, Integer> listaAeropuertosALosQueVuela = red.getNodo(i).getAeropuertosALosQueVuela();
 				for (Map.Entry<Integer, Integer> entry : listaAeropuertosALosQueVuela.entrySet()) {
-					Random r = new Random();
 					Nodo aux = red.getNodos().get(entry.getKey());
 					Arista aristaAuxiliar = new Arista(red.getNodo(i), aux, 0);
 					int peso = 0;

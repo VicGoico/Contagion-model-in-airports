@@ -2,11 +2,8 @@ package modelo.modelos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
-
 import modelo.red.Nodo;
 import modelo.red.Red;
 
@@ -18,7 +15,6 @@ public class SIR implements Modelo {
 	private double tasaRecuperacion;
 	private double tasaContagio;
 
-	private ArrayList<ArrayList<Integer>> nodosSusceptibles;
 	// ej pos0 -> array con todos los aeropuertos susceptibles en el instante 0
 	private ArrayList<ArrayList<Integer>> nodosInfectados;
 	// ej pos0 -> array con todos los aeropuertos infectados en el instante 0
@@ -29,7 +25,6 @@ public class SIR implements Modelo {
 		this.red = red;
 		this.tasaRecuperacion = tasaRecuperacion;
 		this.tasaContagio = tasaContagio;
-		nodosSusceptibles = new ArrayList<>();
 		nodosInfectados = new ArrayList<>();
 		nodosRecuperados = new ArrayList<>();
 	}
@@ -105,25 +100,6 @@ public class SIR implements Modelo {
 		return this.aristasHanProvocadoInfeccion;
 	}
 
-	private void actualizarNodosInfectados(int instante) {
-		ArrayList<Integer> nodosInfectadosEnInstante = new ArrayList<>();
-		for (Nodo n : this.nodosContagiadosFin) {
-			nodosInfectadosEnInstante.add(n.getId());
-		}
-		this.nodosInfectados.add(instante, nodosInfectadosEnInstante);
-
-	}
-
-	private void actualizarNodosSusceptibles(int instante) {
-		ArrayList<Integer> nodosSusceptiblesEnInstante = new ArrayList<>();
-		for (Nodo nodo : this.red.getNodos()) {
-			if (!nodosContagiadosFin.contains(nodo)) {
-				nodosSusceptiblesEnInstante.add(nodo.getId());
-			}
-		}
-
-	}
-
 	private boolean estancamiento() {
 		if(nodosInfectados.size() < 5) {
 			//Si ha habido menos de 5 iteraciones
@@ -155,7 +131,7 @@ public class SIR implements Modelo {
 		
 		for (int i = 0; i < this.nodosInfectados.size(); i++) {
 			if(this.nodosInfectados.get(i). size() > max) {
-				max = this.nodosInfectados.get(i). size();
+				max = this.nodosInfectados.get(i).size();
 			}
 		}
 		return max;
