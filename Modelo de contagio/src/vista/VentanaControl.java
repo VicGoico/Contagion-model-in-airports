@@ -240,9 +240,9 @@ public class VentanaControl extends javax.swing.JPanel {
 
 		JPanel panelSeleccionAeropuerto = new JPanel(new GridLayout(4, 2, 10, 10));
 		panelSeleccionAeropuerto.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
-		panelSeleccionAeropuerto.add(new JLabel("Indica el aeropuerto en el que deseas comenzar la infección:"));
+		panelSeleccionAeropuerto.add(new JLabel("Indica el pais del aeropuerto en el que deseas comenzar la infección:"));
 		panelSeleccionAeropuerto.add(this.jComboBoxPaises);
-		panelSeleccionAeropuerto.add(new JLabel("Inidica el pais del aeropuerto donde quieres infectar:"));
+		panelSeleccionAeropuerto.add(new JLabel("Inidica el aeropuerto que quieres infectar:"));
 		panelSeleccionAeropuerto.add(this.jComboBoxAeropuertos);
 		centerPanel.add(panelSeleccionAeropuerto);
 
