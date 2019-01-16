@@ -316,10 +316,10 @@ public class Main {
 
 		out.write("tiempo,infectados\n");
 		int i = 0;
-		int total = 0;
+		//int total = 0;
 		for (ArrayList<Integer> instante : modelo.getInfeccionTiempo()) {
-			total += instante.size();
-			out.write(i + "," + total + System.getProperty("line.separator"));
+			//total += instante.size();
+			out.write(i + "," + instante.size() + System.getProperty("line.separator"));
 			i += 1;
 		}
 		out.close();
@@ -350,6 +350,17 @@ public class Main {
 
 		out.close();
 	}
+	public static void guardarRecuperados(Modelo modelo, String outputFileName) throws IOException {
+		BufferedWriter out = new BufferedWriter(new FileWriter(outputFileName));
+
+		out.write("tiempo,recuperados\n");
+		int i = 0;
+		for (ArrayList<Integer> instante : modelo.getInfeccionRecuperados()) {
+			out.write(i + "," + instante.size() + System.getProperty("line.separator"));
+			i += 1;
+		}
+		out.close();
+	}
 
 	/**
 	 * Permite guardar los resultados de la infeccion
@@ -362,6 +373,13 @@ public class Main {
 				+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
 		Main.guardarInfeccionEnFuncionDeT(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-infeccionEnT-"
 				+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
+		
+		if(modelo.getInfeccionRecuperados() != null) {
+			Main.guardarRecuperados(modelo, OUTPUTFILENAME_PROCESSEDDATA + "-aeropuertosRecuperados-"
+				+ modelo.getClass().getName() + "-" + new Date().getTime() + ".csv");
+		}
+		
+		System.out.println("PAUSA");
 	}
 
 	/**

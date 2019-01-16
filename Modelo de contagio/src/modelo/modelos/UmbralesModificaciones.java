@@ -131,4 +131,9 @@ public class UmbralesModificaciones implements Modelo {
 		}
 		return total;
 	}
+
+	@Override
+	public ArrayList<ArrayList<Integer>> getInfeccionRecuperados() {
+		return null;
+	}
 }

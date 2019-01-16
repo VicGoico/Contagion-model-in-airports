@@ -44,7 +44,7 @@ public class SI implements Modelo {
 		instanteCero.add(foco.getId());
 		nodosInfectados.add(instante, instanteCero);
 
-		while (nodosInfectados.get(instante) != null && nodosInfectados.get(instante).size() > 0) {
+		while (nodosInfectados.get(instante) != null && nodosInfectados.get(instante).size() > 0 && !estancamiento()) {
 
 			ArrayList<Integer> nodosInfectadosInstante = new ArrayList<>();
 
@@ -64,13 +64,33 @@ public class SI implements Modelo {
 
 			}
 			instante += 1;
+			nodosInfectadosInstante.addAll(nodosInfectados.get(instante - 1));
 			nodosInfectados.add(instante, nodosInfectadosInstante);
 
 		}
 
-		System.out.println("PAUSA");
 	}
 
+	
+	private boolean estancamiento() {
+		if(nodosInfectados.size() < 5) {
+			//Si ha habido menos de 5 iteraciones
+			return false;
+		}
+		else {
+			boolean estancamiento = true;
+			//inicializamos los nodos infectados a el total de nodos infectados de la ultima iteracion
+			//si en las ultimas 5 iteraciones no ha aumentado el numero de infecciones se ha estancado
+			int infectados = nodosInfectados.get(nodosInfectados.size() -1).size();
+			for(int i = nodosInfectados.size() -1; i > nodosInfectados.size() - 5; i--) {
+				if(nodosInfectados.get(i).size() != infectados) {
+					estancamiento = false;
+				}
+			}
+			return estancamiento;
+		}
+	}
+	
 	@Override
 	public ArrayList<Nodo> getNodosContagiados() {
 		return this.nodosContagiadosFin;
@@ -107,10 +127,11 @@ public class SI implements Modelo {
 	
 	@Override
 	public int numInfectados() {
-		int total = 0;
-		for (ArrayList<Integer> instante : this.nodosInfectados) {
-			total += instante.size();
-		}
-		return total;
+		return nodosContagiadosFin.size();
+	}
+
+	@Override
+	public ArrayList<ArrayList<Integer>> getInfeccionRecuperados() {
+		return null;
 	}
 }
