@@ -151,19 +151,14 @@ public class SIR implements Modelo {
 
 	@Override
 	public int numInfectados() {
-		int total = 0;
-
-		HashSet<Integer> nodosInfectados = new HashSet<>();
-		HashSet<Integer> nodosRecuperados = new HashSet<>();
-
+		int max = 0;
+		
 		for (int i = 0; i < this.nodosInfectados.size(); i++) {
-			nodosInfectados.addAll(this.nodosInfectados.get(i));
-			nodosRecuperados.addAll(this.nodosRecuperados.get(i));
+			if(this.nodosInfectados.get(i). size() > max) {
+				max = this.nodosInfectados.get(i). size();
+			}
 		}
-
-		total = nodosInfectados.size() - nodosRecuperados.size();
-
-		return total;
+		return max;
 	}
 
 	@Override
