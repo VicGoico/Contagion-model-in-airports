@@ -96,10 +96,9 @@ public class Main {
 				try {
 					String modeloS = args[0];
 					int focoId = Integer.parseInt(args[1]);
+					Main.cargarRed(null, null, null, null, null);
 					Modelo modelo = parseModelo(modeloS, args.length > 2 ? args[2] : null,
 							args.length > 3 ? args[3] : null);
-
-					Main.cargarRed(null, null, null, null, null);
 					Main.cargarUmbral();
 					Main.comenzarInfeccion(modelo, focoId);
 					Main.guardarNodos(OUTPUTFILENAME_PROCESSEDDATA + "-nodos-" + modelo.getClass().getSimpleName() + "-"
@@ -114,10 +113,9 @@ public class Main {
 				try {
 					String modeloS = args[6], rutaCSVResultados = args[5];
 					int focoId = Integer.parseInt(args[7]);
+					Main.cargarRed(args[0], args[1], args[2], args[3], args[4]);
 					Modelo modelo = parseModelo(modeloS, args.length > 8 ? args[8] : null,
 							args.length > 9 ? args[9] : null);
-
-					Main.cargarRed(args[0], args[1], args[2], args[3], args[4]);
 					Main.cargarUmbral();
 					Main.comenzarInfeccion(modelo, focoId);
 					Main.guardarNodos(rutaCSVResultados + "-nodos-" + modelo.getClass().getSimpleName() + "-"

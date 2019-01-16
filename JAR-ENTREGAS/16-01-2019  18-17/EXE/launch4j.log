@@ -1,0 +1,26 @@
+
+
+Version:	3.12
+CmdLine:	C:\Users\face_\Desktop\SOC Analisis de redes sociales\PROJECT\GITHUB\JAR-ENTREGAS\16-01-2019  18-17\Archivos\Simulador.exe --l4j-debug
+WOW64:		yes
+Working dir:	C:\Users\face_\Desktop\SOC Analisis de redes sociales\PROJECT\GITHUB\JAR-ENTREGAS\16-01-2019  18-17\Archivos\.
+Java min ver:	1.008.000
+Java max ver:	
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files\Java\jre1.8.0_191\bin\javaw.exe (OK)
+Match:		1.008.000
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_191
+Check launcher:	C:\Program Files\Java\jre1.8.0_191\bin\javaw.exe (OK)
+Match:		1.008.000_191
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\10.0.2
+Check launcher:	C:\Program Files\Java\jdk-10.0.2\bin\javaw.exe (OK)
+Match:		1.010.000_002
+Runtime used:	1.010.000_002 (64-bit)
+Launcher:	C:\Program Files\Java\jdk-10.0.2\bin\javaw.exe
+Launcher args:	-jar "C:\Users\face_\Desktop\SOC Analisis de redes sociales\PROJECT\GITHUB\JAR-ENTREGAS\16-01-2019  18-17\Archivos\Simulador.exe"
+Args length:	129/32768 chars
+Exit code:	0
